@@ -4,7 +4,7 @@ import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader,
 import { useSidebar } from "../ui/sidebar";
 
 export default function Postlist() {
-    const { isMobile, open } = useSidebar();
+    const { open } = useSidebar();
     return (
         <div className={`grid p-4 gap-8 ${open ? "grid-cols-3" : "grid-cols-4"}`}>
             {[...Array(8)].map((_, i) => (

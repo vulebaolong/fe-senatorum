@@ -13,6 +13,7 @@ import {
     SidebarMenuSubButton,
     SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import ThemeToggleV2 from "../theme-toggle/theme-toggle-v2";
 
 export function NavMain({
     items,
@@ -32,6 +33,10 @@ export function NavMain({
         <SidebarGroup>
             <SidebarGroupLabel>Platform</SidebarGroupLabel>
             <SidebarMenu>
+                <SidebarMenuItem className="flex items-center justify-between">
+                    <p className="text-sm font-medium">Theme</p>
+                    <ThemeToggleV2 />
+                </SidebarMenuItem>
                 {items.map((item) => (
                     <Collapsible key={item.title} asChild defaultOpen={item.isActive} className="group/collapsible">
                         <SidebarMenuItem>
