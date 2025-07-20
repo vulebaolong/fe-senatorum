@@ -1,4 +1,11 @@
-import { getInfoAction, loginFormAction, loginGoogleAction, loginMagicLinkAction, registerAction, verifyMagicLinkAction } from "@/api/actions/auth.action";
+import {
+    getInfoAction,
+    loginFormAction,
+    loginGoogleAction,
+    loginMagicLinkAction,
+    registerAction,
+    verifyMagicLinkAction,
+} from "@/api/actions/auth.action";
 import { resError } from "@/helpers/function.helper";
 import { useAppDispatch } from "@/redux/hooks";
 import { SET_INFO } from "@/redux/slices/user.slice";
@@ -84,14 +91,11 @@ export const useLoginMagicLink = () => {
 };
 
 export const useVerifyMagicLink = () => {
-     return useMutation({
+    return useMutation({
         mutationFn: async (payload: TVerifyMagicLinkReq) => {
             const { data, status, message } = await verifyMagicLinkAction(payload);
             if (status === "error" || data === null) throw new Error(message);
             return data;
-        },
-        onError: (error) => {
-            toast.error(resError(error, `Login failed`));
         },
     });
 };

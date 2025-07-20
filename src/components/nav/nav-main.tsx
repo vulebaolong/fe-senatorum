@@ -6,6 +6,7 @@ import { ChevronRight, Palette } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
     
+    SidebarGroup,
     SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuButton,
@@ -17,7 +18,6 @@ import {
 } from "@/components/ui/sidebar";
 import ThemeToggleV2 from "../theme-toggle/theme-toggle-v2";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { SidebarGroup } from "../custom/sidebar-custom";
 
 const navMain = [
     {

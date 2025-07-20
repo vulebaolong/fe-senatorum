@@ -5,17 +5,16 @@ import * as React from "react";
 
 import { NavMain } from "@/components/nav/nav-main";
 import { NavUser } from "@/components/nav/nav-user";
-import { SidebarContent, SidebarRail, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { Sidebar, SidebarFooter, SidebarHeader } from "../custom/sidebar-custom";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { isMobile, state } = useSidebar();
 
     return (
-        <Sidebar collapsible="icon" {...props}>
+        <Sidebar collapsible="icon" {...props} className="h-[calc(100svh-var(--header-height))] bottom-0 top-[var(--header-height)]">
             <SidebarHeader className={"items-center"}>
                 <div className={cn("flex justify-between align-center w-full transition-all duration-200 ease-linear", "group-data-[collapsible=icon]:justify-center")}>
                     <p

@@ -11,6 +11,7 @@ export default function layout({ children }: TProps) {
         <>
             <Header />
             <SidebarProvider className="pt-[var(--header-height)]">
+            {/* <SidebarProvider> */}
                 <AppSidebar />
                 <SidebarInset>
                     <main>{children}</main>

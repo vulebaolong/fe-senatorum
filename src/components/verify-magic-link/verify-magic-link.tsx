@@ -2,9 +2,11 @@
 
 import { useVerifyMagicLink } from "@/api/tantask/auth.tanstack";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
+import { resError } from "@/helpers/function.helper";
 import useRouter from "@/hooks/use-router-custom";
 import { TVerifyMagicLinkReq } from "@/types/auth.type";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 type TProps = {
     params: TVerifyMagicLinkReq;
@@ -19,7 +21,8 @@ export default function VerifyMagicLink({ params }: TProps) {
             onSuccess: () => {
                 router.push(ROUTER_CLIENT.HOME);
             },
-            onError: () => {
+            onError: (err) => {
+                toast.error(resError(err, `Verify magic link failed`));
                 router.push(ROUTER_CLIENT.LOGIN);
             },
         });

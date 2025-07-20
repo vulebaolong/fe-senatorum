@@ -1,8 +1,7 @@
 import { clearTokensAction } from "@/api/actions/auth.action";
 import { NEXT_PUBLIC_BASE_DOMAIN_API } from "@/constant/app.constant";
-import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken } from "@/helpers/cookies.helper";
 import { CHAT_BUBBLE, CHAT_OPENED } from "@/constant/chat.constant";
-import { googleLogout } from '@react-oauth/google';
+import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken } from "@/helpers/cookies.helper";
 
 let isRefreshing = false;
 let failedQueue: { resolve: (token: string) => void; reject: (err: any) => void }[] = [];
@@ -58,18 +57,18 @@ export const refreshToken = async () => {
 
 export async function logout() {
     await clearTokensAction();
-    googleLogout()
+    // googleLogout()
 
     if (typeof window !== "undefined") {
-       // Client
-       localStorage.setItem(CHAT_OPENED, JSON.stringify([]));
-       localStorage.setItem(CHAT_BUBBLE, JSON.stringify([]));
-       window.location.reload();
-       window.location.href = "/login";
+        // Client
+        localStorage.setItem(CHAT_OPENED, JSON.stringify([]));
+        localStorage.setItem(CHAT_BUBBLE, JSON.stringify([]));
+        window.location.reload();
+        window.location.href = "/login";
     } else {
-       // Server
-       const { redirect } = await import("next/navigation");
-       redirect("/login");
+        // Server
+        const { redirect } = await import("next/navigation");
+        redirect("/login");
     }
 }
 

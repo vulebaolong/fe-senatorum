@@ -24,7 +24,7 @@ export default function Search() {
             <Button
                 onClick={() => setOpen(true)}
                 variant="secondary"
-                className="h-full md:w-40 lg:w-60 xl:w-72 flex items-center justify-between gap-2 rounded-xl px-4 dark:bg-card relative w-full"
+                className="h-full md:w-40 lg:w-60 xl:w-72 flex items-center justify-between gap-2 rounded-full px-4 dark:bg-muted bg-zinc-100 order-sidebar-border border relative w-full"
             >
                 <span className="hidden lg:inline-flex text-xs text-muted-foreground opacity-50">Search Article</span>
                 <span className="inline-flex lg:hidden text-xs text-muted-foreground opacity-50">Search...</span>

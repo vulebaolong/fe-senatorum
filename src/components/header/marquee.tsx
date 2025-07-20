@@ -19,11 +19,11 @@ export default function Marquee() {
     }, [key]);
 
     return (
-        <div className="py-1 pl-3 text-muted-foreground text-xs w-full h-5 overflow-hidden">
+        <div className="flex items-center text-muted-foreground text-xs w-full h-5 overflow-hidden">
             <AnimatePresence mode="wait">
                 <motion.p key={key} className="inline-block" initial="hidden" animate="visible" exit="exit" variants={container}>
                     {MESSAGE.split("").map((char, index) => (
-                        <motion.span key={index} variants={charFade}>
+                        <motion.span key={index} variants={charFade} style={{lineHeight: 1}}>
                             {char}
                         </motion.span>
                     ))}
