@@ -1,43 +1,45 @@
-import { createArticleAction, getAllArticleAction, getMyArticleAction, getOtherArticleAction } from "@/api/actions/article.action";
+import { createArticleAction, getAllPostAction, getMyPostAction, getOtherPostAction } from "@/api/actions/post.action";
+import { wait } from "@/helpers/function.helper";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-export const useGetAllArticle = (payload: any) => {
+export const useGetAllPost = (payload: any) => {
     return useQuery({
-        queryKey: ["get-all-article", payload],
+        queryKey: ["get-all-post", payload],
         queryFn: async () => {
             const { pagination, filters, sort } = payload;
             const { pageIndex, pageSize } = pagination;
             const query = `page=${pageIndex}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
 
-            const { data, status, message } = await getAllArticleAction(query);
+            const { data, status, message } = await getAllPostAction(query);
             if (status === "error" || data === null) throw new Error(message);
 
-            console.log({ useGetAllArticle: data });
+            await wait(5000);
+            console.log({ useGetAllPost: data });
             return data;
         },
     });
 };
 
-export const useGetMyArticle = (payload: any) => {
+export const useGetMyPost = (payload: any) => {
     return useQuery({
-        queryKey: ["get-my-article", payload],
+        queryKey: ["get-my-post", payload],
         queryFn: async () => {
             const { pagination, filters, sort } = payload;
             const { pageIndex, pageSize } = pagination;
             const query = `page=${pageIndex}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
 
-            const { data, status, message } = await getMyArticleAction(query);
+            const { data, status, message } = await getMyPostAction(query);
             if (status === "error" || data === null) throw new Error(message);
 
-            console.log({ useGetMyArticle: data });
+            console.log({ useGetMyPost: data });
             return data;
         },
     });
 };
 
-export const useGetOtherArticle = (payload: any & { id?: string }) => {
+export const useGetOtherPost = (payload: any & { id?: string }) => {
     return useQuery({
-        queryKey: ["get-other-article", payload],
+        queryKey: ["get-other-post", payload],
         queryFn: async () => {
             const { pagination, filters, sort, id } = payload;
             const { pageIndex, pageSize } = pagination;
@@ -47,10 +49,10 @@ export const useGetOtherArticle = (payload: any & { id?: string }) => {
                 sort?.isDesc
             }`;
 
-            const { data, status, message } = await getOtherArticleAction(query);
+            const { data, status, message } = await getOtherPostAction(query);
             if (status === "error" || data === null) throw new Error(message);
 
-            console.log({ useGetOtherArticle: data });
+            console.log({ useGetOtherPost: data });
             return data;
         },
     });

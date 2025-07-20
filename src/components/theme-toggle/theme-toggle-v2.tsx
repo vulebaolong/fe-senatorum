@@ -1,10 +1,11 @@
 "use client";
+
 import { MonitorCog, Moon, SunDim } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 
-export default function ThemeToggleV2() {
+export default function ThemeToggleV2({ className }: { className?: string }) {
     const { setTheme, theme } = useTheme();
     const [mounted, setMounted] = useState(false);
 
@@ -12,23 +13,10 @@ export default function ThemeToggleV2() {
         setMounted(true);
     }, []);
 
-    if (!mounted)
-        return (
-            <div className="flex gap-1 rounded-12 border border-border-subtlest-tertiary p-1">
-                <Button type="button" variant="ghost">
-                    <Moon />
-                </Button>
-                <Button type="button" variant="ghost">
-                    <SunDim size={30} />
-                </Button>
-                <Button type="button" variant="ghost">
-                    <MonitorCog />
-                </Button>
-            </div>
-        );
+    if (!mounted) return null;
 
     return (
-        <div className="flex items-center gap-1 rounded-[12px] border border-border-subtlest-tertiary p-1">
+        <div className={`flex gap-1 rounded-lg border border-border-subtlest-tertiary p-0.5 ${className}`}>
             <Button type="button" className="size-6" onClick={() => setTheme("dark")} variant="ghost">
                 <Moon fill={theme === "dark" ? "var(--primary)" : "var(--primary-foreground)"} />
             </Button>

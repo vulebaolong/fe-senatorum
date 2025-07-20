@@ -1,10 +1,11 @@
 "use client";
+import { BookOpen, Bot, Settings2, SquareTerminal } from "lucide-react";
 
-import { ChevronRight, type LucideIcon } from "lucide-react";
+import { ChevronRight, Palette } from "lucide-react";
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
-    SidebarGroup,
+    
     SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuButton,
@@ -12,32 +13,123 @@ import {
     SidebarMenuSub,
     SidebarMenuSubButton,
     SidebarMenuSubItem,
+    useSidebar,
 } from "@/components/ui/sidebar";
 import ThemeToggleV2 from "../theme-toggle/theme-toggle-v2";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { SidebarGroup } from "../custom/sidebar-custom";
 
-export function NavMain({
-    items,
-}: {
-    items: {
-        title: string;
-        url: string;
-        icon?: LucideIcon;
-        isActive?: boolean;
-        items?: {
-            title: string;
-            url: string;
-        }[];
-    }[];
-}) {
+const navMain = [
+    {
+        title: "Playground",
+        url: "#",
+        icon: SquareTerminal,
+        isActive: true,
+        items: [
+            {
+                title: "History",
+                url: "#",
+            },
+            {
+                title: "Starred",
+                url: "#",
+            },
+            {
+                title: "Settings",
+                url: "#",
+            },
+        ],
+    },
+    {
+        title: "Models",
+        url: "#",
+        icon: Bot,
+        items: [
+            {
+                title: "Genesis",
+                url: "#",
+            },
+            {
+                title: "Explorer",
+                url: "#",
+            },
+            {
+                title: "Quantum",
+                url: "#",
+            },
+        ],
+    },
+    {
+        title: "Documentation",
+        url: "#",
+        icon: BookOpen,
+        items: [
+            {
+                title: "Introduction",
+                url: "#",
+            },
+            {
+                title: "Get Started",
+                url: "#",
+            },
+            {
+                title: "Tutorials",
+                url: "#",
+            },
+            {
+                title: "Changelog",
+                url: "#",
+            },
+        ],
+    },
+    {
+        title: "Settings",
+        url: "#",
+        icon: Settings2,
+        items: [
+            {
+                title: "General",
+                url: "#",
+            },
+            {
+                title: "Team",
+                url: "#",
+            },
+            {
+                title: "Billing",
+                url: "#",
+            },
+            {
+                title: "Limits",
+                url: "#",
+            },
+        ],
+    },
+];
+
+export function NavMain() {
+    const { isMobile, state } = useSidebar();
     return (
         <SidebarGroup>
             <SidebarGroupLabel>Platform</SidebarGroupLabel>
             <SidebarMenu>
-                <SidebarMenuItem className="flex items-center justify-between">
-                    <p className="text-sm font-medium">Theme</p>
-                    <ThemeToggleV2 />
+                <SidebarMenuItem>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <div className="flex items-center overflow-hidden">
+                                <div className="p-2">
+                                    <Palette className="size-4 shrink-0 " />
+                                </div>
+                                <span className="text-sm">{`Theme`}</span>
+                                <ThemeToggleV2 className="ml-auto" />
+                            </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="right" align="center" hidden={state !== "collapsed" || isMobile}>
+                            <p>Theme</p>
+                        </TooltipContent>
+                    </Tooltip>
                 </SidebarMenuItem>
-                {items.map((item) => (
+                {navMain.map((item) => (
                     <Collapsible key={item.title} asChild defaultOpen={item.isActive} className="group/collapsible">
                         <SidebarMenuItem>
                             <CollapsibleTrigger asChild>

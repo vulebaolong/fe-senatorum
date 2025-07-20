@@ -1,160 +1,68 @@
 "use client";
 
-import { AudioWaveform, BookOpen, Bot, Command, Frame, GalleryVerticalEnd, Map, PieChart, Settings2, SquareTerminal } from "lucide-react";
+import { Plus } from "lucide-react";
 import * as React from "react";
 
 import { NavMain } from "@/components/nav/nav-main";
-import { NavProjects } from "@/components/nav/nav-projects";
 import { NavUser } from "@/components/nav/nav-user";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar";
-
-// This is sample data.
-const data = {
-    user: {
-        name: "shadcn",
-        email: "m@example.com",
-        avatar: "/avatars/shadcn.jpg",
-    },
-    teams: [
-        {
-            name: "Acme Inc",
-            logo: GalleryVerticalEnd,
-            plan: "Enterprise",
-        },
-        {
-            name: "Acme Corp.",
-            logo: AudioWaveform,
-            plan: "Startup",
-        },
-        {
-            name: "Evil Corp.",
-            logo: Command,
-            plan: "Free",
-        },
-    ],
-    navMain: [
-        {
-            title: "Playground",
-            url: "#",
-            icon: SquareTerminal,
-            isActive: true,
-            items: [
-                {
-                    title: "History",
-                    url: "#",
-                },
-                {
-                    title: "Starred",
-                    url: "#",
-                },
-                {
-                    title: "Settings",
-                    url: "#",
-                },
-            ],
-        },
-        {
-            title: "Models",
-            url: "#",
-            icon: Bot,
-            items: [
-                {
-                    title: "Genesis",
-                    url: "#",
-                },
-                {
-                    title: "Explorer",
-                    url: "#",
-                },
-                {
-                    title: "Quantum",
-                    url: "#",
-                },
-            ],
-        },
-        {
-            title: "Documentation",
-            url: "#",
-            icon: BookOpen,
-            items: [
-                {
-                    title: "Introduction",
-                    url: "#",
-                },
-                {
-                    title: "Get Started",
-                    url: "#",
-                },
-                {
-                    title: "Tutorials",
-                    url: "#",
-                },
-                {
-                    title: "Changelog",
-                    url: "#",
-                },
-            ],
-        },
-        {
-            title: "Settings",
-            url: "#",
-            icon: Settings2,
-            items: [
-                {
-                    title: "General",
-                    url: "#",
-                },
-                {
-                    title: "Team",
-                    url: "#",
-                },
-                {
-                    title: "Billing",
-                    url: "#",
-                },
-                {
-                    title: "Limits",
-                    url: "#",
-                },
-            ],
-        },
-    ],
-    projects: [
-        {
-            name: "Design Engineering",
-            url: "#",
-            icon: Frame,
-        },
-        {
-            name: "Sales & Marketing",
-            url: "#",
-            icon: PieChart,
-        },
-        {
-            name: "Travel",
-            url: "#",
-            icon: Map,
-        },
-    ],
-};
+import { SidebarContent, SidebarRail, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
+import { Button } from "../ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { Sidebar, SidebarFooter, SidebarHeader } from "../custom/sidebar-custom";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const { isMobile, state } = useSidebar();
+
     return (
         <Sidebar collapsible="icon" {...props}>
-            <SidebarHeader>
-                <div className="flex items-center gap-2">
-                    <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                        <AudioWaveform className="size-4" />
-                    </div>
-                    <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="truncate font-medium">Katheria Business</span>
-                        <span className="truncate text-xs">Enterprise</span>
-                    </div>
+            <SidebarHeader className={"items-center"}>
+                <div className={cn("flex justify-between align-center w-full transition-all duration-200 ease-linear", "group-data-[collapsible=icon]:justify-center")}>
+                    <p
+                        className={cn(
+                            "text-sidebar-foreground/70 opacity-100 visible w-full ring-sidebar-ring flex h-8 items-center rounded-md text-xs font-medium transition-all duration-200 ease-linear overflow-hidden whitespace-nowrap",
+                            "px-2",
+                            "group-data-[collapsible=icon]:px-0",
+                            "group-data-[collapsible=icon]:w-0",
+                            "group-data-[collapsible=icon]:opacity-0",
+                            "group-data-[collapsible=icon]:invisible"
+                        )}
+                    >
+                        Menu
+                    </p>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <SidebarTrigger />
+                        </TooltipTrigger>
+                        <TooltipContent side="right" align="center" hidden={state !== "collapsed" || isMobile}>
+                            <p>Theme</p>
+                        </TooltipContent>
+                    </Tooltip>
                 </div>
+                <Button
+                    className={cn(
+                        "flex items-center justify-center gap-2 h-8 w-full overflow-hidden px-3 py-2 transition-all duration-200 ease-linear",
+                        "group-data-[collapsible=icon]:size-8",
+                        "group-data-[collapsible=icon]:px-0",
+                        "group-data-[collapsible=icon]:justify-center",
+                        "group-data-[collapsible=icon]:gap-0"
+                    )}
+                >
+                    <Plus />
+                    <span
+                        className={cn(
+                            "whitespace-nowrap transition-all duration-200 ease-linear",
+                            "group-data-[collapsible=icon]:opacity-0",
+                            "group-data-[collapsible=icon]:w-0",
+                            "group-data-[collapsible=icon]:overflow-hidden"
+                        )}
+                    >
+                        New Article
+                    </span>
+                </Button>
             </SidebarHeader>
             <SidebarContent>
-                <NavMain items={data.navMain} />
-                <NavProjects projects={data.projects} />
+                <NavMain />
             </SidebarContent>
             <SidebarFooter>
                 <NavUser />

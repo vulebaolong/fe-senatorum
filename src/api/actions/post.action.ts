@@ -5,9 +5,8 @@ import { TRes, TResAction, TResPagination } from "@/types/app.type";
 import { TArticle } from "@/types/article.type";
 import api from "../core.api";
 
-export async function getAllArticleAction(query: string): Promise<TResAction<TResPagination<TArticle> | null>> {
+export async function getAllPostAction(query: string): Promise<TResAction<TResPagination<TArticle> | null>> {
    try {
-      console.log(`${ENDPOINT.ARTICLE_MY}?${query}`);
       const result = await api.get<TRes<TResPagination<TArticle>>>(`${ENDPOINT.ARTICLE_ALL}?${query}`);
       const { data } = result;
       return { status: "success", message: result.message, data: data };
@@ -16,10 +15,10 @@ export async function getAllArticleAction(query: string): Promise<TResAction<TRe
    }
 }
 
-export async function getMyArticleAction(query: string): Promise<TResAction<TResPagination<TArticle> | null>> {
+export async function getMyPostAction(query: string): Promise<TResAction<TResPagination<TArticle> | null>> {
    try {
-      console.log(`${ENDPOINT.ARTICLE_MY}?${query}`);
-      const result = await api.get<TRes<TResPagination<TArticle>>>(`${ENDPOINT.ARTICLE_MY}?${query}`);
+      console.log(`${ENDPOINT.POST_MY}?${query}`);
+      const result = await api.get<TRes<TResPagination<TArticle>>>(`${ENDPOINT.POST_MY}?${query}`);
       const { data } = result;
       return { status: "success", message: result.message, data: data };
    } catch (error: any) {
@@ -27,7 +26,7 @@ export async function getMyArticleAction(query: string): Promise<TResAction<TRes
    }
 }
 
-export async function getOtherArticleAction(query: string): Promise<TResAction<TResPagination<TArticle> | null>> {
+export async function getOtherPostAction(query: string): Promise<TResAction<TResPagination<TArticle> | null>> {
    try {
       const result = await api.get<TRes<TResPagination<TArticle>>>(`${ENDPOINT.ARTICLE_OTHER}${query}`);
       const { data } = result;

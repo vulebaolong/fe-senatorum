@@ -26,7 +26,7 @@ export const resError = (error: any, defaultMes: string) => {
 
 export const formatLocalTime = (time?: dayjs.ConfigType, format = "HH:mm:ss DD/MM/YYYY") => {
     if (typeof time === "string") {
-        if (format === `ago`) return formatRelativeTimeNumber(time);
+        if (format === `ago`) return dayjs(time).fromNow()
         return dayjs.utc(time).local().format(format);
     } else if (typeof time === "number") {
         if (format === `ago`) return dayjs.unix(time).local().fromNow();

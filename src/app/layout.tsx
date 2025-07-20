@@ -25,7 +25,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     const messages = await getMessages();
     return (
         <html lang={locale}  suppressHydrationWarning>
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+            <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
                 <NextIntlClientProvider messages={messages}>
                     <Provider>{children}</Provider>
                 </NextIntlClientProvider>
@@ -34,3 +34,29 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         </html>
     );
 }
+
+/**
+ * 
+ * 
+ * tracking user
+ * phiên đăng nhập
+ * 
+ * private page
+ * 
+ * header theo wireframe
+ * 
+ * 
+ * 
+ * 
+ * type
+ * 
+ * 
+ * category
+ * 
+ * report
+ * 
+ * banned (dự phòng)
+ * 
+ * 
+ * 
+ */

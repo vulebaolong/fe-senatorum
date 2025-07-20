@@ -1,0 +1,80 @@
+"use client";
+
+import { useGetAllPost } from "@/api/tantask/post.tanstack";
+import { TArticle } from "@/types/article.type";
+import { useEffect, useRef, useState } from "react";
+import { AppendLoading } from "../data-state/append-state/AppendState";
+import NodataOverlay from "../no-data/NodataOverlay";
+import { Skeleton } from "../ui/skeleton";
+import ArticleItem from "./article-item/article-item";
+
+type TProps = {
+    filters?: Record<string, any>;
+    id?: string;
+    // type: "all" | "my" | "other";
+    // className?: string;
+};
+
+export default function Articlelist({ filters, id }: TProps) {
+    const [page, setPage] = useState(1);
+    const [articles, setArticles] = useState<TArticle[]>([]);
+    const pageSize = 10;
+    const totalPageRef = useRef(0);
+    const containerRef = useRef(null);
+    const bottomTriggerRef = useRef(null);
+
+    const getAllArticle = useGetAllPost({
+        pagination: { pageIndex: page, pageSize },
+        filters,
+        id: id,
+        sort: { sortBy: `createdAt`, isDesc: true },
+    });
+
+    useEffect(() => {
+        if (!getAllArticle.data?.items) return;
+
+        const newArticles = getAllArticle.data.items;
+        setArticles((prev) => {
+            if (page === 1) return newArticles;
+            return [...prev, ...newArticles];
+        });
+    }, [getAllArticle.data?.items]);
+
+    useEffect(() => {
+        if (getAllArticle.data?.totalPage) totalPageRef.current = getAllArticle.data.totalPage;
+    }, [getAllArticle.data?.totalPage]);
+
+    const handleEndReached = () => {
+        if (getAllArticle.isFetching || getAllArticle.isLoading || page >= totalPageRef.current) return;
+        console.log({ page, totalPage: totalPageRef.current });
+        console.log(getAllArticle.isFetching || getAllArticle.isLoading || page >= totalPageRef.current);
+        setPage((prev) => prev + 1);
+    };
+
+    return (
+        <div ref={containerRef} className={`px-5 pb-5 mt-2 h-[calc(100vh-var(--header-height))] overflow-y-scroll`}>
+            <div className="relative grid gap-5 justify-center [grid-template-columns:repeat(auto-fill,minmax(300px,300px))] min-h-full">
+                <AppendLoading
+                    isLoading={getAllArticle.isLoading}
+                    isEmpty={articles.length === 0}
+                    isError={getAllArticle.isError}
+                    onBottom={handleEndReached}
+                    containerRef={containerRef}
+                    bottomTriggerRef={bottomTriggerRef}
+                    footerLoadingComponent={Array.from({ length: 5 }).map((_, i) => (
+                        <Skeleton key={i} className="min-h-[430px] h-full w-full rounded-xl" />
+                    ))}
+                    initialLoadingComponent={Array.from({ length: 5 }).map((_, i) => (
+                        <Skeleton key={i} className="h-[430px] w-full rounded-xl" />
+                    ))}
+                    noDataComponent={<NodataOverlay visible />}
+                >
+                    {articles.map((article) => (
+                        <ArticleItem key={article.id} article={article} />
+                    ))}
+                </AppendLoading>
+            </div>
+            <div ref={bottomTriggerRef} className="w-full h-1"></div>
+        </div>
+    );
+}
