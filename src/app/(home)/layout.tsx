@@ -1,3 +1,5 @@
+"use client";
+
 import Header from "@/components/header/header";
 import { AppSidebar } from "@/components/nav/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
@@ -10,8 +12,7 @@ export default function layout({ children }: TProps) {
     return (
         <>
             <Header />
-            <SidebarProvider className="pt-[var(--header-height)]">
-            {/* <SidebarProvider> */}
+            <SidebarProvider defaultOpen={false} className="pt-[var(--header-height)]">
                 <AppSidebar />
                 <SidebarInset>
                     <main>{children}</main>

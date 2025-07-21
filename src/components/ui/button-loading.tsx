@@ -8,7 +8,7 @@ interface ButtonLoadingProps extends React.ComponentProps<typeof Button> {
 
 export function ButtonLoading({ loading, children, className, ...props }: ButtonLoadingProps) {
     return (
-        <Button {...props} disabled={loading || props.disabled} className={`relative ${className}`}>
+        <Button {...props} disabled={loading || props.disabled} className={`relative overflow-hidden ${className}`}>
             {/* Loader */}
             {
                 <span
@@ -26,8 +26,8 @@ export function ButtonLoading({ loading, children, className, ...props }: Button
             {/* Content */}
             <span
                 className={`
-          absolute left-0 top-0 w-full h-full flex items-center justify-center
-          transition-all duration-300
+          absolute left-0 top-0 w-full h-full flex items-center justify-center gap-2
+          transition-all duration-300 
           ${loading ? "translate-y-8 opacity-0" : "translate-y-0 opacity-100"}
           pointer-events-none
         `}

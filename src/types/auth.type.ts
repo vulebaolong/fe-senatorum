@@ -18,8 +18,7 @@ export type TLoginMagicLinkReq = {
 };
 
 export type TVerifyMagicLinkReq = {
-    token: string;
-    nonce: string;
+    magicLinkId: string;
 };
 
 export type TLoginFormGaReq = {
@@ -60,4 +59,8 @@ export type TPayloadLoginGoogleAuthenticator = {
 export type TLoginGoogleWithTotpReq = {
     email: string;
     token: string;
+};
+
+export type TLoginGoogleOneTapReq = {
+    credential: string;
 };

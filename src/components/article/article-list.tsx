@@ -7,6 +7,7 @@ import { AppendLoading } from "../data-state/append-state/AppendState";
 import NodataOverlay from "../no-data/NodataOverlay";
 import { Skeleton } from "../ui/skeleton";
 import ArticleItem from "./article-item/article-item";
+import { useFillSkeletons } from "@/hooks/fill-skeleton-article";
 
 type TProps = {
     filters?: Record<string, any>;
@@ -44,6 +45,10 @@ export default function Articlelist({ filters, id }: TProps) {
         if (getAllArticle.data?.totalPage) totalPageRef.current = getAllArticle.data.totalPage;
     }, [getAllArticle.data?.totalPage]);
 
+    const itemWidth = 300;
+    const gap = 20;
+    const skeletonCount = useFillSkeletons(containerRef, itemWidth, articles.length, gap);
+
     const handleEndReached = () => {
         if (getAllArticle.isFetching || getAllArticle.isLoading || page >= totalPageRef.current) return;
         console.log({ page, totalPage: totalPageRef.current });
@@ -53,7 +58,7 @@ export default function Articlelist({ filters, id }: TProps) {
 
     return (
         <div ref={containerRef} className={`px-5 pb-5 mt-2 h-[calc(100vh-var(--header-height))] overflow-y-scroll`}>
-            <div className="relative grid gap-5 justify-center [grid-template-columns:repeat(auto-fill,minmax(300px,300px))] min-h-full">
+            <div className={`relative grid gap-5 justify-center [grid-template-columns:repeat(auto-fill,minmax(${itemWidth}px,${itemWidth}px))] min-h-full`}>
                 <AppendLoading
                     isLoading={getAllArticle.isLoading}
                     isEmpty={articles.length === 0}
@@ -61,10 +66,10 @@ export default function Articlelist({ filters, id }: TProps) {
                     onBottom={handleEndReached}
                     containerRef={containerRef}
                     bottomTriggerRef={bottomTriggerRef}
-                    footerLoadingComponent={Array.from({ length: 5 }).map((_, i) => (
+                    footerLoadingComponent={Array.from({ length: skeletonCount }).map((_, i) => (
                         <Skeleton key={i} className="min-h-[430px] h-full w-full rounded-xl" />
                     ))}
-                    initialLoadingComponent={Array.from({ length: 5 }).map((_, i) => (
+                    initialLoadingComponent={Array.from({ length: skeletonCount }).map((_, i) => (
                         <Skeleton key={i} className="h-[430px] w-full rounded-xl" />
                     ))}
                     noDataComponent={<NodataOverlay visible />}

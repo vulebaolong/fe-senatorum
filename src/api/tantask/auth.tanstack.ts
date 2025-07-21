@@ -2,6 +2,7 @@ import {
     getInfoAction,
     loginFormAction,
     loginGoogleAction,
+    loginGooleOneTapAction,
     loginMagicLinkAction,
     registerAction,
     verifyMagicLinkAction,
@@ -9,7 +10,7 @@ import {
 import { resError } from "@/helpers/function.helper";
 import { useAppDispatch } from "@/redux/hooks";
 import { SET_INFO } from "@/redux/slices/user.slice";
-import { TLoginFormReq, TLoginGoogleWithTotpReq, TLoginMagicLinkReq, TRegisterReq, TVerifyMagicLinkReq } from "@/types/auth.type";
+import { TLoginFormReq, TLoginGoogleOneTapReq, TLoginGoogleWithTotpReq, TLoginMagicLinkReq, TRegisterReq, TVerifyMagicLinkReq } from "@/types/auth.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -109,6 +110,17 @@ export const useLoginGoogle = () => {
         },
         onError: (error) => {
             toast.error(resError(error, `Login failed`));
+        },
+    });
+};
+
+export const useLoginGooleOneTap = () => {
+    return useMutation({
+        mutationFn: async (payload: TLoginGoogleOneTapReq) => {
+            const { data, status, message } = await loginGooleOneTapAction(payload);
+            if (status === "error" || data === null) throw new Error(message);
+            console.log({ useLoginGooleOneTap: data });
+            return data;
         },
     });
 };

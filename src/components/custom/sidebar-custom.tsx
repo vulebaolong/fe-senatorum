@@ -4,6 +4,8 @@ import * as React from "react";
 
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { PanelLeftClose, PanelRightClose } from "lucide-react";
+import { Button } from "../ui/button";
 import { useSidebar } from "../ui/sidebar";
 
 const SIDEBAR_WIDTH_MOBILE = "18rem";
@@ -119,4 +121,26 @@ export function SidebarFooter({ className, ...props }: React.ComponentProps<"div
 
 export function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
     return <div data-slot="sidebar-header" data-sidebar="header" className={cn("flex flex-col gap-2 p-[7px]", className)} {...props} />;
+}
+
+export function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
+    const { toggleSidebar, open } = useSidebar();
+
+    return (
+        <Button
+            data-sidebar="trigger"
+            data-slot="sidebar-trigger"
+            variant="ghost"
+            size="icon"
+            className={cn("size-7", className)}
+            onClick={(event) => {
+                onClick?.(event);
+                toggleSidebar();
+            }}
+            {...props}
+        >
+            {open ? <PanelLeftClose /> : <PanelRightClose />}
+            <span className="sr-only">Toggle Sidebar</span>
+        </Button>
+    );
 }

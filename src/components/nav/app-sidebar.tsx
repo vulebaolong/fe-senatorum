@@ -5,18 +5,24 @@ import * as React from "react";
 
 import { NavMain } from "@/components/nav/nav-main";
 import { NavUser } from "@/components/nav/nav-user";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail, useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
+import { SidebarTrigger } from "../custom/sidebar-custom";
 import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    const { isMobile, state } = useSidebar();
+    const { open } = useSidebar();
 
     return (
         <Sidebar collapsible="icon" {...props} className="h-[calc(100svh-var(--header-height))] bottom-0 top-[var(--header-height)]">
             <SidebarHeader className={"items-center"}>
-                <div className={cn("flex justify-between align-center w-full transition-all duration-200 ease-linear", "group-data-[collapsible=icon]:justify-center")}>
+                <div
+                    className={cn(
+                        "flex justify-between align-center w-full transition-all duration-200 ease-linear",
+                        "group-data-[collapsible=icon]:justify-center"
+                    )}
+                >
                     <p
                         className={cn(
                             "text-sidebar-foreground/70 opacity-100 visible w-full ring-sidebar-ring flex h-8 items-center rounded-md text-xs font-medium transition-all duration-200 ease-linear overflow-hidden whitespace-nowrap",
@@ -33,8 +39,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         <TooltipTrigger asChild>
                             <SidebarTrigger />
                         </TooltipTrigger>
-                        <TooltipContent side="right" align="center" hidden={state !== "collapsed" || isMobile}>
-                            <p>Theme</p>
+                        <TooltipContent side="right" align="center">
+                            <p>{open ? "Close Sidebar" : "Open Sidebar"}</p>
                         </TooltipContent>
                     </Tooltip>
                 </div>
