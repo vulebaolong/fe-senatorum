@@ -38,8 +38,7 @@ export const usePermissions = (payload: any) => {
         queryKey: ["permissions", payload],
         queryFn: async () => {
             const { data, status, message } = await getPermissionsAction(
-                `page=${payload.pagination.pageIndex}&pageSize=${payload.pagination.pageSize}&filters=${JSON.stringify(payload.filters)}&sortBy=${
-                    payload.sort?.sortBy
+                `page=${payload.pagination.pageIndex}&pageSize=${payload.pagination.pageSize}&filters=${JSON.stringify(payload.filters)}&sortBy=${payload.sort?.sortBy
                 }&isDesc=${payload.sort?.isDesc}`
             );
             if (status === "error" || data === null) throw new Error(message);
@@ -86,7 +85,6 @@ export const useUpdatePermissions = () => {
         },
     });
 };
-
 
 export const useDeletePermissions = () => {
     const queryClient = useQueryClient();

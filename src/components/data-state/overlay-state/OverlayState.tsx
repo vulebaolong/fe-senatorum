@@ -12,17 +12,16 @@ type OverlayStateProps = {
 };
 
 export function OverlayState({ isLoading, isEmpty, isError, loadingComponent, noDataComponent, children }: OverlayStateProps) {
-    return (
-        <div className="relative">
-            {isLoading && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center  backdrop-blur-sm">
-                    {loadingComponent || <Loader2 className="h-5 w-5 animate-spin" />}
-                </div>
-            )}
-            {!isLoading && (isEmpty || isError) && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center  backdrop-blur-sm">{noDataComponent || <Nodata />}</div>
-            )}
-            {children}
-        </div>
-    );
+    if (isLoading) {
+        return (
+            <div className="absolute inset-0 z-10 flex items-center justify-center  backdrop-blur-sm">
+                {loadingComponent || <Loader2 className="h-5 w-5 animate-spin" />}
+            </div>
+        );
+    }
+
+    if (!isLoading && (isEmpty || isError)) {
+        return <div className="absolute inset-0 z-10 flex items-center justify-center  backdrop-blur-sm">{noDataComponent || <Nodata />}</div>;
+    }
+    return <>{children}</>;
 }

@@ -5,9 +5,10 @@ import { TUser } from "./user.type";
 
 export type TArticle = {
     id: number;
+    slug: string;
     title: string;
     content: any;
-    imageUrl: string;
+    thumbnail: string;
     views: number;
     userId: number;
     typeId: number;

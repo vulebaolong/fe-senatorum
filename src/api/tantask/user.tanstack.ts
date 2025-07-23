@@ -1,26 +1,12 @@
 import {
     editProfileAction,
-    findAllChatGroupManyAction,
-    findAllChatGroupOneAction,
     findAllUserAction,
     getDetailUserAction,
     searchNameUserAction,
     uploadAvatarCloudAction,
-    uploadAvatarLocalAction,
 } from "@/api/actions/user.action";
 import { TEditProfileReq } from "@/types/user.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
-
-export const useUploadAvatarLocal = () => {
-    return useMutation({
-        mutationFn: async (payload: FormData) => {
-            const { data, status, message } = await uploadAvatarLocalAction(payload);
-            if (status === "error" || data === null) throw new Error(message);
-            console.log({ useUploadAvatarLocal: data });
-            return data;
-        },
-    });
-};
 
 export const useUploadAvatarCloud = () => {
     return useMutation({
@@ -40,30 +26,6 @@ export const useFindAllUser = () => {
             const { data, status, message } = await findAllUserAction();
             if (status === "error" || data === null) throw new Error(message);
             console.log({ useFindAllUser: data });
-            return data;
-        },
-    });
-};
-
-export const useFindAllChatGroupOne = () => {
-    return useQuery({
-        queryKey: ["chat-group-list-one"],
-        queryFn: async () => {
-            const { data, status, message } = await findAllChatGroupOneAction();
-            if (status === "error" || data === null) throw new Error(message);
-            console.log({ useFindAllChatGroupOne: data });
-            return data;
-        },
-    });
-};
-
-export const useFindAllChatGroupMany = () => {
-    return useQuery({
-        queryKey: ["chat-group-list-many"],
-        queryFn: async () => {
-            const { data, status, message } = await findAllChatGroupManyAction();
-            if (status === "error" || data === null) throw new Error(message);
-            console.log({ useFindAllChatGroupMany: data });
             return data;
         },
     });

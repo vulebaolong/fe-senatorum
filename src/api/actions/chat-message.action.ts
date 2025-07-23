@@ -7,7 +7,7 @@ import api from "../core.api";
 
 export async function getGetChatMessageAction(query: string): Promise<TResAction<TResPagination<TAllmessage> | null>> {
    try {
-      const result = await api.get<TRes<TResPagination<TAllmessage>>>(`${ENDPOINT.CHAT_MESSAGE}?${query}`);
+      const result = await api.get<TRes<TResPagination<TAllmessage>>>(`${ENDPOINT.CHAT_MESSAGE.CHAT_MESSAGE}?${query}`);
       const { data } = result;
       return { status: "success", message: result.message, data: data };
    } catch (error: any) {

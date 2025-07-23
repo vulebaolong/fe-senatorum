@@ -39,7 +39,7 @@ export const useMutationCommentByParent = () => {
 
             const { data, status, message } = await getCommentByArticleAction(query);
             if (status === "error" || data === null) throw new Error(message);
-            
+
             console.log({ useMutationCommentByParent: data });
             return data;
         },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetAllPost, useGetMyPost, useGetOtherPost } from "@/api/tantask/post.tanstack";
+import { useGetAllArticle, useGetMyPost, useGetOtherArticle } from "@/api/tantask/article.tanstack";
 import { formatLocalTime } from "@/helpers/function.helper";
 import { TArticle } from "@/types/article.type";
 import { ArrowDown, ArrowUp, Bookmark, Ellipsis, Eye, MessageCircle, Share2 } from "lucide-react";
@@ -29,9 +29,9 @@ export default function Postlist({ filters, id, type, className }: TProps) {
     const totalPageRef = useRef(0);
 
     const getAllPost = (() => {
-        if (type === "all") return useGetAllPost;
+        if (type === "all") return useGetAllArticle;
         if (type === "my") return useGetMyPost;
-        return useGetOtherPost;
+        return useGetOtherArticle;
     })()({
         pagination: { pageIndex: page, pageSize },
         filters,

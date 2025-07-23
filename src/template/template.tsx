@@ -1,32 +1,31 @@
 "use client";
 
-import useRouter from "@/hooks/use-router-custom";
-import { useAppSelector } from "@/redux/hooks";
+import { logout } from "@/api/core.api";
 import { useGetInfoMutation } from "@/api/tantask/auth.tanstack";
-import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { SET_INFO } from "@/redux/slices/user.slice";
 import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 type TProps = {
     children: React.ReactNode;
-    protect?: boolean;
 };
 
-export default function Template({ children, protect = false }: TProps) {
-    const router = useRouter();
+export default function Template({ children }: TProps) {
     const getInfo = useGetInfoMutation();
-    const [allowRender, setAllowRender] = useState(!protect);
+    const [allowRender, setAllowRender] = useState(false);
     const loadingPage = useAppSelector((state) => state.setting.loadingPage);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         getInfo.mutate(undefined, {
-            onSuccess: () => {
+            onSuccess: (data) => {
                 setAllowRender(true);
+                dispatch(SET_INFO(data));
             },
             onError: () => {
-                if (protect) {
-                    setAllowRender(false);
-                    router.push("/login");
-                }
+                setAllowRender(false);
+                logout();
             },
         });
     }, []);

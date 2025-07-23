@@ -2,12 +2,14 @@
 
 import { ENDPOINT } from "@/constant/endpoint.constant";
 import { TRes, TResAction, TResPagination } from "@/types/app.type";
-import { TComment, TCreateCommentReq } from "@/types/comment.type";
+import { TChatGroup } from "@/types/chat.type";
+import { TEditProfileReq, TUser } from "@/types/user.type";
 import api from "../core.api";
 
-export async function createCommentAction(payload: TCreateCommentReq): Promise<TResAction<TComment | null>> {
+
+export async function findAllChatGroupOneAction(): Promise<TResAction<TResPagination<TChatGroup> | null>> {
     try {
-        const result = await api.post<TRes<TComment>>(ENDPOINT.COMMENT.COMMENT, payload);
+        const result = await api.get<TRes<TResPagination<TChatGroup>>>(`${ENDPOINT.CHAT_GROUP.CHAT_GROUP}?pageSize=100&isOne=true`);
         const { data } = result;
         return { status: "success", message: result.message, data: data };
     } catch (error: any) {
@@ -15,9 +17,9 @@ export async function createCommentAction(payload: TCreateCommentReq): Promise<T
     }
 }
 
-export async function getCommentByArticleAction(query: string): Promise<TResAction<TResPagination<TComment> | null>> {
+export async function findAllChatGroupManyAction(): Promise<TResAction<TResPagination<TChatGroup> | null>> {
     try {
-        const result = await api.get<TRes<TResPagination<TComment>>>(`${ENDPOINT.COMMENT.COMMENT}?${query}`);
+        const result = await api.get<TRes<TResPagination<TChatGroup>>>(`${ENDPOINT.CHAT_GROUP.CHAT_GROUP}?pageSize=100&isOne=false`);
         const { data } = result;
         return { status: "success", message: result.message, data: data };
     } catch (error: any) {

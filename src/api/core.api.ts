@@ -1,6 +1,7 @@
 import { clearTokensAction } from "@/api/actions/auth.action";
 import { NEXT_PUBLIC_BASE_DOMAIN_API } from "@/constant/app.constant";
 import { CHAT_BUBBLE, CHAT_OPENED } from "@/constant/chat.constant";
+import { ENDPOINT } from "@/constant/endpoint.constant";
 import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken } from "@/helpers/cookies.helper";
 
 let isRefreshing = false;
@@ -30,7 +31,7 @@ export const refreshToken = async () => {
         const accessToken = await getAccessToken();
         const refreshToken = await getRefreshToken();
 
-        const res = await fetch(`${NEXT_PUBLIC_BASE_DOMAIN_API}auth/refresh-token`, {
+        const res = await fetch(`${NEXT_PUBLIC_BASE_DOMAIN_API}${ENDPOINT.AUTH.REFRESH_TOKEN}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

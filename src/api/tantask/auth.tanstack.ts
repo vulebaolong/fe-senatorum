@@ -15,15 +15,13 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export const useGetInfoMutation = () => {
-    const dispatch = useAppDispatch();
     return useMutation({
         mutationFn: async () => {
             try {
                 const { data, status, message } = await getInfoAction();
                 if (status === "error" || data === null) throw new Error(message);
                 console.log({ useGetInfoMutation: data });
-                dispatch(SET_INFO(data));
-                return true;
+                return data;
             } catch (error) {
                 throw error;
             }

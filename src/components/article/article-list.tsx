@@ -1,13 +1,13 @@
 "use client";
 
-import { useGetAllPost } from "@/api/tantask/post.tanstack";
+import { useGetAllArticle } from "@/api/tantask/article.tanstack";
+import { useFillSkeletons } from "@/hooks/fill-skeleton-article";
 import { TArticle } from "@/types/article.type";
 import { useEffect, useRef, useState } from "react";
 import { AppendLoading } from "../data-state/append-state/AppendState";
 import NodataOverlay from "../no-data/NodataOverlay";
 import { Skeleton } from "../ui/skeleton";
 import ArticleItem from "./article-item/article-item";
-import { useFillSkeletons } from "@/hooks/fill-skeleton-article";
 
 type TProps = {
     filters?: Record<string, any>;
@@ -24,7 +24,7 @@ export default function Articlelist({ filters, id }: TProps) {
     const containerRef = useRef(null);
     const bottomTriggerRef = useRef(null);
 
-    const getAllArticle = useGetAllPost({
+    const getAllArticle = useGetAllArticle({
         pagination: { pageIndex: page, pageSize },
         filters,
         id: id,
@@ -51,14 +51,14 @@ export default function Articlelist({ filters, id }: TProps) {
 
     const handleEndReached = () => {
         if (getAllArticle.isFetching || getAllArticle.isLoading || page >= totalPageRef.current) return;
-        console.log({ page, totalPage: totalPageRef.current });
-        console.log(getAllArticle.isFetching || getAllArticle.isLoading || page >= totalPageRef.current);
         setPage((prev) => prev + 1);
     };
 
     return (
-        <div ref={containerRef} className={`px-5 pb-5 mt-2 h-[calc(100vh-var(--header-height))] overflow-y-scroll`}>
-            <div className={`relative grid gap-5 justify-center [grid-template-columns:repeat(auto-fill,minmax(${itemWidth}px,${itemWidth}px))] min-h-full`}>
+        <div ref={containerRef} className={`p-5 h-[calc(100vh-var(--header-height))] overflow-y-scroll`}>
+            <div
+                className={`relative grid gap-5 justify-center [grid-template-columns:repeat(auto-fill,minmax(${itemWidth}px,${itemWidth}px))] min-h-full`}
+            >
                 <AppendLoading
                     isLoading={getAllArticle.isLoading}
                     isEmpty={articles.length === 0}

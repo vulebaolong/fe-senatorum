@@ -5,7 +5,6 @@ import {
     getRolesAction,
     getToggleRoleAction,
     TCreateRoleAction,
-    toggleRolePermissionAction,
     TUpdateRoleAction,
     updateRolesAction
 } from "@/api/actions/role.action";
@@ -13,14 +12,14 @@ import { resError } from "@/helpers/function.helper";
 import { TToggleRolePermissionReq, TToggleRoleReq } from "@/types/role.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { toggleRolePermissionAction } from "../actions/role-permision.action";
 
 export const useRoles = (payload: any) => {
     return useQuery({
         queryKey: ["roles", payload],
         queryFn: async () => {
             const { data, status, message } = await getRolesAction(
-                `page=${payload.pagination.pageIndex}&pageSize=${payload.pagination.pageSize}&filters=${JSON.stringify(payload.filters)}&sortBy=${
-                    payload.sort?.sortBy
+                `page=${payload.pagination.pageIndex}&pageSize=${payload.pagination.pageSize}&filters=${JSON.stringify(payload.filters)}&sortBy=${payload.sort?.sortBy
                 }&isDesc=${payload.sort?.isDesc}`
             );
             if (status === "error" || data === null) throw new Error(message);

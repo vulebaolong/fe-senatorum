@@ -6,7 +6,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { formatLocalTime } from "@/helpers/function.helper";
+import useRouter from "@/hooks/use-router-custom";
 import { TArticle } from "@/types/article.type";
 import { Bookmark, Ellipsis, Eye, MessageCircle, Share2 } from "lucide-react";
 
@@ -15,8 +17,14 @@ type TProps = {
 };
 
 export default function ArticleItem({ article }: TProps) {
+    const router = useRouter();
     return (
-        <article key={article.id} className="pt-5 space-y-5 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[384px] h-full w-full">
+        <article
+            onClick={() => {
+                router.push(`${ROUTER_CLIENT.ARTICLE}/${article.slug}`);
+            }}
+            className="pt-5 space-y-5 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[384px] h-full w-full cursor-pointer"
+        >
             {/* header */}
             <div className=" h-[40px] flex items-center justify-between px-5 ">
                 <div className="flex basis-[60%] items-center gap-1 min-w-0">
@@ -62,7 +70,7 @@ export default function ArticleItem({ article }: TProps) {
             {/* thumbnail */}
             <div className="flex-1 px-2 flex flex-col justify-between gap-2">
                 <div className="w-full aspect-video border border-border rounded-lg overflow-hidden">
-                    <ImageCustom src={article.imageUrl} alt={"article image"} />
+                    <ImageCustom src={article.thumbnail} alt={"article image"} />
                 </div>
             </div>
 

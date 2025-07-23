@@ -5,11 +5,11 @@ import { clearTokens, setAccessToken, setRefreshToken } from "@/helpers/cookies.
 import { TRes, TResAction } from "@/types/app.type";
 import { TLoginGoogleOneTapReq, TLoginGoogleWithTotpReq, TLoginMagicLinkReq, TLoginRes, TRegisterReq, TRegisterRes, TVerifyMagicLinkReq } from "@/types/auth.type";
 import { TUser } from "@/types/user.type";
-import api from "../core.api";
+import api, { logout } from "../core.api";
 
 export async function registerAction(payload: TRegisterReq): Promise<TResAction<TRegisterRes | null>> {
     try {
-        const result = await api.post<TRes<TRegisterRes>>(ENDPOINT.REGISTER, payload);
+        const result = await api.post<TRes<TRegisterRes>>(ENDPOINT.AUTH.REGISTER, payload);
         const { data } = result;
         return { status: "success", message: result.message, data: data };
     } catch (error: any) {
@@ -19,7 +19,7 @@ export async function registerAction(payload: TRegisterReq): Promise<TResAction<
 
 export async function loginFormAction(payload: TLoginMagicLinkReq): Promise<TResAction<TLoginRes | null>> {
     try {
-        const result = await api.post<TRes<TLoginRes>>(ENDPOINT.LOGIN, payload);
+        const result = await api.post<TRes<TLoginRes>>(ENDPOINT.AUTH.LOGIN, payload);
         const { data } = result;
         if (!data.isTotp && data?.accessToken && data?.refreshToken) {
             await setAccessToken(data?.accessToken);
@@ -33,7 +33,7 @@ export async function loginFormAction(payload: TLoginMagicLinkReq): Promise<TRes
 
 export async function loginMagicLinkAction(payload: TLoginMagicLinkReq): Promise<TResAction<TLoginRes | null>> {
     try {
-        const result = await api.post<TRes<TLoginRes>>(ENDPOINT.CREATE_MAGIC_LINK, payload);
+        const result = await api.post<TRes<TLoginRes>>(ENDPOINT.AUTH.CREATE_MAGIC_LINK, payload);
         const { data } = result;
         return { status: "success", message: result.message, data: data };
     } catch (error: any) {
@@ -43,7 +43,7 @@ export async function loginMagicLinkAction(payload: TLoginMagicLinkReq): Promise
 
 export async function verifyMagicLinkAction(payload: TVerifyMagicLinkReq): Promise<TResAction<TLoginRes | null>> {
     try {
-        const result = await api.post<TRes<TLoginRes>>(ENDPOINT.VERIFY_MAGIC_LINK, payload);
+        const result = await api.post<TRes<TLoginRes>>(ENDPOINT.AUTH.VERIFY_MAGIC_LINK, payload);
         const { data } = result;
         if (!data.isTotp && data?.accessToken && data?.refreshToken) {
             await setAccessToken(data?.accessToken);
@@ -57,7 +57,7 @@ export async function verifyMagicLinkAction(payload: TVerifyMagicLinkReq): Promi
 
 export async function loginGooleOneTapAction(payload: TLoginGoogleOneTapReq): Promise<TResAction<TLoginRes | null>> {
     try {
-        const result = await api.post<TRes<TLoginRes>>(ENDPOINT.LOGIN_GOOGLE_ONE_TAP, payload);
+        const result = await api.post<TRes<TLoginRes>>(ENDPOINT.AUTH.LOGIN_GOOGLE_ONE_TAP, payload);
         const { data } = result;
         if (!data.isTotp && data?.accessToken && data?.refreshToken) {
             await setAccessToken(data?.accessToken);
@@ -71,7 +71,7 @@ export async function loginGooleOneTapAction(payload: TLoginGoogleOneTapReq): Pr
 
 export async function loginGoogleAction(payload: TLoginGoogleWithTotpReq): Promise<TResAction<TLoginRes | null>> {
     try {
-        const result = await api.post<TRes<TLoginRes>>(ENDPOINT.LOGIN_GOOGLE, payload);
+        const result = await api.post<TRes<TLoginRes>>(ENDPOINT.AUTH.LOGIN_GOOGLE, payload);
         const { data } = result;
         if (!data.isTotp && data?.accessToken && data?.refreshToken) {
             await setAccessToken(data?.accessToken);
@@ -85,7 +85,7 @@ export async function loginGoogleAction(payload: TLoginGoogleWithTotpReq): Promi
 
 export async function getInfoAction(): Promise<TResAction<TUser | null>> {
     try {
-        const result = await api.get<TRes<TUser>>(ENDPOINT.GET_INFO);
+        const result = await api.get<TRes<TUser>>(ENDPOINT.AUTH.GET_INFO);
         const { data } = result;
 
         return { status: "success", message: result.message, data: data };
