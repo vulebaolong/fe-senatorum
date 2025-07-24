@@ -2,26 +2,27 @@ import Nodata from "@/components/no-data/Nodata";
 import { Loader2 } from "lucide-react";
 import { ReactNode } from "react";
 
-type OverlayStateProps = {
+type OverlayStateProps<T> = {
     isLoading: boolean;
-    isEmpty: boolean;
     isError: boolean;
+    data: T | null | undefined;
+    content: (data: T) => ReactNode;
     loadingComponent?: ReactNode;
     noDataComponent?: ReactNode;
-    children: ReactNode;
 };
 
-export function OverlayState({ isLoading, isEmpty, isError, loadingComponent, noDataComponent, children }: OverlayStateProps) {
+export function OverlayState<T>({ isLoading, isError, data, content, loadingComponent, noDataComponent }: OverlayStateProps<T>) {
     if (isLoading) {
         return (
-            <div className="absolute inset-0 z-10 flex items-center justify-center  backdrop-blur-sm">
+            <div className="absolute inset-0 z-10 flex items-center justify-center">
                 {loadingComponent || <Loader2 className="h-5 w-5 animate-spin" />}
             </div>
         );
     }
 
-    if (!isLoading && (isEmpty || isError)) {
-        return <div className="absolute inset-0 z-10 flex items-center justify-center  backdrop-blur-sm">{noDataComponent || <Nodata />}</div>;
+    if (!data || isError) {
+        return <div className="absolute inset-0 z-10 flex items-center justify-center">{noDataComponent || <Nodata />}</div>;
     }
-    return <>{children}</>;
+
+    return <>{content(data)}</>;
 }

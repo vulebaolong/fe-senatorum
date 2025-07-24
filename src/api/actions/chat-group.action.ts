@@ -3,7 +3,6 @@
 import { ENDPOINT } from "@/constant/endpoint.constant";
 import { TRes, TResAction, TResPagination } from "@/types/app.type";
 import { TChatGroup } from "@/types/chat.type";
-import { TEditProfileReq, TUser } from "@/types/user.type";
 import api from "../core.api";
 
 

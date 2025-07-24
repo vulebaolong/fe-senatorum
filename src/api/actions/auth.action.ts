@@ -5,7 +5,7 @@ import { clearTokens, setAccessToken, setRefreshToken } from "@/helpers/cookies.
 import { TRes, TResAction } from "@/types/app.type";
 import { TLoginGoogleOneTapReq, TLoginGoogleWithTotpReq, TLoginMagicLinkReq, TLoginRes, TRegisterReq, TRegisterRes, TVerifyMagicLinkReq } from "@/types/auth.type";
 import { TUser } from "@/types/user.type";
-import api, { logout } from "../core.api";
+import api from "../core.api";
 
 export async function registerAction(payload: TRegisterReq): Promise<TResAction<TRegisterRes | null>> {
     try {

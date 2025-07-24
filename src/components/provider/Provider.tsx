@@ -1,6 +1,7 @@
 "use client";
 import "../../styles/animation.css";
 import "../../styles/global.css";
+import '@mdxeditor/editor/style.css'
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import dayjs from "dayjs";

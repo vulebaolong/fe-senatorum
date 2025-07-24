@@ -2,7 +2,7 @@
 
 import { ENDPOINT } from "@/constant/endpoint.constant";
 import { TRes, TResAction, TResPagination } from "@/types/app.type";
-import { TRole, TToggleRolePermissionReq, TToggleRolePermissionRes, TToggleRoleReq } from "@/types/role.type";
+import { TRole, TToggleRoleReq } from "@/types/role.type";
 import api from "../core.api";
 
 export async function getRolesAction(query: string): Promise<TResAction<TResPagination<TRole> | null>> {

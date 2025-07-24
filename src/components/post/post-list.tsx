@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetAllArticle, useGetMyPost, useGetOtherArticle } from "@/api/tantask/article.tanstack";
+import { useGetAllArticle, useGetOtherArticle } from "@/api/tantask/article.tanstack";
 import { formatLocalTime } from "@/helpers/function.helper";
 import { TArticle } from "@/types/article.type";
 import { ArrowDown, ArrowUp, Bookmark, Ellipsis, Eye, MessageCircle, Share2 } from "lucide-react";
@@ -30,7 +30,6 @@ export default function Postlist({ filters, id, type, className }: TProps) {
 
     const getAllPost = (() => {
         if (type === "all") return useGetAllArticle;
-        if (type === "my") return useGetMyPost;
         return useGetOtherArticle;
     })()({
         pagination: { pageIndex: page, pageSize },
@@ -127,7 +126,7 @@ export default function Postlist({ filters, id, type, className }: TProps) {
                                 </div>
 
                                 <div className="w-full aspect-video border border-border rounded-lg overflow-hidden">
-                                    <ImageCustom src={post.imageUrl} alt={"post image"} />
+                                    <ImageCustom src={post.thumbnail} alt={"post image"} />
                                 </div>
                             </div>
 

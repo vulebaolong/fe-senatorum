@@ -10,9 +10,12 @@ import { cn } from "@/lib/utils";
 import { SidebarTrigger } from "../custom/sidebar-custom";
 import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import useRouter from "@/hooks/use-router-custom";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { open } = useSidebar();
+    const router = useRouter();
 
     return (
         <Sidebar collapsible="icon" {...props} className="h-[calc(100svh-var(--header-height))] bottom-0 top-[var(--header-height)]">
@@ -45,6 +48,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     </Tooltip>
                 </div>
                 <Button
+                    onClick={() => {
+                        router.push(ROUTER_CLIENT.ARTICLE_CREATE);
+                    }}
                     className={cn(
                         "flex items-center justify-center gap-2 h-8 w-full overflow-hidden px-3 py-2 transition-all duration-200 ease-linear",
                         "group-data-[collapsible=icon]:size-8",
