@@ -14,13 +14,13 @@ type OverlayStateProps<T> = {
 export function OverlayState<T>({ isLoading, isError, data, content, loadingComponent, noDataComponent }: OverlayStateProps<T>) {
     if (isLoading) {
         return (
-            <div className="absolute inset-0 z-10 flex items-center justify-center">
+            <div className="absolute inset-0 z-10 flex items-center justify-center min-h-5 h-auto">
                 {loadingComponent || <Loader2 className="h-5 w-5 animate-spin" />}
             </div>
         );
     }
 
-    if (!data || isError) {
+    if (!data || (data as any)?.length === 0 || isError) {
         return <div className="absolute inset-0 z-10 flex items-center justify-center">{noDataComponent || <Nodata />}</div>;
     }
 

@@ -1,132 +1,80 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { ButtonLoading } from "@/components/ui/button-loading";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { MDXEditorMethods } from "@mdxeditor/editor";
 import { useRef } from "react";
-import { ForwardRefEditor } from "./mdx-editor/forward-ref-editor";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import { ButtonLoading } from "@/components/ui/button-loading";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CategoryMultiSelect } from "./category-multi-select";
-import { TCategory } from "@/types/category.type";
-
-export const categories: TCategory[] = [
-    {
-        id: "1",
-        name: "Frontend",
-        slug: "frontend",
-        description: "UI/UX & JS frameworks",
-        isDeleted: false,
-        createdAt: "2024-01-01T00:00:00Z",
-        updatedAt: "2024-01-01T00:00:00Z",
-    },
-    {
-        id: "2",
-        name: "Backend",
-        slug: "backend",
-        description: "Server, Database & API",
-        isDeleted: false,
-        createdAt: "2024-01-02T00:00:00Z",
-        updatedAt: "2024-01-02T00:00:00Z",
-    },
-    {
-        id: "3",
-        name: "DevOps",
-        slug: "devops",
-        description: "CI/CD, Docker, Infrastructure",
-        isDeleted: false,
-        createdAt: "2024-01-03T00:00:00Z",
-        updatedAt: "2024-01-03T00:00:00Z",
-    },
-    {
-        id: "4",
-        name: "AI",
-        slug: "ai",
-        description: "Artificial Intelligence & Machine Learning",
-        isDeleted: false,
-        createdAt: "2024-01-04T00:00:00Z",
-        updatedAt: "2024-01-04T00:00:00Z",
-    },
-    {
-        id: "5",
-        name: "Mobile",
-        slug: "mobile",
-        description: "React Native, Flutter, mobile UX",
-        isDeleted: false,
-        createdAt: "2024-01-05T00:00:00Z",
-        updatedAt: "2024-01-05T00:00:00Z",
-    },
-    {
-        id: "6",
-        name: "Design",
-        slug: "design",
-        description: "Figma, prototyping, design systems",
-        isDeleted: false,
-        createdAt: "2024-01-06T00:00:00Z",
-        updatedAt: "2024-01-06T00:00:00Z",
-    },
-    {
-        id: "7",
-        name: "Testing",
-        slug: "testing",
-        description: "Unit, Integration, E2E testing tools",
-        isDeleted: false,
-        createdAt: "2024-01-07T00:00:00Z",
-        updatedAt: "2024-01-07T00:00:00Z",
-    },
-];
-
-const categorySchema = z.object({
-    id: z.string(),
-    name: z.string(),
-    slug: z.string(),
-    description: z.string(),
-});
+import { ForwardRefEditor } from "./mdx-editor/forward-ref-editor";
+import { CategoryMultiSelect } from "./select/category-multi-select";
+import TypeSelect from "./select/type-select";
+import { TCreateArticleReq } from "@/types/article.type";
+import { useCreateArticle } from "@/api/tantask/article.tanstack";
+import { toast } from "sonner";
+import { resError } from "@/helpers/function.helper";
 
 const FormSchema = z.object({
-    email: z.email({ message: "Email không hợp lệ" }),
-    type: z.string(),
-    categories: z.array(categorySchema).min(1, "Chọn ít nhất 1 danh mục").max(3, "Chỉ được chọn tối đa 3 danh mục"),
+    title: z.string().nonempty(),
+    typeId: z.string().nonempty(),
+    categoryIds: z.array(z.number()).min(1, "Chọn ít nhất 1 danh mục").max(3, "Chỉ được chọn tối đa 3 danh mục"),
+    content: z.string().nonempty(),
 });
 
 export default function ArticleCreate() {
     const editorRef = useRef<MDXEditorMethods>(null);
 
+    const createArticle = useCreateArticle();
+
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            email: `example@gmail.com`,
+            title: ``,
+            typeId: ``,
+            categoryIds: [],
+            content: ``,
         },
     });
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        const payload = {
-            email: data.email.trim(),
+        if (!editorRef.current) return toast.warning("Not found editor");
+
+        const content = editorRef.current?.getMarkdown();
+        if (content.trim().length === 0) return toast.warning("Please enter content");
+
+        const payload: TCreateArticleReq = {
+            ...data,
+            content: content,
+            thumbnail: "123",
+            typeId: Number(data.typeId),
         };
 
         console.log({ payload });
-        //   useloginForm.mutate(payload, {
-        //       onSuccess: (data) => {
-        //           console.log({ data });
-        //           if (data.isTotp) {
-        //               // setStep(`login-google-authentication`);
-        //           } else {
-        //               router.push(ROUTER_CLIENT.HOME);
-        //               toast.success(`Login successfully`);
-        //           }
-        //       },
-        //   });
+
+        createArticle.mutate(payload, {
+            onSuccess: (data) => {
+                console.log({ data });
+                editorRef.current?.setMarkdown("");
+                form.reset();
+                toast.success(`Create article successfully`);
+            },
+            onError: (error) => {
+                toast.error(resError(error, `Create article failed`));
+            },
+        });
     }
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="p-5 h-[calc(100vh-var(--header-height))] flex flex-col gap-5">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="p-5 h-[calc(100vh-var(--header-height))] flex flex-col gap-5 overflow-y-auto">
+                {/* email */}
                 <FormField
                     control={form.control}
-                    name="email"
+                    name="title"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Title</FormLabel>
@@ -140,23 +88,21 @@ export default function ArticleCreate() {
                         </FormItem>
                     )}
                 />
+
+                {/* type */}
                 <FormField
                     control={form.control}
-                    name="type"
+                    name="typeId"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Type</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
                                     <SelectTrigger className="min-w-[180px]">
                                         <SelectValue placeholder="Select a type article" />
                                     </SelectTrigger>
                                 </FormControl>
-                                <SelectContent>
-                                    <SelectItem value="m@example.com">Analysis</SelectItem>
-                                    <SelectItem value="m@google.com">Analysis</SelectItem>
-                                    <SelectItem value="m@support.com">Analysis</SelectItem>
-                                </SelectContent>
+                                <TypeSelect />
                             </Select>
                             <FormDescription className="text-xs italic">
                                 Type articles by purpose like blogs, tutorials, product updates, etc.
@@ -165,17 +111,15 @@ export default function ArticleCreate() {
                         </FormItem>
                     )}
                 />
+
+                {/* categories */}
                 <FormField
                     control={form.control}
-                    name="categories"
+                    name="categoryIds"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Category</FormLabel>
-                            <CategoryMultiSelect
-                                value={(field.value as TCategory[]) || []}
-                                onChange={field.onChange}
-                                options={categories} // từ BE
-                            />
+                            <CategoryMultiSelect value={field.value || []} onChange={field.onChange} />
                             <FormDescription className="text-xs italic">
                                 Categorize posts by purpose like blogs, tutorials, product updates, etc.
                             </FormDescription>
@@ -183,10 +127,29 @@ export default function ArticleCreate() {
                         </FormItem>
                     )}
                 />
-                <div className="overflow-y-auto flex-1">
-                    <ForwardRefEditor ref={editorRef} markdown="# Hello world" onChange={(md) => console.log(md)} />
-                </div>
-                <ButtonLoading loading={false} type="submit" className="w-full">
+
+                {/* content */}
+                <FormField
+                    control={form.control}
+                    name="content"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Content</FormLabel>
+                            <div className="flex-1 h-fit relative">
+                                <ForwardRefEditor ref={editorRef} markdown={field.value} onChange={field.onChange} />
+                                <Badge variant={"outline"} className="absolute bottom-[5px] right-[5px]">
+                                    count: {field.value.trim().length}
+                                </Badge>
+                            </div>
+                            <FormDescription className="text-xs italic">
+                                Categorize posts by purpose like blogs, tutorials, product updates, etc.
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <ButtonLoading loading={createArticle.isPending} type="submit" className="w-full">
                     Create
                 </ButtonLoading>
             </form>

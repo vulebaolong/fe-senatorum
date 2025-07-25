@@ -1,7 +1,7 @@
 import { TBaseTimestamps } from "./base.type"
 
 export type TCategory = {
-   id: string
+   id: number
    name: string
    slug: string
    description: string

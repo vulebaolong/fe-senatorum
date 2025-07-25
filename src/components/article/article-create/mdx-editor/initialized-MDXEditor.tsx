@@ -72,7 +72,7 @@ export default function InitializedMDXEditor({ editorRef, ...props }: { editorRe
 
     return (
         <MDXEditor
-            className={`${theme === "dark" && "dark-theme dark-editor"}   dark:bg-zinc-900 border border-input rounded-md h-full`}
+            className={`${theme === "dark" && "dark-theme dark-editor"} dark:bg-zinc-900 border border-input rounded-md h-full pb-2.5`}
             plugins={[
                 // Example Plugin Usage
                 headingsPlugin(),

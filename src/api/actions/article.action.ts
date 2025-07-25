@@ -2,7 +2,7 @@
 
 import { ENDPOINT } from "@/constant/endpoint.constant";
 import { TRes, TResAction, TResPagination } from "@/types/app.type";
-import { TArticle } from "@/types/article.type";
+import { TArticle, TCreateArticleReq } from "@/types/article.type";
 import api from "../core.api";
 
 export async function getAllArticleAction(query: string): Promise<TResAction<TResPagination<TArticle> | null>> {
@@ -35,9 +35,10 @@ export async function getDetailArticleAction(slug: string): Promise<TResAction<T
    }
 }
 
-export async function createArticleAction(payload: FormData): Promise<TResAction<any | null>> {
+export async function createArticleAction(payload: TCreateArticleReq): Promise<TResAction<boolean | null>> {
    try {
-      const result = await api.post<TRes<any>>(ENDPOINT.ARTICLE.ARTICLE, payload);
+      console.log({ body: payload });
+      const result = await api.post<TRes<boolean>>(ENDPOINT.ARTICLE.ARTICLE, payload);
       const { data } = result;
       return { status: "success", message: result.message, data: data };
    } catch (error: any) {

@@ -87,7 +87,9 @@ class APIClient {
 
         const isFormData = body instanceof FormData;
 
-        const contentType = isFormData ? {} : { "Content-Type": "application/json" };
+        const contentType = isFormData
+            ? { "Content-Type": "multipart/form-data" }
+            : { "Content-Type": "application/json" };
 
         const handleBody = () => {
             if (!body) return undefined;
@@ -114,12 +116,21 @@ class APIClient {
             console.log(`(${response.status}) Access Token không hợp lệ hoặc đã hết hạn → Cần refresh token`);
             try {
                 accessToken = await refreshToken();
-                response = await fetch(`${NEXT_PUBLIC_BASE_DOMAIN_API}${url}`, {
-                    ...options,
+
+                // Re-prepare headers & body after token refresh
+                const isFormData = body instanceof FormData;
+                const contentType = isFormData
+                    ? { "Content-Type": "multipart/form-data" }
+                    : { "Content-Type": "application/json" };
+
+                response = await fetch(`${this.baseURL}${url}`, {
+                    ...restOptions,
                     headers: {
-                        ...(options.headers || {}),
                         Authorization: `Bearer ${accessToken}`,
+                        ...contentType,
+                        ...headers,
                     },
+                    body: handleBody(),
                 });
             } catch (err) {
                 console.error("❌ Refresh Token Error", err);

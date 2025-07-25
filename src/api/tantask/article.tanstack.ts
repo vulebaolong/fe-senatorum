@@ -1,4 +1,5 @@
 import { createArticleAction, getAllArticleAction, getDetailArticleAction, getOtherArticleAction } from "@/api/actions/article.action";
+import { TCreateArticleReq } from "@/types/article.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useGetAllArticle = (payload: any) => {
@@ -54,7 +55,7 @@ export const useGetDetailArticle = (payload: string) => {
 
 export const useCreateArticle = () => {
     return useMutation({
-        mutationFn: async (payload: FormData) => {
+        mutationFn: async (payload: TCreateArticleReq) => {
             const { data, status, message } = await createArticleAction(payload);
             if (status === "error" || data === null) throw new Error(message);
             return data;

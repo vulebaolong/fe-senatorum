@@ -27,7 +27,7 @@ export const ENDPOINT = {
     ARTICLE: {
         ARTICLE: "article",
         ARTICLE_ALL: "article/all",
-        ARTICLE_OTHER: "post/other",
+        ARTICLE_OTHER: "article/other",
     },
     COMMENT: {
         COMMENT: "comment",
@@ -48,4 +48,10 @@ export const ENDPOINT = {
         SAVE: "totp/save",
         DISABLE: "totp/disable",
     },
+    TYPE: {
+        TYPE: "type",
+    },
+    CATEGORY: {
+        CATEGORY: "category",
+    }
 };
