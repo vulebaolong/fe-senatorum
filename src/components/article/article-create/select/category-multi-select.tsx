@@ -3,13 +3,12 @@ import { OverlayState } from "@/components/data-state/overlay-state/OverlayState
 import { Button } from "@/components/ui/button";
 import { Command, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { TResPagination } from "@/types/app.type";
 import { TCategory } from "@/types/category.type";
 import { Check, ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 type Props = {
-    value: number[]; 
+    value: number[];
     onChange: (value: number[]) => void;
 };
 

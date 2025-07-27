@@ -53,5 +53,8 @@ export const ENDPOINT = {
     },
     CATEGORY: {
         CATEGORY: "category",
-    }
+    },
+    IMAGE: {
+        DRAFT: "image/upload-draft",
+    },
 };

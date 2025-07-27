@@ -2,9 +2,8 @@
 
 import { ENDPOINT } from "@/constant/endpoint.constant";
 import { TRes, TResAction, TResPagination } from "@/types/app.type";
-import { TType } from "@/types/type.type";
-import api from "../core.api";
 import { TCategory } from "@/types/category.type";
+import api from "../core.api";
 
 export async function getListCategoryArticleAction(): Promise<TResAction<TResPagination<TCategory> | null>> {
     try {

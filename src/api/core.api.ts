@@ -87,10 +87,6 @@ class APIClient {
 
         const isFormData = body instanceof FormData;
 
-        const contentType = isFormData
-            ? { "Content-Type": "multipart/form-data" }
-            : { "Content-Type": "application/json" };
-
         const handleBody = () => {
             if (!body) return undefined;
             if (isFormData) return body;
@@ -99,37 +95,36 @@ class APIClient {
 
         let accessToken = await getAccessToken();
 
-        const optionFetch: any = {
-            ...restOptions,
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                ...contentType,
-                ...headers,
-            },
-            body: handleBody(),
+        const newHeaders: HeadersInit = {
+            Authorization: `Bearer ${accessToken}`,
+            ...(isFormData ? {} : { "Content-Type": "application/json" }),
+            ...(headers || {}), // thêm các header gốc nếu có
         };
 
-        let response = await fetch(`${this.baseURL}${url}`, optionFetch);
-
+        let response = await fetch(`${this.baseURL}${url}`, {
+            ...restOptions,
+            headers: newHeaders,
+            body: handleBody(),
+        });
         // ✅ Xử lý lỗi 403: Access Token không hợp lệ hoặc đã hết hạn → Cần refresh token
         if (response.status === 403) {
             console.log(`(${response.status}) Access Token không hợp lệ hoặc đã hết hạn → Cần refresh token`);
             try {
                 accessToken = await refreshToken();
 
-                // Re-prepare headers & body after token refresh
+                // Kiểm tra xem body có phải là FormData không
                 const isFormData = body instanceof FormData;
-                const contentType = isFormData
-                    ? { "Content-Type": "multipart/form-data" }
-                    : { "Content-Type": "application/json" };
+
+                // Khởi tạo headers mới
+                const newHeaders: HeadersInit = {
+                    Authorization: `Bearer ${accessToken}`,
+                    ...(isFormData ? {} : { "Content-Type": "application/json" }),
+                    ...(headers || {}), // thêm các header gốc nếu có
+                };
 
                 response = await fetch(`${this.baseURL}${url}`, {
                     ...restOptions,
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        ...contentType,
-                        ...headers,
-                    },
+                    headers: newHeaders,
                     body: handleBody(),
                 });
             } catch (err) {

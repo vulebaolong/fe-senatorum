@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     output: `standalone`,
     reactStrictMode: false,
     images: {
-        domains: ["be-node.vulebaolong.com", "dynamic-media-cdn.tripadvisor.com", "res.cloudinary.com"],
+        domains: ["be-node.vulebaolong.com", "res.cloudinary.com"],
         remotePatterns: [
             {
                 protocol: "http",
@@ -18,12 +18,6 @@ const nextConfig: NextConfig = {
             {
                 protocol: "https",
                 hostname: "**",
-                port: "",
-                search: "",
-            },
-            {
-                protocol: "https",
-                hostname: "dynamic-media-cdn.tripadvisor.com",
                 port: "",
                 search: "",
             },

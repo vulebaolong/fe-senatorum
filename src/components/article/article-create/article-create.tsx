@@ -1,32 +1,46 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
+import { useCreateArticle } from "@/api/tantask/article.tanstack";
 import { ButtonLoading } from "@/components/ui/button-loading";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { TCreateArticleReq } from "@/types/article.type";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MDXEditorMethods } from "@mdxeditor/editor";
-import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { ForwardRefEditor } from "./mdx-editor/forward-ref-editor";
+import Editor from "../../lexical/editor";
 import { CategoryMultiSelect } from "./select/category-multi-select";
 import TypeSelect from "./select/type-select";
-import { TCreateArticleReq } from "@/types/article.type";
-import { useCreateArticle } from "@/api/tantask/article.tanstack";
-import { toast } from "sonner";
-import { resError } from "@/helpers/function.helper";
 
 const FormSchema = z.object({
     title: z.string().nonempty(),
     typeId: z.string().nonempty(),
     categoryIds: z.array(z.number()).min(1, "Chọn ít nhất 1 danh mục").max(3, "Chỉ được chọn tối đa 3 danh mục"),
-    content: z.string().nonempty(),
+    content: z.string().refine(
+        (val) => {
+            try {
+                const parsed = JSON.parse(val);
+                const children = parsed?.root?.children ?? [];
+                return children.some((node: any) => {
+                    if (node.type === "paragraph" && Array.isArray(node.children)) {
+                        return node.children.some((child: any) => child.text?.trim() !== "");
+                    }
+                    return true;
+                });
+            } catch (error) {
+                console.log(error);
+                return false;
+            }
+        },
+        {
+            message: "Nội dung không được để trống",
+        }
+    ),
 });
 
 export default function ArticleCreate() {
-    const editorRef = useRef<MDXEditorMethods>(null);
+    // const editorRef = useRef<MDXEditorMethods>(null);
 
     const createArticle = useCreateArticle();
 
@@ -40,32 +54,28 @@ export default function ArticleCreate() {
         },
     });
 
+    console.log({ form, errors: form.formState.errors, values: form.getValues() });
+
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        if (!editorRef.current) return toast.warning("Not found editor");
-
-        const content = editorRef.current?.getMarkdown();
-        if (content.trim().length === 0) return toast.warning("Please enter content");
-
         const payload: TCreateArticleReq = {
             ...data,
-            content: content,
             thumbnail: "123",
             typeId: Number(data.typeId),
         };
 
         console.log({ payload });
 
-        createArticle.mutate(payload, {
-            onSuccess: (data) => {
-                console.log({ data });
-                editorRef.current?.setMarkdown("");
-                form.reset();
-                toast.success(`Create article successfully`);
-            },
-            onError: (error) => {
-                toast.error(resError(error, `Create article failed`));
-            },
-        });
+        // createArticle.mutate(payload, {
+        //     onSuccess: (data) => {
+        //         console.log({ data });
+        //         editorRef.current?.setMarkdown("");
+        //         form.reset();
+        //         toast.success(`Create article successfully`);
+        //     },
+        //     onError: (error) => {
+        //         toast.error(resError(error, `Create article failed`));
+        //     },
+        // });
     }
 
     return (
@@ -135,12 +145,18 @@ export default function ArticleCreate() {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Content</FormLabel>
-                            <div className="flex-1 h-fit relative">
+                            <Editor
+                                onChange={field.onChange}
+                                // onChange={(editorState) => {
+                                //     console.log(editorState);
+                                // }}
+                            />
+                            {/* <div className="flex-1 h-fit relative">
                                 <ForwardRefEditor ref={editorRef} markdown={field.value} onChange={field.onChange} />
                                 <Badge variant={"outline"} className="absolute bottom-[5px] right-[5px]">
                                     count: {field.value.trim().length}
                                 </Badge>
-                            </div>
+                            </div> */}
                             <FormDescription className="text-xs italic">
                                 Categorize posts by purpose like blogs, tutorials, product updates, etc.
                             </FormDescription>
