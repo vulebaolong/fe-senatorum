@@ -58,6 +58,7 @@ export const useCreateArticle = () => {
         mutationFn: async (payload: TCreateArticleReq) => {
             const { data, status, message } = await createArticleAction(payload);
             if (status === "error" || data === null) throw new Error(message);
+            console.log({ useCreateArticle: data });
             return data;
         },
     });

@@ -5,7 +5,6 @@ import { ChevronRight, Palette } from "lucide-react";
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
-    
     SidebarGroup,
     SidebarGroupLabel,
     SidebarMenu,
@@ -18,144 +17,108 @@ import {
 } from "@/components/ui/sidebar";
 import ThemeToggleV2 from "../theme-toggle/theme-toggle-v2";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import useRouter from "@/hooks/use-router-custom";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
 
-const navMain = [
+const groups = [
     {
-        title: "Playground",
+        title: "Discover groups",
         url: "#",
-        icon: SquareTerminal,
-        isActive: true,
-        items: [
-            {
-                title: "History",
-                url: "#",
-            },
-            {
-                title: "Starred",
-                url: "#",
-            },
-            {
-                title: "Settings",
-                url: "#",
-            },
-        ],
     },
     {
-        title: "Models",
+        title: "Current group 1",
         url: "#",
-        icon: Bot,
-        items: [
-            {
-                title: "Genesis",
-                url: "#",
-            },
-            {
-                title: "Explorer",
-                url: "#",
-            },
-            {
-                title: "Quantum",
-                url: "#",
-            },
-        ],
     },
     {
-        title: "Documentation",
+        title: "Current group 2",
         url: "#",
-        icon: BookOpen,
-        items: [
-            {
-                title: "Introduction",
-                url: "#",
-            },
-            {
-                title: "Get Started",
-                url: "#",
-            },
-            {
-                title: "Tutorials",
-                url: "#",
-            },
-            {
-                title: "Changelog",
-                url: "#",
-            },
-        ],
     },
     {
-        title: "Settings",
+        title: "New Group",
         url: "#",
-        icon: Settings2,
-        items: [
-            {
-                title: "General",
-                url: "#",
-            },
-            {
-                title: "Team",
-                url: "#",
-            },
-            {
-                title: "Billing",
-                url: "#",
-            },
-            {
-                title: "Limits",
-                url: "#",
-            },
-        ],
+    },
+];
+
+const collections = [
+    {
+        title: "Bookmarks",
+        url: "#",
+    },
+    {
+        title: "Custom collections 1",
+        url: "#",
+    },
+    {
+        title: "Custom collections 2",
+        url: "#",
+    },
+    {
+        title: "New Collection",
+        url: "#",
     },
 ];
 
 export function NavMain() {
     const { isMobile, state } = useSidebar();
+    const router = useRouter();
     return (
-        <SidebarGroup>
-            <SidebarGroupLabel>Platform</SidebarGroupLabel>
-            <SidebarMenu>
-                <SidebarMenuItem>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <div className="flex items-center overflow-hidden">
-                                <div className="p-2">
-                                    <Palette className="size-4 shrink-0 " />
+        <>
+            <SidebarGroup>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <div className="flex items-center overflow-hidden">
+                                    <div className="p-2">
+                                        <Palette className="size-4 shrink-0 " />
+                                    </div>
+                                    <span className="text-sm">{`Theme`}</span>
+                                    <ThemeToggleV2 className="ml-auto" />
                                 </div>
-                                <span className="text-sm">{`Theme`}</span>
-                                <ThemeToggleV2 className="ml-auto" />
-                            </div>
-                        </TooltipTrigger>
-                        <TooltipContent side="right" align="center" hidden={state !== "collapsed" || isMobile}>
-                            <p>Theme</p>
-                        </TooltipContent>
-                    </Tooltip>
-                </SidebarMenuItem>
-                {navMain.map((item) => (
-                    <Collapsible key={item.title} asChild defaultOpen={item.isActive} className="group/collapsible">
-                        <SidebarMenuItem>
-                            <CollapsibleTrigger asChild>
-                                <SidebarMenuButton tooltip={item.title}>
-                                    {item.icon && <item.icon />}
-                                    <span>{item.title}</span>
-                                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                                </SidebarMenuButton>
-                            </CollapsibleTrigger>
-                            <CollapsibleContent>
-                                <SidebarMenuSub>
-                                    {item.items?.map((subItem) => (
-                                        <SidebarMenuSubItem key={subItem.title}>
-                                            <SidebarMenuSubButton asChild>
-                                                <a href={subItem.url}>
-                                                    <span>{subItem.title}</span>
-                                                </a>
-                                            </SidebarMenuSubButton>
-                                        </SidebarMenuSubItem>
-                                    ))}
-                                </SidebarMenuSub>
-                            </CollapsibleContent>
+                            </TooltipTrigger>
+                            <TooltipContent side="right" align="center" hidden={state !== "collapsed" || isMobile}>
+                                <p>Theme</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            onClick={() => {
+                                router.push(ROUTER_CLIENT.ARTICLE_SELF);
+                            }}
+                            className="items-center justify-center border"
+                            variant={"outline"}
+                            tooltip={"My Article"}
+                        >
+                            <span>My Article</span>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarGroup>
+            <SidebarGroup>
+                <SidebarGroupLabel>Groups</SidebarGroupLabel>
+                <SidebarMenu>
+                    {groups.map((item) => (
+                        <SidebarMenuItem key={item.title}>
+                            <SidebarMenuButton className="items-center justify-center border" variant={"outline"} tooltip={item.title}>
+                                <span>{item.title}</span>
+                            </SidebarMenuButton>
                         </SidebarMenuItem>
-                    </Collapsible>
-                ))}
-            </SidebarMenu>
-        </SidebarGroup>
+                    ))}
+                </SidebarMenu>
+            </SidebarGroup>
+            <SidebarGroup>
+                <SidebarGroupLabel>My Collections</SidebarGroupLabel>
+                <SidebarMenu>
+                    {collections.map((item) => (
+                        <SidebarMenuItem key={item.title}>
+                            <SidebarMenuButton className="items-center justify-center border" variant={"outline"} tooltip={item.title}>
+                                <span>{item.title}</span>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    ))}
+                </SidebarMenu>
+            </SidebarGroup>
+        </>
     );
 }

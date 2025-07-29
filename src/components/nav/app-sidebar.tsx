@@ -5,13 +5,13 @@ import * as React from "react";
 
 import { NavMain } from "@/components/nav/nav-main";
 import { NavUser } from "@/components/nav/nav-user";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail, useSidebar } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, useSidebar } from "@/components/ui/sidebar";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
+import useRouter from "@/hooks/use-router-custom";
 import { cn } from "@/lib/utils";
 import { SidebarTrigger } from "../custom/sidebar-custom";
 import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import useRouter from "@/hooks/use-router-custom";
-import { ROUTER_CLIENT } from "@/constant/router.constant";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { open } = useSidebar();
@@ -85,7 +85,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarFooter>
                 <NavUser />
             </SidebarFooter>
-            <SidebarRail />
         </Sidebar>
     );
 }

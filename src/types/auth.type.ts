@@ -1,7 +1,7 @@
 import { TUser } from "./user.type";
 
 export type TRegisterReq = {
-    nickName: string;
+    name: string;
     email: string;
     password: string;
 };

@@ -32,7 +32,7 @@ export type TListComment = {
     Users: {
         _id?: string;
         email?: string;
-        nickName: string;
+        name: string;
         avatar?: string | undefined;
         googleId?: string | undefined;
         roleId?: string;

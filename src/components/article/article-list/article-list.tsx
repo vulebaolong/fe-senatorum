@@ -4,10 +4,10 @@ import { useGetAllArticle } from "@/api/tantask/article.tanstack";
 import { useFillSkeletons } from "@/hooks/fill-skeleton-article";
 import { TArticle } from "@/types/article.type";
 import { useEffect, useRef, useState } from "react";
-import { AppendLoading } from "../data-state/append-state/AppendState";
-import NodataOverlay from "../no-data/NodataOverlay";
-import { Skeleton } from "../ui/skeleton";
-import ArticleItem from "./article-item/article-item";
+import { AppendLoading } from "../../data-state/append-state/AppendState";
+import NodataOverlay from "../../no-data/NodataOverlay";
+import { Skeleton } from "../../ui/skeleton";
+import ArticleItem from "../article-item/article-item";
 
 type TProps = {
     filters?: Record<string, any>;

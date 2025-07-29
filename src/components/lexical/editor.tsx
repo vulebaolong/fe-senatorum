@@ -17,24 +17,27 @@ import {
     ParagraphNode,
     TextNode,
 } from "lexical";
-import "./style.css";
 
+import { CodeHighlightNode, CodeNode } from "@lexical/code";
+import { AutoLinkNode, LinkNode } from "@lexical/link";
+import { ListItemNode, ListNode } from "@lexical/list";
+import { TRANSFORMERS } from "@lexical/markdown";
 import { HorizontalRuleNode } from "@lexical/react/LexicalHorizontalRuleNode";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
-import { MyOnChangePlugin } from "./plugin/my-onchange-plugin";
+import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
+import { ToolbarContext } from "./context/toolbar-context";
+import { ImageNode } from "./nodes/image-node";
+import CodeHighlightPrismPlugin from "./plugin/code-highlight-prism-plugin";
+import LoadEditorContentPlugin from "./plugin/load-editor-content-plugin";
 import ToolbarPlugin from "./plugin/toolbar-plugin/toolbar-plugin";
 import TreeViewPlugin from "./plugin/tree-view-plugin";
 import { parseAllowedColor, parseAllowedFontSize } from "./style-config";
-import { theme } from "./theme";
-import { CodeNode } from "@lexical/code";
-import { LinkNode, AutoLinkNode } from "@lexical/link";
-import { ListNode, ListItemNode } from "@lexical/list";
-import { TableNode, TableCellNode, TableRowNode } from "@lexical/table";
-import { TRANSFORMERS } from "@lexical/markdown";
-import { ToolbarContext } from "./context/toolbar-context";
-import { Separator } from "../ui/separator";
-import { ImageNode } from "./nodes/image-node";
+import { theme } from "./theme/theme";
+import { RefObject, useEffect } from "react";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import EditorRefPlugin from "./plugin/editor-ref-plugin";
 
 const placeholder = "Enter some rich text...";
 
@@ -120,7 +123,7 @@ const constructImportMap = (): DOMConversionMap => {
     return importMap;
 };
 
-const editorConfig = {
+export const editorConfig = {
     html: {
         export: exportMap,
         import: constructImportMap(),
@@ -135,12 +138,13 @@ const editorConfig = {
         TextNode,
         HorizontalRuleNode,
         CodeNode,
+        CodeHighlightNode,
         HeadingNode,
         QuoteNode,
         TableNode,
         TableCellNode,
         TableRowNode,
-        ImageNode
+        ImageNode,
     ],
     onError(error: Error) {
         throw error;
@@ -149,22 +153,22 @@ const editorConfig = {
 };
 
 type TProps = {
-    onChange: (contentString: string, editorState: EditorState) => void;
+    onChange?: (contentString: string, editorState: EditorState) => void;
+    initialContentJSON?: string;
+    editorRef?: RefObject<LexicalEditor | null>;
 };
 
-export default function Editor({ onChange }: TProps) {
+export default function Editor({ onChange, initialContentJSON, editorRef }: TProps) {
     const onChangeEditor = (editorState: EditorState) => {
-        // Call toJSON on the EditorState object, which produces a serialization safe string
         const editorStateJSON = editorState.toJSON();
-        // However, we still have a JavaScript object, so we need to convert it to an actual string with JSON.stringify
-        onChange(JSON.stringify(editorStateJSON), editorState);
+        if (onChange) onChange(JSON.stringify(editorStateJSON), editorState);
     };
     return (
-        <LexicalComposer initialConfig={editorConfig}>
+        <LexicalComposer initialConfig={{ ...editorConfig }}>
+            <EditorRefPlugin editorRef={editorRef} />
             <ToolbarContext>
                 <div className="editor-container">
-                    <ToolbarPlugin />
-                    <Separator orientation="horizontal" />
+                    {!initialContentJSON && <ToolbarPlugin />}
                     <div className="editor-inner">
                         <RichTextPlugin
                             contentEditable={
@@ -176,11 +180,13 @@ export default function Editor({ onChange }: TProps) {
                             }
                             ErrorBoundary={LexicalErrorBoundary}
                         />
+                        <LoadEditorContentPlugin json={initialContentJSON} />
                         <HistoryPlugin />
                         <AutoFocusPlugin />
-                        <TreeViewPlugin />
-                        <MyOnChangePlugin onChange={onChangeEditor} />
+                        {/* <TreeViewPlugin /> */}
+                        <OnChangePlugin onChange={onChangeEditor} />
                         <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+                        <CodeHighlightPrismPlugin />
                     </div>
                 </div>
             </ToolbarContext>

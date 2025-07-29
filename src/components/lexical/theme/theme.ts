@@ -1,4 +1,7 @@
-export const theme = {
+import { EditorThemeClasses } from "lexical";
+import "./theme.css";
+
+export const theme: EditorThemeClasses = {
     ltr: "ltr",
     rtl: "rtl",
     paragraph: "editor-paragraph",
@@ -26,13 +29,17 @@ export const theme = {
     link: "editor-link",
     text: {
         bold: "editor-textBold",
+        capitalize: "editor-textCapitalize",
         code: "editor-textCode",
+        highlight: "editor-textHighlight",
         italic: "editor-textItalic",
+        lowercase: "editor-textLowercase",
         strikethrough: "editor-textStrikethrough",
         subscript: "editor-textSubscript",
         superscript: "editor-textSuperscript",
         underline: "editor-textUnderline",
         underlineStrikethrough: "editor-textUnderlineStrikethrough",
+        uppercase: "editor-textUppercase",
     },
     code: "editor-code",
     codeHighlight: {
@@ -67,4 +74,5 @@ export const theme = {
         "url": "editor-tokenOperator",
         "variable": "editor-tokenVariable",
     },
+    hr: "editor-hr",
 };

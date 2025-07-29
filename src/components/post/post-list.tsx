@@ -80,19 +80,19 @@ export default function Postlist({ filters, id, type, className }: TProps) {
                             <div className="flex items-center justify-between px-6">
                                 <div className="flex items-center gap-1">
                                     <Avatar className="h-6 w-6 rounded-full">
-                                        <AvatarImage src={post.Users.avatar} alt={post.Users.nickName} />
+                                        <AvatarImage src={post.Users.avatar} alt={post.Users.name} />
                                         <AvatarFallback className="rounded-full text-xs">
-                                            {post.Users.nickName.slice(0, 2).toUpperCase()}
+                                            {post.Users.name.slice(0, 2).toUpperCase()}
                                         </AvatarFallback>
                                     </Avatar>
                                     <Avatar className="h-8 w-8 rounded-full">
-                                        <AvatarImage src={post.Users.avatar} alt={post.Users.nickName} />
+                                        <AvatarImage src={post.Users.avatar} alt={post.Users.name} />
                                         <AvatarFallback className="rounded-full text-sm">
-                                            {post.Users.nickName.slice(0, 2).toUpperCase()}
+                                            {post.Users.name.slice(0, 2).toUpperCase()}
                                         </AvatarFallback>
                                     </Avatar>
                                     <div className="">
-                                        <p className="text-sm font-semibold truncate">{post.Users.nickName}</p>
+                                        <p className="text-sm font-semibold truncate">{post.Users.name}</p>
                                         <p className="text-xs text-muted-foreground">{formatLocalTime(post.createdAt, `ago`)}</p>
                                     </div>
                                 </div>

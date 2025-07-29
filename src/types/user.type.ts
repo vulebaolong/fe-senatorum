@@ -4,7 +4,8 @@ import { TRole } from "./role.type";
 export type TUser = {
    _id: string;
    email: string;
-   nickName: string;
+   name: string;
+   username: string;
    avatar?: string;
    googleId?: string;
    roleId: string;
@@ -20,5 +21,5 @@ export type TUploadAvatarLocalRes = {
 
 export type TEditProfileReq = {
    id: string;
-   nickName: string;
+   name: string;
 };

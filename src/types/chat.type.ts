@@ -11,7 +11,7 @@ export type TAllmessage = {
 export type TMessageItem = {
    message: string;
    avatar: string | undefined;
-   nickName: string | undefined;
+   name: string | undefined;
    userId: string;
    roleId: string;
    createdAt: string;
@@ -24,7 +24,7 @@ export type TStateChat = {
 };
 export type TStateChatMember = {
    userId: string;
-   nickName: TUser["nickName"];
+   name: TUser["name"];
    avatar: TUser["avatar"];
    roleId: string;
 };
