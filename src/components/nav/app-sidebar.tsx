@@ -22,7 +22,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarHeader className={"items-center"}>
                 <div
                     className={cn(
-                        "flex justify-between align-center w-full transition-all duration-200 ease-linear",
+                        "h-[42px] items-center flex justify-between align-center w-full transition-all duration-200 ease-linear",
                         "group-data-[collapsible=icon]:justify-center"
                     )}
                 >

@@ -49,7 +49,7 @@ export default function ToolbarPlugin() {
 
     return (
         <div
-            className="flex items-center gap-0.5 rounded-tl-md rounded-tr-md p-0.5 sticky top-0 z-10 bg-background border-b"
+            className="flex items-center gap-0.5 rounded-tl-xl rounded-tr-2xl p-0.5 sticky top-0 z-10 bg-background border-b"
             ref={toolbarRef}
         >
             <UndoRedoPlugin />

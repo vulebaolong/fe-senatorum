@@ -147,7 +147,7 @@ function LazyImage({
     const imageStyle = calculateDimensions();
 
     return (
-        <ImageNext
+        <img
             className={className || undefined}
             src={src}
             alt={altText}
@@ -170,7 +170,7 @@ function LazyImage({
 
 function BrokenImage(): JSX.Element {
     return (
-        <ImageNext
+        <img
             src={brokenImage}
             style={{
                 height: 200,

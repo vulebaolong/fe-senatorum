@@ -13,6 +13,10 @@ import InstagramIcon from "./icon-social/instagram-icon";
 import RedditIcon from "./icon-social/reddit-icon";
 import XIcon from "./icon-social/x-icon";
 import Editor from "@/components/lexical/editor";
+import ButtonIcon from "@/components/custom/button-custom/button-icon";
+import IconArrowUp from "@/components/icon/icon-arrow-up";
+import IconArrowDown from "@/components/icon/icon-arrow-down";
+import { Bookmark, Eye, MessageCircle, Share2 } from "lucide-react";
 
 type TProps = {
     slug: string;
@@ -41,9 +45,11 @@ export default function ArticleDetail({ slug }: TProps) {
                                             </div>
                                             <div className="w-full h-full flex flex-col gap-2 justify-between">
                                                 <div className="flex items-center gap-2">
-                                                    <Badge variant="outline">{data.Types.name}</Badge>
-                                                    <Badge variant="outline">{data.Types.name}</Badge>
-                                                    <Badge variant="outline">{data.Types.name}</Badge>
+                                                    {data.ArticleCategories.map((item, i) => (
+                                                        <Badge variant="outline" key={i}>
+                                                            {item.Categories.name}
+                                                        </Badge>
+                                                    ))}
                                                 </div>
                                                 <div className="text-3xl font-bold line-clamp-3 h-[110px]">
                                                     {data.title}The Feds Interest The Feds Interest The Feds Interest The Feds Interest The Feds
@@ -73,11 +79,32 @@ export default function ArticleDetail({ slug }: TProps) {
                                                     <Button>Follow</Button>
                                                 </div>
 
-                                                <div className="flex items-center justify-between gap-2">
-                                                    <Button variant={"outline"}>Vote</Button>
-                                                    <Button variant={"outline"}>View Count</Button>
-                                                    <Button variant={"outline"}>Comment</Button>
-                                                    <Button variant={"outline"}>Bookmark</Button>
+                                                <div className="flex items-center justify-between w-full">
+                                                    <div className="flex-1">
+                                                        <div className="flex items-center w-min gap-1 p-0.5 rounded-lg border border-border-subtlest-tertiary">
+                                                            <ButtonIcon variant="ghost" size="icon" className="size-6">
+                                                                <IconArrowUp className="w-6 h-6 pointer-events-none" />
+                                                            </ButtonIcon>
+                                                            <p className="text-sm font-semibold">{50}</p>
+                                                            <ButtonIcon variant="ghost" size="icon" className="size-6 ">
+                                                                <IconArrowDown className="w-6 h-6 pointer-events-none" />
+                                                            </ButtonIcon>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex flex-1 items-center gap-1 justify-center">
+                                                        <Eye className="text-muted-foreground" size={12} />
+                                                        <p className="text-xs font-semibold text-muted-foreground">2.1k</p>
+                                                        <MessageCircle className="text-muted-foreground" size={12} />
+                                                        <p className="text-xs font-semibold text-muted-foreground">47</p>
+                                                    </div>
+                                                    <div className="flex flex-1 items-center gap-1 justify-end">
+                                                        <ButtonIcon variant="ghost" size="icon" className="size-6">
+                                                            <Bookmark style={{ width: `15px`, height: `15px` }} />
+                                                        </ButtonIcon>
+                                                        <ButtonIcon variant="ghost" size="icon" className="size-6">
+                                                            <Share2 style={{ width: `15px`, height: `15px` }} />
+                                                        </ButtonIcon>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -96,7 +123,7 @@ export default function ArticleDetail({ slug }: TProps) {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="sticky top-0 self-start bg-amber-700 h-fit">123</div>
+                                    <div className="sticky top-0 self-start h-fit"></div>
                                 </div>
                             </div>
                         );

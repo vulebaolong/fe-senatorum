@@ -7,9 +7,9 @@ import Search from "./search";
 export default function Header() {
     return (
         <div>
-            <header className="px-[15px] fixed w-full h-[var(--header-height)] flex items-center justify-between flex-col bg-sidebar border-sidebar-border border shadow-sm">
+            <header className=" fixed w-full h-[var(--header-height)] flex items-center justify-between flex-col bg-sidebar border-sidebar-border border shadow-sm">
                 <Marquee />
-                <div className=" py-2 w-full h-[50px] rounded-xl flex items-center justify-between">
+                <div className="px-[15px] py-2 w-full h-[50px] rounded-xl flex items-center justify-between">
                     <Logo className="h-full" />
 
                     <Search />

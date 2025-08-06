@@ -14,9 +14,7 @@ export default function layout({ children }: TProps) {
             <Header />
             <SidebarProvider defaultOpen={false} className="pt-[var(--header-height)]">
                 <AppSidebar />
-                <SidebarInset>
-                    <main>{children}</main>
-                </SidebarInset>
+                <SidebarInset>{children}</SidebarInset>
             </SidebarProvider>
         </>
     );

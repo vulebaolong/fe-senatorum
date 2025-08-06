@@ -96,7 +96,7 @@ export function NavMain() {
                 </SidebarMenu>
             </SidebarGroup>
             <SidebarGroup>
-                <SidebarGroupLabel>Groups</SidebarGroupLabel>
+                <SidebarGroupLabel>Chapter</SidebarGroupLabel>
                 <SidebarMenu>
                     {groups.map((item) => (
                         <SidebarMenuItem key={item.title}>
@@ -108,7 +108,7 @@ export function NavMain() {
                 </SidebarMenu>
             </SidebarGroup>
             <SidebarGroup>
-                <SidebarGroupLabel>My Collections</SidebarGroupLabel>
+                <SidebarGroupLabel>Collection</SidebarGroupLabel>
                 <SidebarMenu>
                     {collections.map((item) => (
                         <SidebarMenuItem key={item.title}>

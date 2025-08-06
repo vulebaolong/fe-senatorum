@@ -10,6 +10,7 @@ function useRouter() {
    const dispatch = useAppDispatch();
    useEffect(() => {
       // console.log({ isPending });
+      // console.log(123);
       dispatch(SET_LOADING_PAGE(isPending));
    }, [isPending]);
 

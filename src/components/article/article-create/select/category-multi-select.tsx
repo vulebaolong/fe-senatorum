@@ -36,9 +36,9 @@ export function CategoryMultiSelect({ value, onChange }: Props) {
         .join(", ");
 
     return (
-        <Popover open={open} onOpenChange={setOpen}>
+        <Popover open={open} onOpenChange={setOpen} >
             <PopoverTrigger asChild>
-                <Button variant="outline" className="min-w-[180px] w-max justify-between text-muted-foreground hover:text-muted-foreground">
+                <Button variant="outline" className="w-full justify-between text-muted-foreground hover:text-muted-foreground">
                     {value.length > 0 ? selectedNames : "Select up to 3 categories"}
                     <ChevronDown className="size-4 opacity-50" />
                 </Button>

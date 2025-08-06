@@ -1,3 +1,4 @@
+import { TArticleCategory } from "./article-category.type";
 import { TBaseTimestamps } from "./base.type";
 import { TReactionType } from "./reactioin.type";
 import { TType } from "./type.type";
@@ -14,6 +15,7 @@ export type TArticle = {
     typeId: number;
     Users: TUser;
     Types: TType;
+    ArticleCategories: TArticleCategory[];
     reaction: TReactionType | null;
 } & TBaseTimestamps;
 
