@@ -9,7 +9,6 @@ import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { resError } from "@/helpers/function.helper";
-import useRouter from "@/hooks/use-router-custom";
 import { cn } from "@/lib/utils";
 import { TCreateArticleReq } from "@/types/article.type";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,11 +22,12 @@ import Editor from "../../lexical/editor";
 import { CategoryMultiSelect } from "./select/category-multi-select";
 import TypeSelect from "./select/type-select";
 import Thumbnail from "./thumbnail/thumbnail";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
-    title: z.string().nonempty(),
-    typeId: z.string().nonempty(),
-    categoryIds: z.array(z.number()).min(1, "Chọn ít nhất 1 danh mục").max(3, "Chỉ được chọn tối đa 3 danh mục"),
+    title: z.string().nonempty("Title is required."),
+    typeId: z.string().nonempty("Type is required."),
+    categoryIds: z.array(z.number()).min(1, "Select at least one category.").max(3, "You can select up to 3 categories."),
     content: z.string().refine(
         (val) => {
             try {
@@ -45,9 +45,10 @@ const FormSchema = z.object({
             }
         },
         {
-            message: "Nội dung không được để trống",
+            message: "Content must not be empty.",
         }
     ),
+    thumbnail: z.string().nonempty("Thumbnail is required."),
 });
 
 export default function ArticleCreate() {
@@ -55,6 +56,7 @@ export default function ArticleCreate() {
     const editorRef = useRef<LexicalEditor | null>(null);
     const router = useRouter();
     const [settingsOpen, setSettingsOpen] = useState(true);
+    const [preview, setPreview] = useState<string | null>(null);
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -63,6 +65,7 @@ export default function ArticleCreate() {
             typeId: ``,
             categoryIds: [],
             content: ``,
+            thumbnail: ``,
         },
     });
 
@@ -71,21 +74,26 @@ export default function ArticleCreate() {
     function onSubmit(data: z.infer<typeof FormSchema>) {
         const payload: TCreateArticleReq = {
             ...data,
-            thumbnail: "https://res.cloudinary.com/vulebaolong/image/upload/v1751599817/articles/gjlmckp9g7v1koq0q3wy.jpg",
             typeId: Number(data.typeId),
         };
 
         console.log({ payload });
 
         createArticle.mutate(payload, {
-            onSuccess: (data) => {
-                form.reset();
+            onSuccess: () => {
                 toast.success(`Create article successfully`);
+
+                form.reset();
 
                 editorRef.current?.update(() => {
                     const root = $getRoot(); // Lấy node gốc của document
                     root.clear(); // Xóa hết nội dung hiện có trong editor
                     root.append($createParagraphNode()); // Tạo đoạn văn bản trống (giống như <p></p>)
+                });
+
+                setPreview((old) => {
+                    if (old) URL.revokeObjectURL(old);
+                    return null;
                 });
             },
             onError: (error) => {
@@ -162,7 +170,22 @@ export default function ArticleCreate() {
                                     />
 
                                     {/* thumbnail */}
-                                    <Thumbnail />
+                                    <FormField
+                                        control={form.control}
+                                        name="thumbnail"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Thumbnail preview={preview} setPreview={setPreview} onUploadThumbnail={field.onChange} />
+                                                </FormControl>
+                                                <FormDescription className="text-xs italic">
+                                                    This image represents your article in listings and previews. Choose one that is clear and
+                                                    relevant.
+                                                </FormDescription>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
 
                                     {/* content */}
                                     <FormField
@@ -175,7 +198,7 @@ export default function ArticleCreate() {
                                                     <Editor onChange={field.onChange} editorRef={editorRef} />
                                                 </div>
                                                 <FormDescription className="text-xs italic">
-                                                    Categorize posts by purpose like blogs, tutorials, product updates, etc.
+                                                    Write the main body of your article here. Make it informative, structured, and engaging
                                                 </FormDescription>
                                                 <FormMessage />
                                             </FormItem>

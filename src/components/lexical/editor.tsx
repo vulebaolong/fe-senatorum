@@ -27,17 +27,15 @@ import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPl
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
+import { RefObject } from "react";
 import { ToolbarContext } from "./context/toolbar-context";
 import { ImageNode } from "./nodes/image-node";
 import CodeHighlightPrismPlugin from "./plugin/code-highlight-prism-plugin";
+import EditorRefPlugin from "./plugin/editor-ref-plugin";
 import LoadEditorContentPlugin from "./plugin/load-editor-content-plugin";
 import ToolbarPlugin from "./plugin/toolbar-plugin/toolbar-plugin";
-import TreeViewPlugin from "./plugin/tree-view-plugin";
 import { parseAllowedColor, parseAllowedFontSize } from "./style-config";
 import { theme } from "./theme/theme";
-import { RefObject, useEffect } from "react";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import EditorRefPlugin from "./plugin/editor-ref-plugin";
 
 const placeholder = "Enter some rich text...";
 

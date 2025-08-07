@@ -1,24 +1,19 @@
 "use client";
-import { BookOpen, Bot, Settings2, SquareTerminal } from "lucide-react";
 
-import { ChevronRight, Palette } from "lucide-react";
+import { Palette } from "lucide-react";
 
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
     SidebarGroup,
     SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-    SidebarMenuSub,
-    SidebarMenuSubButton,
-    SidebarMenuSubItem,
-    useSidebar,
+    useSidebar
 } from "@/components/ui/sidebar";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
+import useRouter from "@/hooks/use-router-custom";
 import ThemeToggleV2 from "../theme-toggle/theme-toggle-v2";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import useRouter from "@/hooks/use-router-custom";
-import { ROUTER_CLIENT } from "@/constant/router.constant";
 
 const groups = [
     {

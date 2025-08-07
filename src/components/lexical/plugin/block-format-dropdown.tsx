@@ -15,7 +15,7 @@ import { $getSelection, $isNodeSelection, $isRangeSelection } from "lexical";
 import { AudioLines } from "lucide-react";
 import { JSX, useEffect } from "react";
 import { blockTypeToBlockName, useToolbarState } from "../context/toolbar-context";
-import { $findTopLevelElement, rootTypeToRootName } from "./toolbar-plugin/toolbar-plugin";
+import { $findTopLevelElement } from "./toolbar-plugin/toolbar-plugin";
 import {
     formatBulletList,
     formatCheckList,

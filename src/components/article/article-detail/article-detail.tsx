@@ -1,22 +1,22 @@
 "use client";
 
 import { useGetDetailArticle } from "@/api/tantask/article.tanstack";
+import ButtonIcon from "@/components/custom/button-custom/button-icon";
 import ImageCustom from "@/components/custom/image-custom/ImageCustom";
 import { OverlayState } from "@/components/data-state/overlay-state/OverlayState";
-import EditorViewer from "@/components/lexical/editor-viewer";
+import IconArrowDown from "@/components/icon/icon-arrow-down";
+import IconArrowUp from "@/components/icon/icon-arrow-up";
+import Editor from "@/components/lexical/editor";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TArticle } from "@/types/article.type";
+import { Bookmark, Eye, MessageCircle, Share2 } from "lucide-react";
 import FacebookIcon from "./icon-social/facebook-icon";
 import InstagramIcon from "./icon-social/instagram-icon";
 import RedditIcon from "./icon-social/reddit-icon";
 import XIcon from "./icon-social/x-icon";
-import Editor from "@/components/lexical/editor";
-import ButtonIcon from "@/components/custom/button-custom/button-icon";
-import IconArrowUp from "@/components/icon/icon-arrow-up";
-import IconArrowDown from "@/components/icon/icon-arrow-down";
-import { Bookmark, Eye, MessageCircle, Share2 } from "lucide-react";
+import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 
 type TProps = {
     slug: string;
@@ -41,7 +41,7 @@ export default function ArticleDetail({ slug }: TProps) {
                                     <div className="flex flex-col gap-10">
                                         <div className=" grid gap-5 grid-cols-2">
                                             <div className="w-full h-full border-sidebar-border border shadow-sm aspect-video overflow-hidden rounded-xl">
-                                                <ImageCustom src={data.thumbnail} alt={data.slug} />
+                                                <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}${data.thumbnail}`} alt={data.slug} />
                                             </div>
                                             <div className="w-full h-full flex flex-col gap-2 justify-between">
                                                 <div className="flex items-center gap-2">

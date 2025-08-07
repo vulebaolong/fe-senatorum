@@ -13,10 +13,9 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
-import NavUserInfo from "./nav-user-info";
 import useRouter from "@/hooks/use-router-custom";
-import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { useAppSelector } from "@/redux/hooks";
+import NavUserInfo from "./nav-user-info";
 
 export function NavUser() {
     const { isMobile } = useSidebar();

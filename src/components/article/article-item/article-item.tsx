@@ -6,11 +6,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { formatLocalTime } from "@/helpers/function.helper";
-import useRouter from "@/hooks/use-router-custom";
 import { TArticle } from "@/types/article.type";
 import { Bookmark, Ellipsis, Eye, MessageCircle, Share2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type TProps = {
     article: TArticle;
@@ -59,9 +60,9 @@ export default function ArticleItem({ article }: TProps) {
             {/* category */}
             <div className="flex flex-col gap-2 px-5 h-[22px]">
                 <div className="flex items-center gap-1 flex-wrap">
-                    {Array.from({ length: 3 }).map((_, i) => (
-                        <Badge key={i} variant="outline">
-                            Outline
+                    {article.ArticleCategories.map((item, i) => (
+                        <Badge variant="outline" key={i}>
+                            {item.Categories.name}
                         </Badge>
                     ))}
                 </div>
@@ -70,7 +71,7 @@ export default function ArticleItem({ article }: TProps) {
             {/* thumbnail */}
             <div className="flex-1 px-2 flex flex-col justify-between gap-2">
                 <div className="w-full aspect-video border border-border rounded-lg overflow-hidden">
-                    <ImageCustom src={article.thumbnail} alt={"article image"} />
+                    <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}${article.thumbnail}`} alt={"article image"} />
                 </div>
             </div>
 

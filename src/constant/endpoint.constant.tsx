@@ -56,5 +56,6 @@ export const ENDPOINT = {
     },
     IMAGE: {
         DRAFT: "image/upload-draft",
+        DELETE: "image/delete-draft",
     },
 };

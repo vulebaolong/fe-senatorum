@@ -19,8 +19,8 @@ import { Suspense, useEffect, useRef, useState } from "react";
 // import {createWebsocketProvider} from '../collaboration';
 // import {useSettings} from '../context/SettingsContext';
 // import {useSharedHistoryContext} from '../context/SharedHistoryContext';
+import Image from "next/image";
 import brokenImage from "../images/image-broken.svg";
-import ImageNext from "next/image";
 // import EmojisPlugin from '../plugins/EmojisPlugin';
 // import KeywordsPlugin from '../plugins/KeywordsPlugin';
 // import LinkPlugin from '../plugins/LinkPlugin';
@@ -39,7 +39,7 @@ function useSuspenseImage(src: string) {
         return cached;
     } else if (!cached) {
         cached = new Promise<boolean>((resolve) => {
-            const img = new Image();
+            const img: HTMLImageElement = new globalThis.Image();
             img.src = src;
             img.onload = () => resolve(false);
             img.onerror = () => resolve(true);
@@ -146,6 +146,7 @@ function LazyImage({
 
     const imageStyle = calculateDimensions();
 
+    /* eslint-disable @next/next/no-img-element */
     return (
         <img
             className={className || undefined}
@@ -170,16 +171,16 @@ function LazyImage({
 
 function BrokenImage(): JSX.Element {
     return (
-        <img
-            src={brokenImage}
-            style={{
-                height: 200,
-                opacity: 0.2,
-                width: 200,
-            }}
-            draggable="false"
-            alt="Broken image"
-        />
+        <div style={{ width: 200, height: 200, opacity: 0.2 }}>
+            <Image
+                src={brokenImage} // hoặc "/images/broken.png"
+                alt="Broken image"
+                width={200}
+                height={200}
+                draggable={false}
+                style={{ objectFit: "contain" }}
+            />
+        </div>
     );
 }
 

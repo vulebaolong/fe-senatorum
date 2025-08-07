@@ -1,8 +1,7 @@
-import { createEditor } from "lexical";
 import { $generateHtmlFromNodes } from "@lexical/html";
+import { createEditor } from "lexical";
 import { useEffect, useState } from "react";
 import { editorConfig } from "../editor";
-import CodeHighlightPrismPlugin from "../plugin/code-highlight-prism-plugin";
 
 type TProps = {
     lexicalJson: string;
