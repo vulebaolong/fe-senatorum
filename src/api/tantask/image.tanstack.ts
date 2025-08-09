@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { deleteImageDraftAction, uploadImageDraftAction } from "../actions/image.action";
+import { deleteImageDraftAction, uploadImageDraftAction, upSertThumbnailAction } from "../actions/image.action";
 
 export const useUploadImageDraft = () => {
     return useMutation({
@@ -7,6 +7,17 @@ export const useUploadImageDraft = () => {
             const { data, status, message } = await uploadImageDraftAction(payload);
             if (status === "error" || data === null) throw new Error(message);
             console.log({ useCreateComment: data });
+            return data;
+        },
+    });
+};
+
+export const useUpsertThumbnail = () => {
+    return useMutation({
+        mutationFn: async (payload: FormData) => {
+            const { data, status, message } = await upSertThumbnailAction(payload);
+            if (status === "error" || data === null) throw new Error(message);
+            console.log({ useUpsertThumbnail: data });
             return data;
         },
     });

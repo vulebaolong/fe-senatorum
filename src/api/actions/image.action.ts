@@ -6,8 +6,17 @@ import { ENDPOINT } from "@/constant/endpoint.constant";
 
 export async function uploadImageDraftAction(payload: FormData): Promise<TResAction<any | null>> {
     try {
-        console.log({ body: payload });
         const result = await api.post<TRes<any>>(ENDPOINT.IMAGE.DRAFT, payload);
+        const { data } = result;
+        return { status: "success", message: result.message, data: data };
+    } catch (error: any) {
+        return { status: "error", message: error?.message, data: null };
+    }
+}
+
+export async function upSertThumbnailAction(payload: FormData): Promise<TResAction<any | null>> {
+    try {
+        const result = await api.post<TRes<any>>(ENDPOINT.ARTICLE.ARTICLE_UPSERT_THUMBNAIL, payload);
         const { data } = result;
         return { status: "success", message: result.message, data: data };
     } catch (error: any) {

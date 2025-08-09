@@ -118,7 +118,7 @@ export default function ArticleDetail({ slug }: TProps) {
                                                     <RedditIcon />
                                                 </div>
                                                 <div className="">
-                                                    <Editor initialContentJSON={data.content} />
+                                                    <Editor isViewOnly initialContentJSON={data.content} />
                                                 </div>
                                             </div>
                                         </div>

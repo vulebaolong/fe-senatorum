@@ -28,6 +28,9 @@ export const ENDPOINT = {
         ARTICLE: "article",
         ARTICLE_ALL: "article/all",
         ARTICLE_OTHER: "article/other",
+        ARTICLE_UPSERT: "article/upsert",
+        ARTICLE_GET_DRAFT: "article/draft",
+        ARTICLE_UPSERT_THUMBNAIL: "article/upsert-thumbnail",
     },
     COMMENT: {
         COMMENT: "comment",

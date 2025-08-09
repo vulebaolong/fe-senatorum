@@ -1,5 +1,12 @@
-import { createArticleAction, getAllArticleAction, getDetailArticleAction, getOtherArticleAction } from "@/api/actions/article.action";
-import { TCreateArticleReq } from "@/types/article.type";
+import {
+    createArticleAction,
+    getAllArticleAction,
+    getDetailArticleAction,
+    getDraftArticleAction,
+    getOtherArticleAction,
+    upsertArticleAction,
+} from "@/api/actions/article.action";
+import { TCreateArticleReq, TUpsertArticleReq } from "@/types/article.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useGetAllArticle = (payload: any) => {
@@ -28,8 +35,9 @@ export const useGetOtherArticle = (payload: any & { id?: string }) => {
             const { pageIndex, pageSize } = pagination;
             console.log({ id });
             if (!id) throw new Error("ID is required");
-            const query = `/${id}?page=${pageIndex}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc
-                }`;
+            const query = `/${id}?page=${pageIndex}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${
+                sort?.isDesc
+            }`;
 
             const { data, status, message } = await getOtherArticleAction(query);
             if (status === "error" || data === null) throw new Error(message);
@@ -53,12 +61,36 @@ export const useGetDetailArticle = (payload: string) => {
     });
 };
 
+export const useGetDraftArticle = () => {
+    return useQuery({
+        queryKey: ["get-draft-article"],
+        queryFn: async () => {
+            const { data, status, message } = await getDraftArticleAction();
+            if (status === "error" || data === null) throw new Error(message);
+
+            console.log({ useGetDraftArticle: data });
+            return data;
+        },
+    });
+};
+
 export const useCreateArticle = () => {
     return useMutation({
         mutationFn: async (payload: TCreateArticleReq) => {
             const { data, status, message } = await createArticleAction(payload);
             if (status === "error" || data === null) throw new Error(message);
             console.log({ useCreateArticle: data });
+            return data;
+        },
+    });
+};
+
+export const useUpsertArticle = () => {
+    return useMutation({
+        mutationFn: async (payload: TUpsertArticleReq) => {
+            const { data, status, message } = await upsertArticleAction(payload);
+            if (status === "error" || data === null) throw new Error(message);
+            console.log({ useUpsertArticle: data });
             return data;
         },
     });

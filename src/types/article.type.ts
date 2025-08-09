@@ -26,3 +26,11 @@ export type TCreateArticleReq = {
     typeId: number;
     categoryIds: number[];
 };
+
+export type TUpsertArticleReq = {
+    title?: string;
+    content?: string;
+    thumbnail?: string;
+    typeId?: number;
+    categoryIds?: number[];
+};

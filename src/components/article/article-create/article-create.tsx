@@ -1,28 +1,31 @@
 "use client";
 
-import { useCreateArticle } from "@/api/tantask/article.tanstack";
+import { useCreateArticle, useUpsertArticle } from "@/api/tantask/article.tanstack";
 import { Button } from "@/components/ui/button";
 import { ButtonLoading } from "@/components/ui/button-loading";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
-import { resError } from "@/helpers/function.helper";
+import { formatLocalTime } from "@/helpers/function.helper";
 import { cn } from "@/lib/utils";
-import { TCreateArticleReq } from "@/types/article.type";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { $createParagraphNode, $getRoot, LexicalEditor } from "lexical";
-import { ArrowLeft, Eye, Globe, Settings, Tag } from "lucide-react";
-import { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { TResAction, TResPagination } from "@/types/app.type";
+import { TArticle, TCreateArticleReq } from "@/types/article.type";
+import { TType } from "@/types/type.type";
+import { useDebouncedCallback } from "@mantine/hooks";
+import { LexicalEditor } from "lexical";
+import { ArrowLeft, Eye, Globe, Loader2, Settings, Tag } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import Editor from "../../lexical/editor";
 import { CategoryMultiSelect } from "./select/category-multi-select";
 import TypeSelect from "./select/type-select";
 import Thumbnail from "./thumbnail/thumbnail";
-import { useRouter } from "next/navigation";
+import { TCategory } from "@/types/category.type";
 
 const FormSchema = z.object({
     title: z.string().nonempty("Title is required."),
@@ -51,25 +54,50 @@ const FormSchema = z.object({
     thumbnail: z.string().nonempty("Thumbnail is required."),
 });
 
-export default function ArticleCreate() {
+type TProps = {
+    dataArticleDaft: TResAction<TArticle | null>;
+    dataListTypeArticle: TResAction<TResPagination<TType> | null>;
+    dataListCategoryArticle: TResAction<TResPagination<TCategory> | null>;
+};
+
+export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, dataListCategoryArticle }: TProps) {
+    const { data: articleDaft } = dataArticleDaft;
+    const { data: listTypeArticle } = dataListTypeArticle;
+    const { data: listCategoryArticle } = dataListCategoryArticle;
+
+    const upsertArticle = useUpsertArticle();
     const createArticle = useCreateArticle();
     const editorRef = useRef<LexicalEditor | null>(null);
     const router = useRouter();
     const [settingsOpen, setSettingsOpen] = useState(true);
-    const [preview, setPreview] = useState<string | null>(null);
+    const firstRunRef = useRef(true);
 
     const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
         defaultValues: {
-            title: ``,
-            typeId: ``,
-            categoryIds: [],
-            content: ``,
-            thumbnail: ``,
+            title: articleDaft?.title ?? "",
+            content: articleDaft?.content ?? "",
+            thumbnail: articleDaft?.thumbnail ?? "",
+            typeId: articleDaft?.typeId?.toString() ?? "",
+            categoryIds: articleDaft?.ArticleCategories?.map((item) => item.Categories.id) ?? [],
         },
     });
+    const values = useWatch({ control: form.control });
 
-    console.log({ form, errors: form.formState.errors, values: form.getValues() });
+    const handleUpsert = useDebouncedCallback(async (query: any) => {
+        if (firstRunRef.current) return (firstRunRef.current = false);
+
+        console.log({ query });
+        upsertArticle.mutate({
+            title: query.title,
+            content: query.content,
+            thumbnail: query.thumbnail,
+            typeId: Number(query.typeId) || undefined,
+            categoryIds: query.categoryIds,
+        });
+    }, 500);
+    useEffect(() => {
+        handleUpsert(values);
+    }, [values]);
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
         const payload: TCreateArticleReq = {
@@ -79,27 +107,27 @@ export default function ArticleCreate() {
 
         console.log({ payload });
 
-        createArticle.mutate(payload, {
-            onSuccess: () => {
-                toast.success(`Create article successfully`);
+        // createArticle.mutate(payload, {
+        //     onSuccess: () => {
+        //         toast.success(`Create article successfully`);
 
-                form.reset();
+        //         form.reset();
 
-                editorRef.current?.update(() => {
-                    const root = $getRoot(); // Lấy node gốc của document
-                    root.clear(); // Xóa hết nội dung hiện có trong editor
-                    root.append($createParagraphNode()); // Tạo đoạn văn bản trống (giống như <p></p>)
-                });
+        //         editorRef.current?.update(() => {
+        //             const root = $getRoot(); // Lấy node gốc của document
+        //             root.clear(); // Xóa hết nội dung hiện có trong editor
+        //             root.append($createParagraphNode()); // Tạo đoạn văn bản trống (giống như <p></p>)
+        //         });
 
-                setPreview((old) => {
-                    if (old) URL.revokeObjectURL(old);
-                    return null;
-                });
-            },
-            onError: (error) => {
-                toast.error(resError(error, `Create article failed`));
-            },
-        });
+        //         setPreview((old) => {
+        //             if (old) URL.revokeObjectURL(old);
+        //             return null;
+        //         });
+        //     },
+        //     onError: (error) => {
+        //         toast.error(resError(error, `Create article failed`));
+        //     },
+        // });
     }
 
     return (
@@ -176,7 +204,11 @@ export default function ArticleCreate() {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormControl>
-                                                    <Thumbnail preview={preview} setPreview={setPreview} onUploadThumbnail={field.onChange} />
+                                                    <Thumbnail
+                                                        value={field.value || ""}
+                                                        onChange={(v) => field.onChange(v || "")}
+                                                        toUrl={(id) => `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}${id}`} // publicId -> URL
+                                                    />
                                                 </FormControl>
                                                 <FormDescription className="text-xs italic">
                                                     This image represents your article in listings and previews. Choose one that is clear and
@@ -195,7 +227,11 @@ export default function ArticleCreate() {
                                             <FormItem>
                                                 {/* <FormLabel>Content</FormLabel> */}
                                                 <div className="rounded-2xl border">
-                                                    <Editor onChange={field.onChange} editorRef={editorRef} />
+                                                    <Editor
+                                                        initialContentJSON={articleDaft?.content}
+                                                        onChange={field.onChange}
+                                                        editorRef={editorRef}
+                                                    />
                                                 </div>
                                                 <FormDescription className="text-xs italic">
                                                     Write the main body of your article here. Make it informative, structured, and engaging
@@ -205,9 +241,23 @@ export default function ArticleCreate() {
                                         )}
                                     />
 
-                                    <ButtonLoading loading={createArticle.isPending} type="submit" className="w-full">
-                                        Create
-                                    </ButtonLoading>
+                                    <Separator />
+
+                                    <div className="">
+                                        <ButtonLoading loading={createArticle.isPending} type="submit" className="w-[170px]">
+                                            Publish
+                                        </ButtonLoading>
+                                        <div className="flex items-center gap-2">
+                                            <p className="text-xs text-muted-foreground italic">Last updated:</p>
+                                            {upsertArticle.isPending ? (
+                                                <Loader2 className="animate-spin w-4 h-4 text-muted-foreground" />
+                                            ) : (
+                                                <p className="text-xs text-muted-foreground italic">
+                                                    {formatLocalTime(articleDaft?.updatedAt, "ago")}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -237,8 +287,8 @@ export default function ArticleCreate() {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel className="flex items-center gap-2">
-                                                        <Tag size={16} />
-                                                        <p>Type</p>
+                                                        <Tag size={16} className="text-muted-foreground" />
+                                                        <p className="font-bold text-muted-foreground">Type</p>
                                                     </FormLabel>
                                                     <Select onValueChange={field.onChange} value={field.value}>
                                                         <FormControl>
@@ -246,7 +296,7 @@ export default function ArticleCreate() {
                                                                 <SelectValue placeholder="Select a type article" />
                                                             </SelectTrigger>
                                                         </FormControl>
-                                                        <TypeSelect />
+                                                        <TypeSelect listTypeArticle={listTypeArticle} />
                                                     </Select>
                                                     <FormDescription className="text-xs italic">
                                                         Type articles by purpose like blogs, tutorials, product updates, etc.
@@ -263,10 +313,14 @@ export default function ArticleCreate() {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel className="flex items-center gap-2">
-                                                        <Tag size={16} />
-                                                        <p>Category</p>
+                                                        <Tag size={16} className="text-muted-foreground" />
+                                                        <p className="font-bold text-muted-foreground">Category</p>
                                                     </FormLabel>
-                                                    <CategoryMultiSelect value={field.value || []} onChange={field.onChange} />
+                                                    <CategoryMultiSelect
+                                                        value={field.value || []}
+                                                        onChange={field.onChange}
+                                                        listCategoryArticle={listCategoryArticle}
+                                                    />
                                                     <FormDescription className="text-xs italic">
                                                         Categorize posts by purpose like blogs, tutorials, product updates, etc.
                                                     </FormDescription>

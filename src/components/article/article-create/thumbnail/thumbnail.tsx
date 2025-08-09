@@ -1,89 +1,87 @@
 "use client";
 
-import { useUploadImageDraft } from "@/api/tantask/image.tanstack";
+import { useUpsertThumbnail } from "@/api/tantask/image.tanstack";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Image as ImageIcon, Loader2, Trash } from "lucide-react";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type TProps = {
-    onUploadThumbnail: (publicId: string) => void;
-    preview: string | null
-    setPreview: Dispatch<SetStateAction<string | null>>
+    value?: string | null; // luôn là publicId
+    onChange: (val: string) => void; // ghi vào form
+    toUrl: (publicId: string) => string; // bắt buộc: build URL từ publicId
 };
 
-export default function Thumbnail({ onUploadThumbnail, preview, setPreview }: TProps) {
-    const uploadImageDraft = useUploadImageDraft();
-
+export default function Thumbnail({ value, onChange, toUrl }: TProps) {
+    const upsertThumbnail = useUpsertThumbnail();
     const [dragActive, setDragActive] = useState(false);
+    const [tempUrl, setTempUrl] = useState<string | null>(null); // blob preview
     const inputRef = useRef<HTMLInputElement>(null);
 
-    // gán ảnh được chọn/kéo vào
+    const displayUrl = tempUrl || (value ? toUrl(value) : null);
+
+    // cleanup blob khi unmount / blob mới
+    useEffect(() => {
+        return () => {
+            if (tempUrl?.startsWith("blob:")) URL.revokeObjectURL(tempUrl);
+        };
+    }, [tempUrl]);
+
     const handleFiles = useCallback(
         (files: FileList | null) => {
-            if (!files || files.length === 0) return;
-
+            if (!files?.length) return;
             const file = files[0];
-
             if (!file.type.startsWith("image/")) return;
 
-            // Cập nhật preview và meta
             const url = URL.createObjectURL(file);
-            setPreview((old) => {
-                if (old) URL.revokeObjectURL(old);
+            setTempUrl((old) => {
+                if (old?.startsWith("blob:")) URL.revokeObjectURL(old);
                 return url;
             });
 
             const formData = new FormData();
-            formData.append("draft", file);
-            uploadImageDraft.mutate(formData, {
+            formData.append("thumbnail", file);
+            upsertThumbnail.mutate(formData, {
                 onSuccess: (publicId) => {
-                    onUploadThumbnail(publicId);
+                    onChange(publicId); // form.thumbnail = publicId
+                },
+                onError: () => {
+                    if (tempUrl?.startsWith("blob:")) URL.revokeObjectURL(tempUrl);
+                    setTempUrl(null);
                 },
             });
         },
-        [uploadImageDraft, onUploadThumbnail]
+        [upsertThumbnail, onChange, tempUrl]
     );
 
-    // cleanup khi unmount
-    useEffect(() => {
-        return () => {
-            if (preview) URL.revokeObjectURL(preview);
-        };
-    }, [preview]);
+    const onDelete = (e: React.MouseEvent) => {
+        if (upsertThumbnail.isPending) return;
+        e.stopPropagation();
+        if (tempUrl?.startsWith("blob:")) URL.revokeObjectURL(tempUrl);
+        setTempUrl(null);
+        onChange(""); // xoá publicId trong form
+    };
 
-    // drag events
+    const onClick = () => {
+        if (!upsertThumbnail.isPending) inputRef.current?.click();
+    };
+
     const onDragOver = (e: React.DragEvent) => {
-        if (uploadImageDraft.isPending) return;
+        if (upsertThumbnail.isPending) return;
         e.preventDefault();
         setDragActive(true);
     };
     const onDragLeave = (e: React.DragEvent) => {
-        if (uploadImageDraft.isPending) return;
+        if (upsertThumbnail.isPending) return;
         e.preventDefault();
         setDragActive(false);
     };
     const onDrop = (e: React.DragEvent) => {
-        if (uploadImageDraft.isPending) return;
+        if (upsertThumbnail.isPending) return;
         e.preventDefault();
         setDragActive(false);
         handleFiles(e.dataTransfer.files);
-    };
-
-    const onDelete = (e: React.MouseEvent) => {
-        if (uploadImageDraft.isPending) return;
-        e.stopPropagation();
-
-        setPreview((old) => {
-            if (old) URL.revokeObjectURL(old);
-            return null;
-        });
-    };
-
-    const onClick = () => {
-        if (uploadImageDraft.isPending) return;
-        inputRef.current?.click();
     };
 
     return (
@@ -96,43 +94,24 @@ export default function Thumbnail({ onUploadThumbnail, preview, setPreview }: TP
             tabIndex={0}
             onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && inputRef.current?.click()}
             className={cn(
-                "flex items-center justify-center rounded-2xl h-[300px]",
-                "relative select-none",
-                uploadImageDraft.isPending ? "cursor-not-allowed" : "cursor-pointer",
-                `border ${!preview && "border-dashed"}`,
+                "flex items-center justify-center rounded-2xl h-[300px] relative select-none",
+                upsertThumbnail.isPending ? "cursor-not-allowed" : "cursor-pointer",
+                `border ${!displayUrl && "border-dashed"}`,
                 dragActive ? "border-primary bg-primary/5" : "border-ring"
             )}
         >
-            {/* input file ẩn đi, click vào khung sẽ kích hoạt */}
             <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleFiles(e.target.files)} />
 
-            {preview ? (
+            {displayUrl ? (
                 <div className="w-full h-full p-1">
                     <div className="relative w-full h-full group">
-                        {/* Ảnh preview */}
-                        <Image src={preview} alt="Preview" fill className="object-cover rounded-xl" sizes="(max-width: 768px) 100vw, 50vw" />
-
-                        {uploadImageDraft.isPending ? (
-                            // Overlay loading khi đang upload
-                            <div
-                                className={cn(
-                                    "absolute inset-0 flex items-center justify-center",
-                                    "bg-black/50 rounded-xl ",
-                                    "transition-opacity duration-300"
-                                )}
-                            >
+                        <Image src={displayUrl} alt="Preview" fill className="object-cover rounded-xl" sizes="(max-width: 768px) 100vw, 50vw" />
+                        {upsertThumbnail.isPending ? (
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-xl">
                                 <Loader2 className="h-4 w-4 animate-spin mr-2" />
                             </div>
                         ) : (
-                            // Overlay + nút xoá
-                            <div
-                                className={cn(
-                                    "absolute inset-0 flex items-center justify-center",
-                                    "bg-black/20 rounded-xl",
-                                    "opacity-0 group-hover:opacity-100",
-                                    "transition-opacity duration-300"
-                                )}
-                            >
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
                                 <Button type="button" variant="outline" onClick={onDelete} size="icon" className="size-8">
                                     <Trash />
                                 </Button>

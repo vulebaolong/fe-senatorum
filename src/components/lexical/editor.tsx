@@ -154,9 +154,10 @@ type TProps = {
     onChange?: (contentString: string, editorState: EditorState) => void;
     initialContentJSON?: string;
     editorRef?: RefObject<LexicalEditor | null>;
+    isViewOnly?: boolean;
 };
 
-export default function Editor({ onChange, initialContentJSON, editorRef }: TProps) {
+export default function Editor({ onChange, initialContentJSON, editorRef, isViewOnly }: TProps) {
     const onChangeEditor = (editorState: EditorState) => {
         const editorStateJSON = editorState.toJSON();
         if (onChange) onChange(JSON.stringify(editorStateJSON), editorState);
@@ -166,7 +167,7 @@ export default function Editor({ onChange, initialContentJSON, editorRef }: TPro
             <EditorRefPlugin editorRef={editorRef} />
             <ToolbarContext>
                 <div className="editor-container">
-                    {!initialContentJSON && <ToolbarPlugin />}
+                    {!isViewOnly && <ToolbarPlugin />}
                     <div className="editor-inner">
                         <RichTextPlugin
                             contentEditable={
