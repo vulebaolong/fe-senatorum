@@ -4,9 +4,10 @@ import {
     getDetailArticleAction,
     getDraftArticleAction,
     getOtherArticleAction,
+    publishArticleAction,
     upsertArticleAction,
 } from "@/api/actions/article.action";
-import { TCreateArticleReq, TUpsertArticleReq } from "@/types/article.type";
+import { TArticle, TCreateArticleReq, TPublishArticleReq, TUpsertArticleReq } from "@/types/article.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useGetAllArticle = (payload: any) => {
@@ -61,7 +62,7 @@ export const useGetDetailArticle = (payload: string) => {
     });
 };
 
-export const useGetDraftArticle = () => {
+export const useGetDraftArticle = (initialData: TArticle | null) => {
     return useQuery({
         queryKey: ["get-draft-article"],
         queryFn: async () => {
@@ -71,6 +72,8 @@ export const useGetDraftArticle = () => {
             console.log({ useGetDraftArticle: data });
             return data;
         },
+        initialData: initialData,
+        refetchOnMount: false,
     });
 };
 
@@ -80,6 +83,17 @@ export const useCreateArticle = () => {
             const { data, status, message } = await createArticleAction(payload);
             if (status === "error" || data === null) throw new Error(message);
             console.log({ useCreateArticle: data });
+            return data;
+        },
+    });
+};
+
+export const usePublishArticle = () => {
+    return useMutation({
+        mutationFn: async (payload: TPublishArticleReq) => {
+            const { data, status, message } = await publishArticleAction(payload);
+            if (status === "error" || data === null) throw new Error(message);
+            console.log({ usePublishArticle: data });
             return data;
         },
     });

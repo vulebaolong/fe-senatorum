@@ -1,6 +1,6 @@
 "use client";
 
-import { useCreateArticle, useUpsertArticle } from "@/api/tantask/article.tanstack";
+import { usePublishArticle, useUpsertArticle } from "@/api/tantask/article.tanstack";
 import { Button } from "@/components/ui/button";
 import { ButtonLoading } from "@/components/ui/button-loading";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -9,23 +9,25 @@ import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
-import { formatLocalTime } from "@/helpers/function.helper";
+import { formatLocalTime, resError } from "@/helpers/function.helper";
 import { cn } from "@/lib/utils";
 import { TResAction, TResPagination } from "@/types/app.type";
-import { TArticle, TCreateArticleReq } from "@/types/article.type";
+import { TArticle, TPublishArticleReq } from "@/types/article.type";
+import { TCategory } from "@/types/category.type";
 import { TType } from "@/types/type.type";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebouncedCallback } from "@mantine/hooks";
-import { LexicalEditor } from "lexical";
+import { $createParagraphNode, $getRoot, LexicalEditor } from "lexical";
 import { ArrowLeft, Eye, Globe, Loader2, Settings, Tag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import Editor from "../../lexical/editor";
 import { CategoryMultiSelect } from "./select/category-multi-select";
 import TypeSelect from "./select/type-select";
 import Thumbnail from "./thumbnail/thumbnail";
-import { TCategory } from "@/types/category.type";
 
 const FormSchema = z.object({
     title: z.string().nonempty("Title is required."),
@@ -51,7 +53,7 @@ const FormSchema = z.object({
             message: "Content must not be empty.",
         }
     ),
-    thumbnail: z.string().nonempty("Thumbnail is required."),
+    thumbnail: z.string(),
 });
 
 type TProps = {
@@ -66,13 +68,14 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
     const { data: listCategoryArticle } = dataListCategoryArticle;
 
     const upsertArticle = useUpsertArticle();
-    const createArticle = useCreateArticle();
+    const publishArticle = usePublishArticle();
     const editorRef = useRef<LexicalEditor | null>(null);
     const router = useRouter();
     const [settingsOpen, setSettingsOpen] = useState(true);
     const firstRunRef = useRef(true);
 
     const form = useForm<z.infer<typeof FormSchema>>({
+        resolver: zodResolver(FormSchema),
         defaultValues: {
             title: articleDaft?.title ?? "",
             content: articleDaft?.content ?? "",
@@ -81,12 +84,11 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
             categoryIds: articleDaft?.ArticleCategories?.map((item) => item.Categories.id) ?? [],
         },
     });
-    const values = useWatch({ control: form.control });
 
+    const values = useWatch({ control: form.control });
     const handleUpsert = useDebouncedCallback(async (query: any) => {
         if (firstRunRef.current) return (firstRunRef.current = false);
-
-        console.log({ query });
+        console.log({ Debounce: query });
         upsertArticle.mutate({
             title: query.title,
             content: query.content,
@@ -94,40 +96,34 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
             typeId: Number(query.typeId) || undefined,
             categoryIds: query.categoryIds,
         });
-    }, 500);
+    }, 3000);
     useEffect(() => {
         handleUpsert(values);
     }, [values]);
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        const payload: TCreateArticleReq = {
-            ...data,
-            typeId: Number(data.typeId),
+        if (upsertArticle.isPending) return;
+
+        const payload: TPublishArticleReq = {
+            title: data.title.trim(),
         };
 
-        console.log({ payload });
+        console.log({ payload, data });
 
-        // createArticle.mutate(payload, {
-        //     onSuccess: () => {
-        //         toast.success(`Create article successfully`);
+        publishArticle.mutate(payload, {
+            onSuccess: () => {
+                form.reset();
 
-        //         form.reset();
-
-        //         editorRef.current?.update(() => {
-        //             const root = $getRoot(); // Lấy node gốc của document
-        //             root.clear(); // Xóa hết nội dung hiện có trong editor
-        //             root.append($createParagraphNode()); // Tạo đoạn văn bản trống (giống như <p></p>)
-        //         });
-
-        //         setPreview((old) => {
-        //             if (old) URL.revokeObjectURL(old);
-        //             return null;
-        //         });
-        //     },
-        //     onError: (error) => {
-        //         toast.error(resError(error, `Create article failed`));
-        //     },
-        // });
+                editorRef.current?.update(() => {
+                    const root = $getRoot();
+                    root.clear();
+                    root.append($createParagraphNode());
+                });
+            },
+            onError: (error) => {
+                toast.error(resError(error, `Publish Article failed`));
+            },
+        });
     }
 
     return (
@@ -171,7 +167,7 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
 
                     {/* body */}
                     <div className="flex-1 p-5 overflow-y-auto">
-                        <div className={`flex`}>
+                        <div className={cn("flex flex-col", "lg:flex-row")}>
                             {/* LEFT */}
                             <div className="flex-1 min-w-0 transition-[width] duration-300">
                                 <div className="w-full bg-background rounded-2xl shadow-sm p-5 flex flex-col gap-5">
@@ -205,6 +201,7 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
                                             <FormItem>
                                                 <FormControl>
                                                     <Thumbnail
+                                                        key={field.value || "empty"}
                                                         value={field.value || ""}
                                                         onChange={(v) => field.onChange(v || "")}
                                                         toUrl={(id) => `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}${id}`} // publicId -> URL
@@ -244,7 +241,7 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
                                     <Separator />
 
                                     <div className="">
-                                        <ButtonLoading loading={createArticle.isPending} type="submit" className="w-[170px]">
+                                        <ButtonLoading loading={publishArticle.isPending} type="submit" className="w-[200px]">
                                             Publish
                                         </ButtonLoading>
                                         <div className="flex items-center gap-2">
@@ -253,7 +250,7 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
                                                 <Loader2 className="animate-spin w-4 h-4 text-muted-foreground" />
                                             ) : (
                                                 <p className="text-xs text-muted-foreground italic">
-                                                    {formatLocalTime(articleDaft?.updatedAt, "ago")}
+                                                    {formatLocalTime(upsertArticle.data?.updatedAt || articleDaft?.updatedAt, "ago")}
                                                 </p>
                                             )}
                                         </div>
@@ -269,7 +266,9 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
                             >
                                 <div
                                     className={cn(
-                                        "will-change-transform transition-all duration-300 pl-5",
+                                        "w-full shrink-0",
+                                        "will-change-transform transition-all duration-300 pt-5",
+                                        "lg:pl-5 lg:pt-0 lg:w-[360px]",
                                         settingsOpen ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4 pointer-events-none"
                                     )}
                                 >

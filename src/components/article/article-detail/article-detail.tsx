@@ -10,13 +10,13 @@ import Editor from "@/components/lexical/editor";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 import { TArticle } from "@/types/article.type";
 import { Bookmark, Eye, MessageCircle, Share2 } from "lucide-react";
 import FacebookIcon from "./icon-social/facebook-icon";
 import InstagramIcon from "./icon-social/instagram-icon";
 import RedditIcon from "./icon-social/reddit-icon";
 import XIcon from "./icon-social/x-icon";
-import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 
 type TProps = {
     slug: string;

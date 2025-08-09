@@ -27,6 +27,10 @@ export type TCreateArticleReq = {
     categoryIds: number[];
 };
 
+export type TPublishArticleReq = {
+    title: string;
+};
+
 export type TUpsertArticleReq = {
     title?: string;
     content?: string;

@@ -1,7 +1,5 @@
 "use client";
 
-import { useGetListCategoryArticle } from "@/api/tantask/category.tanstack";
-import { OverlayState } from "@/components/data-state/overlay-state/OverlayState";
 import { Button } from "@/components/ui/button";
 import { Command, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -39,8 +37,8 @@ export function CategoryMultiSelect({ value, onChange, listCategoryArticle }: Pr
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
-                <Button variant="outline" className="w-full justify-between">
-                    {value.length > 0 ? selectedNames : "Select up to 3 categories"}
+                <Button variant="outline" className="w-full justify-between font-normal">
+                    {value.length > 0 ? selectedNames : <p className="text-muted-foreground">Select up to 3 categories</p>}
                     <ChevronDown className="size-4 opacity-50" />
                 </Button>
             </PopoverTrigger>
