@@ -33,6 +33,9 @@ export const ENDPOINT = {
         ARTICLE_UPSERT_THUMBNAIL: "article/upsert-thumbnail",
         ARTICLE_PUBLISH: "article/publish",
     },
+    ARTICLE_BOOKMARK: {
+        ARTICLE_TOGGLE_BOOKMARK: "article-bookmark/toggle-article-bookmark",
+    },
     COMMENT: {
         COMMENT: "comment",
     },

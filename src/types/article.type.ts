@@ -1,3 +1,4 @@
+import { ArticleBookmark } from "./article-bookmark.type";
 import { TArticleCategory } from "./article-category.type";
 import { TBaseTimestamps } from "./base.type";
 import { TReactionType } from "./reactioin.type";
@@ -16,6 +17,7 @@ export type TArticle = {
     Users: TUser;
     Types: TType;
     ArticleCategories: TArticleCategory[];
+    ArticleBookmarks: ArticleBookmark[];
     reaction: TReactionType | null;
 } & TBaseTimestamps;
 

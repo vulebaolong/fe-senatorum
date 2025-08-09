@@ -1,3 +1,4 @@
+import { useToggleArticleBookmark } from "@/api/tantask/article-bookmark.tanstack";
 import ButtonIcon from "@/components/custom/button-custom/button-icon";
 import ImageCustom from "@/components/custom/image-custom/ImageCustom";
 import IconArrowDown from "@/components/icon/icon-arrow-down";
@@ -12,6 +13,7 @@ import { formatLocalTime } from "@/helpers/function.helper";
 import { TArticle } from "@/types/article.type";
 import { Bookmark, Ellipsis, Eye, MessageCircle, Share2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 type TProps = {
     article: TArticle;
@@ -19,6 +21,9 @@ type TProps = {
 
 export default function ArticleItem({ article }: TProps) {
     const router = useRouter();
+    const toggleArticleBookmark = useToggleArticleBookmark();
+    const [isBookmarked, setIsBookmarked] = useState(article.ArticleBookmarks.length > 0);
+
     return (
         <article
             onClick={() => {
@@ -98,9 +103,21 @@ export default function ArticleItem({ article }: TProps) {
                         <p className="text-xs font-semibold text-muted-foreground">47</p>
                     </div>
                     <div className="flex flex-1 items-center gap-1 justify-end">
-                        <ButtonIcon variant="ghost" size="icon" className="size-6">
+                        <Button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                // Toggle UI ngay lập tức
+                                setIsBookmarked((prev) => !prev);
+                                toggleArticleBookmark.mutate({
+                                    articleId: article.id,
+                                });
+                            }}
+                            variant={isBookmarked ? "default" : "ghost"}
+                            size="icon"
+                            className="size-6"
+                        >
                             <Bookmark style={{ width: `15px`, height: `15px` }} />
-                        </ButtonIcon>
+                        </Button>
                         <ButtonIcon variant="ghost" size="icon" className="size-6">
                             <Share2 style={{ width: `15px`, height: `15px` }} />
                         </ButtonIcon>
