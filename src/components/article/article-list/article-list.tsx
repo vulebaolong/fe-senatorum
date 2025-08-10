@@ -8,6 +8,7 @@ import { AppendLoading } from "../../data-state/append-state/AppendState";
 import NodataOverlay from "../../no-data/NodataOverlay";
 import { Skeleton } from "../../ui/skeleton";
 import ArticleItem from "../article-item/article-item";
+import { useGetAllArticleBookmark } from "@/api/tantask/article-bookmark.tanstack";
 
 type TProps = {
     filters?: Record<string, any>;
@@ -30,6 +31,8 @@ export default function Articlelist({ filters, id }: TProps) {
         id: id,
         sort: { sortBy: `createdAt`, isDesc: true },
     });
+
+    const getAllArticleBookmark = useGetAllArticleBookmark()
 
     useEffect(() => {
         if (!getAllArticle.data?.items) return;
@@ -74,9 +77,10 @@ export default function Articlelist({ filters, id }: TProps) {
                     ))}
                     noDataComponent={<NodataOverlay visible />}
                 >
-                    {articles.map((article) => (
-                        <ArticleItem key={article.id} article={article} />
-                    ))}
+                    {articles.map((article) => {
+                      const isBookmarked =  getAllArticleBookmark.data?.[article.id]
+                        return <ArticleItem key={article.id} article={article} isBookmarked={!!isBookmarked}/>
+                    })}
                 </AppendLoading>
             </div>
             <div ref={bottomTriggerRef} className="w-full h-1"></div>

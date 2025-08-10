@@ -46,17 +46,14 @@ export function isValidImageSrc(src: string | StaticRequire | StaticImageData | 
 
 export default function ImageCustom({
     alt = "",
-    fallbackSrc = "/fallback-image.png", // <- fallback mặc định nếu ảnh lỗi
+    fallbackSrc = "/images/fallback-image.png", // nhớ để path public
     priority = false,
     style = {},
     objectFit = "cover",
     className = "",
     ...props
 }: AppImageProps) {
-    const [src, setSrc] = useState(props.src);
-
-    const isValid = isValidImageSrc(src);
-    if (!isValid) return null;
+    const [src, setSrc] = useState(props.src && isValidImageSrc(props.src) ? props.src : fallbackSrc);
 
     return (
         <Image

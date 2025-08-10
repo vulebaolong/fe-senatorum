@@ -13,16 +13,17 @@ import { formatLocalTime } from "@/helpers/function.helper";
 import { TArticle } from "@/types/article.type";
 import { Bookmark, Ellipsis, Eye, MessageCircle, Share2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 type TProps = {
     article: TArticle;
+    isBookmarked: boolean;
 };
 
-export default function ArticleItem({ article }: TProps) {
+export default function ArticleItem({ article, isBookmarked }: TProps) {
     const router = useRouter();
     const toggleArticleBookmark = useToggleArticleBookmark();
-    const [isBookmarked, setIsBookmarked] = useState(article.ArticleBookmarks.length > 0);
+    // const [isBookmarked, setIsBookmarked] = useState(article.ArticleBookmarks.length > 0);
+
 
     return (
         <article
@@ -107,7 +108,7 @@ export default function ArticleItem({ article }: TProps) {
                             onClick={(e) => {
                                 e.stopPropagation();
                                 // Toggle UI ngay lập tức
-                                setIsBookmarked((prev) => !prev);
+                                // setIsBookmarked((prev) => !prev);
                                 toggleArticleBookmark.mutate({
                                     articleId: article.id,
                                 });

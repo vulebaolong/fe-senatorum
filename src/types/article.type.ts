@@ -17,7 +17,6 @@ export type TArticle = {
     Users: TUser;
     Types: TType;
     ArticleCategories: TArticleCategory[];
-    ArticleBookmarks: ArticleBookmark[];
     reaction: TReactionType | null;
 } & TBaseTimestamps;
 

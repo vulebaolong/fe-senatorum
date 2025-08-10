@@ -34,6 +34,7 @@ export const ENDPOINT = {
         ARTICLE_PUBLISH: "article/publish",
     },
     ARTICLE_BOOKMARK: {
+        ARTICLE_BOOKMARK_ALL: "article-bookmark",
         ARTICLE_TOGGLE_BOOKMARK: "article-bookmark/toggle-article-bookmark",
     },
     COMMENT: {
