@@ -17,6 +17,9 @@ import FacebookIcon from "./icon-social/facebook-icon";
 import InstagramIcon from "./icon-social/instagram-icon";
 import RedditIcon from "./icon-social/reddit-icon";
 import XIcon from "./icon-social/x-icon";
+import CommentList from "@/components/comment/comment-list";
+import { useState } from "react";
+import { TListComment } from "@/types/comment.type";
 
 type TProps = {
     slug: string;
@@ -24,6 +27,7 @@ type TProps = {
 
 export default function ArticleDetail({ slug }: TProps) {
     const getDetailArticle = useGetDetailArticle(slug);
+    const [listComment, setListComment] = useState<TListComment[]>([]);
 
     return (
         <div className="p-5 h-[calc(100vh-var(--header-height))] overflow-y-scroll">
@@ -119,6 +123,7 @@ export default function ArticleDetail({ slug }: TProps) {
                                                 </div>
                                                 <div className="">
                                                     <Editor isViewOnly initialContentJSON={data.content} />
+                                                    <CommentList article={data} listComment={listComment} setListComment={setListComment} />
                                                 </div>
                                             </div>
                                         </div>
