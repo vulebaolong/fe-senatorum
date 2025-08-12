@@ -6,6 +6,7 @@ import Nodata from "../no-data/Nodata";
 import { AppendLoading } from "../data-state/append-state/AppendState";
 import { Skeleton } from "../ui/skeleton";
 import NodataOverlay from "../no-data/NodataOverlay";
+import CommentItem from "./comment-item/comment-item";
 
 type TProps = {
     article: TArticle;
@@ -42,7 +43,10 @@ export default function CommentList({ article, listComment, setListComment }: TP
     };
 
     return (
-        <div ref={containerRef} className={`p-5 h-[200px] flex flex-col overflow-y-scroll`}>
+        <div
+            ref={containerRef}
+            className={`p-2 h-[500px] flex flex-col overflow-y-scroll border-sidebar-border border shadow-sm rounded-2xl bg-white dark:bg-[#252728]`}
+        >
             <div className="relative flex-1">
                 <AppendLoading
                     isLoading={getCommentByArticle.isLoading}
@@ -55,10 +59,11 @@ export default function CommentList({ article, listComment, setListComment }: TP
                     initialLoadingComponent={<Skeleton className="h-[50px] w-full rounded-xl" />}
                     noDataComponent={<NodataOverlay visible />}
                 >
-                    {listComment.map((comment: TListComment) => (
-                        // <CommentItem key={comment._id} comment={comment} article={article} level={0} />
-                        <p key={comment.id}>{comment.content}</p>
-                    ))}
+                    {listComment.map((comment: TListComment, index) => {
+                        return (
+                            <CommentItem key={comment.id} comment={comment} article={article} level={0} isLast={index === listComment.length - 1} />
+                        );
+                    })}
                 </AppendLoading>
             </div>
             <div ref={bottomTriggerRef} className="w-full h-1"></div>

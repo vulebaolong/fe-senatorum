@@ -1,0 +1,164 @@
+import { useMutationCommentByParent } from "@/api/tantask/comment.tanstack";
+import { formatLocalTime } from "@/helpers/function.helper";
+import { TArticle } from "@/types/article.type";
+import { TListComment } from "@/types/comment.type";
+import { useState } from "react";
+import { typingText } from "@/helpers/motion.helper";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import CommentInput from "../comment-input/comment-input";
+import LineStraight from "../line/line-straight";
+import LineCurve from "../line/line-curve";
+
+type CommentItemProps = {
+    comment: TListComment;
+    article: TArticle;
+    level?: number;
+    isLast: boolean;
+};
+
+export default function CommentItem({ comment, article, level = 0, isLast }: CommentItemProps) {
+    console.log({ level });
+    const [replyingCommentId, setReplyingCommentId] = useState<number | null>(null);
+    const [listComment, setListComment] = useState<TListComment[]>([]);
+
+    const mutationCommentByParent = useMutationCommentByParent();
+
+    const handleReplyComment = (commentId: number) => {
+        setReplyingCommentId(commentId);
+    };
+
+    const handleGetCommentByParent = (commentId: number) => {
+        mutationCommentByParent.mutate(
+            {
+                pagination: { pageIndex: mutationCommentByParent.data ? mutationCommentByParent.data.page + 1 : 1, pageSize: 10 },
+                filters: {
+                    articleId: article.id,
+                    level: level + 1,
+                    parentId: commentId,
+                },
+                sort: { sortBy: `createdAt`, isDesc: true },
+            },
+            {
+                onSuccess: (data) => {
+                    setListComment(data.items);
+                },
+            }
+        );
+    };
+
+    return (
+        <div className="flex flex-col relative">
+            {level > 0 && !isLast && <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />}
+            <div className={`flex items-start gap-2 ${level > 0 ? "pl-2" : ""}`}>
+                {/* Avatar */}
+                <div className="relative z-10 bg-white dark:bg-[#252728] h-9 w-9 rounded-full flex items-center justify-center">
+                    <Avatar className="h-8 w-8">
+                        <AvatarImage src={comment.Users.avatar ?? undefined} alt={`name`} />
+                        <AvatarFallback className="rounded-lg">{comment.Users?.name.slice(0, 2).toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                </div>
+
+                {/* Right column */}
+                <div className="relative flex-1 flex flex-col">
+                    {/* {replyingCommentId === comment.id && <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />} */}
+
+                    {/* action */}
+                    <div className="relative">
+                        {/* line */}
+                        {level > 0 && <LineCurve className="absolute top-0 -left-[79px] h-[18px] w-[35px]" />}
+                        {comment.replyCount > 0 && <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />}
+                        {replyingCommentId && <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />}
+
+                        {/* comment */}
+                        <div className={cn("rounded-xl p-2 w-fit max-w-full", "bg-[#F0F2F5] dark:bg-[#333334]")}>
+                            <div className="text-sm font-semibold leading-none">{comment.Users.name}</div>
+                            <div className="text-sm break-words">{comment.content}</div>
+                        </div>
+
+                        {/* Meta actions */}
+                        <div className={`${comment.replyCount > 0 && !mutationCommentByParent?.data ? `` : `pb-2`}`}>
+                            {comment.createdAt ? (
+                                <div className="flex items-center gap-3 pl-2">
+                                    <span className="text-xs text-muted-foreground">{formatLocalTime(comment.createdAt, `ago`)}</span>
+
+                                    <ActionLink
+                                        label="Thích"
+                                        onClick={() => {
+                                            // TODO: like handler
+                                        }}
+                                    />
+
+                                    {level < 2 && <ActionLink label="Trả lời" onClick={() => handleReplyComment(comment.id)} />}
+                                </div>
+                            ) : (
+                                <div className="pl-2 text-xs italic text-muted-foreground">{typingText("Đang viết")}</div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* input comment */}
+                    {replyingCommentId === comment.id && (
+                        <div className={`relative pl-2 pb-2`}>
+                            <LineCurve className={`absolute top-0 -left-[27px] h-[16px] w-[28px]`} />
+                            {comment.replyCount > 0 && !mutationCommentByParent?.data && <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />}
+                            {mutationCommentByParent?.data && mutationCommentByParent.data.items.length > 0 && <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />}
+                            {listComment.length > 0 && <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />}
+                            <CommentInput article={article} commentParent={comment} setListComment={setListComment} />
+                        </div>
+                    )}
+
+                    {/* Nút xem tất cả phản hồi */}
+                    {comment.replyCount > 0 && !mutationCommentByParent?.data && (
+                        <div className="relative py-2">
+                            <LineCurve className="absolute bottom-[12px] -left-[27px] h-[20px] w-[30px]" />
+                            <p
+                                onClick={() => handleGetCommentByParent(comment.id)}
+                                className="pl-2 text-xs text-muted-foreground font-semibold hover:cursor-pointer leading-none"
+                            >
+                                Xem tất cả {comment.replyCount} phản hồi
+                            </p>
+                        </div>
+                    )}
+
+                    {listComment.map((c, index) => {
+                        return (
+                            <div key={c.id} className="flex flex-col">
+                                <CommentItem comment={c} article={article} level={c.level} isLast={index === listComment.length - 1} />
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* Đệ quy: render children nếu có */}
+            {comment.children && comment.children.length > 0 && (
+                <div className="flex flex-col gap-2 pl-12">
+                    {comment.children.map((child, index) => {
+                        const length = comment.children?.length;
+                        return (
+                            <CommentItem
+                                key={child.id}
+                                comment={child}
+                                article={article}
+                                level={level + 1}
+                                isLast={length ? index === length - 1 : true}
+                            />
+                        );
+                    })}
+                </div>
+            )}
+        </div>
+    );
+}
+/* ========= Helpers / Subcomponents ========= */
+
+function ActionLink({ label, onClick }: { label: string; onClick?: () => void }) {
+    return (
+        <button type="button" onClick={onClick} className={cn("relative text-xs text-muted-foreground transition-colors", "hover:text-primary")}>
+            {label}
+            <span className={cn("absolute left-0 -bottom-0.5 h-px w-0 bg-foreground transition-all", "hover:w-full")} />
+        </button>
+    );
+}

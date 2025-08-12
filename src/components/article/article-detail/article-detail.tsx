@@ -20,6 +20,7 @@ import XIcon from "./icon-social/x-icon";
 import CommentList from "@/components/comment/comment-list";
 import { useState } from "react";
 import { TListComment } from "@/types/comment.type";
+import CommentInput from "@/components/comment/comment-input/comment-input";
 
 type TProps = {
     slug: string;
@@ -123,6 +124,9 @@ export default function ArticleDetail({ slug }: TProps) {
                                                 </div>
                                                 <div className="">
                                                     <Editor isViewOnly initialContentJSON={data.content} />
+                                                    <div className="py-5">
+                                                        <CommentInput article={data} setListComment={setListComment} commentParent={null} />
+                                                    </div>
                                                     <CommentList article={data} listComment={listComment} setListComment={setListComment} />
                                                 </div>
                                             </div>
