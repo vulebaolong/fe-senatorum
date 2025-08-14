@@ -2,14 +2,7 @@
 
 import { Palette } from "lucide-react";
 
-import {
-    SidebarGroup,
-    SidebarGroupLabel,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    useSidebar
-} from "@/components/ui/sidebar";
+import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
 import useRouter from "@/hooks/use-router-custom";
 import ThemeToggleV2 from "../theme-toggle/theme-toggle-v2";
@@ -93,13 +86,11 @@ export function NavMain() {
             <SidebarGroup>
                 <SidebarGroupLabel>Chapter</SidebarGroupLabel>
                 <SidebarMenu>
-                    {groups.map((item) => (
-                        <SidebarMenuItem key={item.title}>
-                            <SidebarMenuButton className="items-center justify-center border" variant={"outline"} tooltip={item.title}>
-                                <span>{item.title}</span>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                    ))}
+                    <SidebarMenuItem >
+                        <SidebarMenuButton className="items-center justify-center border" variant={"outline"} tooltip={"Create chapter"}>
+                            <span>Create chapter</span>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarGroup>
             <SidebarGroup>

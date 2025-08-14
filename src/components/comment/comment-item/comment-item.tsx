@@ -83,12 +83,12 @@ export default function CommentItem({ comment, article, level = 0, isLast }: Com
                                 <div className="flex items-center gap-3 pl-2">
                                     <span className="text-xs text-muted-foreground">{formatLocalTime(comment.createdAt, `ago`)}</span>
 
-                                    <ActionLink
+                                    {/* <ActionLink
                                         label="Thích"
                                         onClick={() => {
                                             // TODO: like handler
                                         }}
-                                    />
+                                    /> */}
 
                                     {level < 2 && <ActionLink label="Trả lời" onClick={() => handleReplyComment(comment.id)} />}
                                 </div>

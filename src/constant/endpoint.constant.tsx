@@ -37,6 +37,15 @@ export const ENDPOINT = {
         ARTICLE_BOOKMARK_ALL: "article-bookmark",
         ARTICLE_TOGGLE_BOOKMARK: "article-bookmark/toggle-article-bookmark",
     },
+    CHAPTER: {
+        CHAPTER: "chapter",
+        CHAPTER_ALL: "chapter/all",
+        CHAPTER_OTHER: "chapter/other",
+        CHAPTER_UPSERT: "chapter/upsert",
+        CHAPTER_GET_DRAFT: "chapter/draft",
+        CHAPTER_UPSERT_THUMBNAIL: "chapter/upsert-thumbnail",
+        CHAPTER_PUBLISH: "chapter/publish",
+    },
     COMMENT: {
         COMMENT: "comment",
     },
