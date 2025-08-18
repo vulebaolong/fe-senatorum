@@ -64,3 +64,13 @@ export type TLoginGoogleWithTotpReq = {
 export type TLoginGoogleOneTapReq = {
     credential: string;
 };
+
+export type TRefreshTokenReq = {
+    accessToken: string;
+    refreshToken: string;
+};
+
+export type TRefreshTokenRes = {
+  accessToken: string;
+  refreshToken: string;
+};

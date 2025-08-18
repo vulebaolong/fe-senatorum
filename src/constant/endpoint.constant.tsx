@@ -77,4 +77,7 @@ export const ENDPOINT = {
         DRAFT: "image/upload-draft",
         DELETE: "image/delete-draft",
     },
+    ARTICLE_VOTE: {
+        ARTICLE_VOTE: "article-vote",
+    },
 };

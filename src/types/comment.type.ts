@@ -1,5 +1,7 @@
+import { TArticle } from "./article.type";
 import { TBaseTimestamps } from "./base.type";
 import { ECommentStatus } from "./enum/comment-status.enum";
+import { TRole } from "./role.type";
 import { TUser } from "./user.type";
 
 export type TComment = {
@@ -8,16 +10,16 @@ export type TComment = {
     content: string;
     level: number;
     replyCount: number;
-    parentId: number | null;
-    articleId: number;
-    userId: number;
+    parentId:  TComment["id"] | null;
+    articleId: TArticle["id"];
+    userId: TUser["id"];
     Users: TUser;
 } & TBaseTimestamps;
 
 export type TCreateCommentReq = {
-    articleId: number;
+    articleId: TArticle["id"];
     content: string;
-    parentId: number | null;
+    parentId: TComment["id"] | null;
 };
 
 export type TListComment = {
@@ -26,9 +28,9 @@ export type TListComment = {
     content: string;
     level: number;
     replyCount: number;
-    parentId: number | null;
-    articleId: number;
-    userId: number;
+    parentId: TComment["id"] | null;
+    articleId: TArticle["id"];
+    userId: TUser["id"];
     createdAt?: string;
     updatedAt?: string;
     isDeleted?: boolean;
@@ -39,7 +41,7 @@ export type TListComment = {
         username: string;
         avatar?: string;
         googleId?: string;
-        roleId: string;
+        roleId: TRole["id"];
         isTotp: boolean;
         createdAt?: string;
         updatedAt?: string;

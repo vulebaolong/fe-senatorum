@@ -1,8 +1,6 @@
-import ButtonBookmark from "@/components/button/button-bookmark";
+import ArticleBookmark from "@/components/article/article-bookmark/article-bookmark";
 import ButtonIcon from "@/components/custom/button-custom/button-icon";
 import ImageCustom from "@/components/custom/image-custom/ImageCustom";
-import IconArrowDown from "@/components/icon/icon-arrow-down";
-import IconArrowUp from "@/components/icon/icon-arrow-up";
 import { OverflowBadges } from "@/components/overflow-badges/OverflowBadges";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -13,6 +11,8 @@ import { formatLocalTime } from "@/helpers/function.helper";
 import { TArticle } from "@/types/article.type";
 import { Ellipsis, Eye, MessageCircle, Share2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import ArticleVote from "../article-vote/article-vote";
+import ArticleFooter from "../article-footer/article-footer";
 
 type TProps = {
     article: TArticle;
@@ -46,9 +46,9 @@ export default function ArticleItem({ article }: TProps) {
                         {article.Types.name}
                     </p>
 
-                    <Button variant="ghost" size="icon" className="size-6 ">
+                    {/* <Button variant="ghost" size="icon" className="size-6 ">
                         <Ellipsis className="text-muted-foreground" style={{ width: `15px`, height: `15px` }} />
-                    </Button>
+                    </Button> */}
                 </div>
             </div>
 
@@ -76,34 +76,8 @@ export default function ArticleItem({ article }: TProps) {
             <div className="px-2 mt-auto">
                 <Separator />
 
-                <div className="flex items-center justify-between w-full my-2">
-                    <div className="">
-                        <div className="flex items-center w-min gap-1 p-0.5 rounded-lg border border-border-subtlest-tertiary">
-                            <ButtonIcon variant="ghost" size="icon" className="size-6">
-                                <IconArrowUp className="w-6 h-6 pointer-events-none" />
-                            </ButtonIcon>
-                            <p className="text-sm font-semibold">{50}</p>
-                            <ButtonIcon variant="ghost" size="icon" className="size-6 ">
-                                <IconArrowDown className="w-6 h-6 pointer-events-none" />
-                            </ButtonIcon>
-                        </div>
-                    </div>
-
-                    <div className="flex  items-center gap-1 justify-center">
-                        <Eye className="text-muted-foreground" size={12} />
-                        <p className="text-xs font-semibold text-muted-foreground">2.1k</p>
-                    </div>
-
-                    <div className="flex  items-center gap-1 justify-center">
-                        <MessageCircle className="text-muted-foreground" size={12} />
-                        <p className="text-xs font-semibold text-muted-foreground">47</p>
-                    </div>
-
-                  <ButtonBookmark articleId={article.id} initial={article.ArticleBookmarks.length > 0} />
-
-                    <ButtonIcon variant="ghost" size="icon" className="size-6">
-                        <Share2 style={{ width: `15px`, height: `15px` }} />
-                    </ButtonIcon>
+                <div className="my-2">
+                    <ArticleFooter article={article} />
                 </div>
             </div>
         </article>

@@ -87,17 +87,24 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
     });
 
     const values = useWatch({ control: form.control });
-    const handleUpsert = useDebouncedCallback(async (query: any) => {
-        if (firstRunRef.current) return (firstRunRef.current = false);
-        console.log({ Debounce: query });
-        upsertArticle.mutate({
-            title: query.title,
-            content: query.content,
-            thumbnail: query.thumbnail,
-            typeId: query.typeId || undefined,
-            categoryIds: query.categoryIds,
-        });
-    }, 3000);
+    const handleUpsert = useDebouncedCallback(
+        async (query: any) => {
+            if (firstRunRef.current) return (firstRunRef.current = false);
+            console.log({ Debounce: query });
+            upsertArticle.mutate({
+                title: query.title,
+                content: query.content,
+                thumbnail: query.thumbnail,
+                typeId: query.typeId || undefined,
+                categoryIds: query.categoryIds,
+            });
+        },
+        {
+            delay: 1000,
+            leading: false,
+            flushOnUnmount: true,
+        }
+    );
     useEffect(() => {
         handleUpsert(values);
     }, [values]);

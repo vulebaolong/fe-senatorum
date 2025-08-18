@@ -214,4 +214,30 @@ export function toUrl(publicId: string) {
     return `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}${publicId}`;
 }
 
-
+/**
+ *  ví dụ:
+ * - formatCompactIntl(999); // "999"
+ * - formatCompactIntl(1000); // "1k"
+ * - formatCompactIntl(2100); // "2.1k"
+ * - formatCompactIntl(2_150_000); // "2.1M"
+ */
+export function formatCompactIntl(
+    n: number | null | undefined,
+    {
+        digits = 1,
+        locale = "en", // dùng "en" để ra K/M/B; "vi-VN" có thể ra dạng khác
+        lowerCaseK = true,
+    }: { digits?: number; locale?: string; lowerCaseK?: boolean } = {}
+): string {
+    if (n == null || Number.isNaN(+n)) return "0";
+    const fmt = new Intl.NumberFormat(locale, {
+        notation: "compact",
+        compactDisplay: "short",
+        maximumFractionDigits: digits,
+    });
+    let s = fmt.format(n);
+    // bỏ .0 thừa (vd 2.0K -> 2K) và chuyển K -> k nếu muốn
+    s = s.replace(/([.,])0\b/g, "");
+    if (lowerCaseK) s = s.replace(/K/g, "k");
+    return s;
+}

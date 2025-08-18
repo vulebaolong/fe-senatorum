@@ -20,6 +20,7 @@ type TProps = {
 export default function CommentInput({ article, setListComment, commentParent = null }: TProps) {
     const [value, setValue] = useState("");
     const info = useAppSelector((state) => state.user.info);
+    const [isComposing, setIsComposing] = useState(false);
 
     const createComment = useCreateComment();
 
@@ -32,7 +33,7 @@ export default function CommentInput({ article, setListComment, commentParent = 
             parentId: commentParent?.id || null,
         };
 
-        const fakeId = Date.now();
+        const fakeId = Date.now().toString();
         setListComment((prev) => {
             const fakeData: TListComment = {
                 id: fakeId,
@@ -77,12 +78,21 @@ export default function CommentInput({ article, setListComment, commentParent = 
 
             {/* input */}
             <Textarea
-                className="flex-1" // thay cho sx={{ flex: 1 }}
-                placeholder="Viết bình luận"
+                className="flex-1 rounded-2xl" // thay cho sx={{ flex: 1 }}
+                placeholder="Join the comments..."
                 minRows={1}
                 maxRows={10}
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
+                onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+                    // Enter để gửi, Shift+Enter để xuống dòng
+                    if (e.key === "Enter" && !e.shiftKey && !isComposing) {
+                        e.preventDefault();
+                        handleCreateComment();
+                    }
+                }}
+                onCompositionStart={() => setIsComposing(true)}
+                onCompositionEnd={() => setIsComposing(false)}
             />
 
             {/* button send */}

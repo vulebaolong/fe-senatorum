@@ -21,6 +21,8 @@ import CommentList from "@/components/comment/comment-list";
 import { useState } from "react";
 import { TListComment } from "@/types/comment.type";
 import CommentInput from "@/components/comment/comment-input/comment-input";
+import ArticleVote from "../article-vote/article-vote";
+import ArticleFooter from "../article-footer/article-footer";
 
 type TProps = {
     slug: string;
@@ -44,7 +46,7 @@ export default function ArticleDetail({ slug }: TProps) {
 
                                 <div className="flex-1 grid gap-10 [grid-template-columns:0.75fr_0.25fr]">
                                     <div className="flex flex-col gap-10">
-                                        <div className=" grid gap-5 grid-cols-2">
+                                        <div className=" grid gap-5 [grid-template-columns:0.45fr_0.55fr]">
                                             <div className="w-full h-full border-sidebar-border border shadow-sm aspect-video overflow-hidden rounded-xl">
                                                 <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}${data.thumbnail}`} alt={data.slug} />
                                             </div>
@@ -84,33 +86,7 @@ export default function ArticleDetail({ slug }: TProps) {
                                                     <Button>Follow</Button>
                                                 </div>
 
-                                                <div className="flex items-center justify-between w-full">
-                                                    <div className="flex-1">
-                                                        <div className="flex items-center w-min gap-1 p-0.5 rounded-lg border border-border-subtlest-tertiary">
-                                                            <ButtonIcon variant="ghost" size="icon" className="size-6">
-                                                                <IconArrowUp className="w-6 h-6 pointer-events-none" />
-                                                            </ButtonIcon>
-                                                            <p className="text-sm font-semibold">{50}</p>
-                                                            <ButtonIcon variant="ghost" size="icon" className="size-6 ">
-                                                                <IconArrowDown className="w-6 h-6 pointer-events-none" />
-                                                            </ButtonIcon>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex flex-1 items-center gap-1 justify-center">
-                                                        <Eye className="text-muted-foreground" size={12} />
-                                                        <p className="text-xs font-semibold text-muted-foreground">2.1k</p>
-                                                        <MessageCircle className="text-muted-foreground" size={12} />
-                                                        <p className="text-xs font-semibold text-muted-foreground">47</p>
-                                                    </div>
-                                                    <div className="flex flex-1 items-center gap-1 justify-end">
-                                                        <ButtonIcon variant="ghost" size="icon" className="size-6">
-                                                            <Bookmark style={{ width: `15px`, height: `15px` }} />
-                                                        </ButtonIcon>
-                                                        <ButtonIcon variant="ghost" size="icon" className="size-6">
-                                                            <Share2 style={{ width: `15px`, height: `15px` }} />
-                                                        </ButtonIcon>
-                                                    </div>
-                                                </div>
+                                                <ArticleFooter article={data} />
                                             </div>
                                         </div>
 
@@ -124,7 +100,7 @@ export default function ArticleDetail({ slug }: TProps) {
                                                 </div>
                                                 <div className="">
                                                     <Editor isViewOnly initialContentJSON={data.content} />
-                                                    <div className="py-5">
+                                                    <div className="py-5 px-2">
                                                         <CommentInput article={data} setListComment={setListComment} commentParent={null} />
                                                     </div>
                                                     <CommentList article={data} listComment={listComment} setListComment={setListComment} />

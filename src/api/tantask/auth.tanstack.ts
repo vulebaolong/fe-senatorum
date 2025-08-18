@@ -4,13 +4,22 @@ import {
     loginGoogleAction,
     loginGooleOneTapAction,
     loginMagicLinkAction,
+    refreshTokenAction,
     registerAction,
     verifyMagicLinkAction,
 } from "@/api/actions/auth.action";
 import { resError } from "@/helpers/function.helper";
 import { useAppDispatch } from "@/redux/hooks";
 import { SET_INFO } from "@/redux/slices/user.slice";
-import { TLoginFormReq, TLoginGoogleOneTapReq, TLoginGoogleWithTotpReq, TLoginMagicLinkReq, TRegisterReq, TVerifyMagicLinkReq } from "@/types/auth.type";
+import {
+    TLoginFormReq,
+    TLoginGoogleOneTapReq,
+    TLoginGoogleWithTotpReq,
+    TLoginMagicLinkReq,
+    TRefreshTokenReq,
+    TRegisterReq,
+    TVerifyMagicLinkReq,
+} from "@/types/auth.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -116,6 +125,17 @@ export const useLoginGooleOneTap = () => {
     return useMutation({
         mutationFn: async (payload: TLoginGoogleOneTapReq) => {
             const { data, status, message } = await loginGooleOneTapAction(payload);
+            if (status === "error" || data === null) throw new Error(message);
+            console.log({ useLoginGooleOneTap: data });
+            return data;
+        },
+    });
+};
+
+export const useRefreshToken = () => {
+    return useMutation({
+        mutationFn: async (payload: TRefreshTokenReq) => {
+            const { data, status, message } = await refreshTokenAction(payload);
             if (status === "error" || data === null) throw new Error(message);
             console.log({ useLoginGooleOneTap: data });
             return data;

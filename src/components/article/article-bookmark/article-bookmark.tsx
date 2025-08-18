@@ -11,9 +11,10 @@ import { TArticle } from "@/types/article.type";
 type TProps = {
     articleId: TArticle["id"];
     initial?: boolean;
+    debounceMs?: number;
 };
 
-export default function ButtonBookmark({ articleId, initial = false }: TProps) {
+export default function ArticleBookmark({ articleId, initial = false, debounceMs = 300 }: TProps) {
     const addBookmark = useAddBookmark();
     const removeBookmark = useRemoveBookmark();
 
@@ -30,26 +31,33 @@ export default function ButtonBookmark({ articleId, initial = false }: TProps) {
     const seqRef = useRef(0);
 
     // Debounce 300ms: chỉ gọi API với trạng thái cuối cùng
-    const commit = useDebouncedCallback(async () => {
-        const desired = desiredRef.current;
-        const seq = ++seqRef.current;
+    const commit = useDebouncedCallback(
+        async () => {
+            const desired = desiredRef.current;
+            const seq = ++seqRef.current;
 
-        try {
-            if (desired) {
-                await addBookmark.mutateAsync({ articleId });
-            } else {
-                await removeBookmark.mutateAsync({ articleId });
+            try {
+                if (desired) {
+                    await addBookmark.mutateAsync({ articleId });
+                } else {
+                    await removeBookmark.mutateAsync({ articleId });
+                }
+                // chỉ áp dụng kết quả nếu đây là commit mới nhất
+                if (seq !== seqRef.current) return;
+                // (optional) toast.success(desired ? "Bookmarked" : "Unbookmarked");
+            } catch (e) {
+                if (seq !== seqRef.current) return; // kết quả cũ -> bỏ
+                // Revert UI khi lỗi
+                setIsBookmarked((prev) => !prev);
+                // (optional) toast.error("Update bookmark failed");
             }
-            // chỉ áp dụng kết quả nếu đây là commit mới nhất
-            if (seq !== seqRef.current) return;
-            // (optional) toast.success(desired ? "Bookmarked" : "Unbookmarked");
-        } catch (e) {
-            if (seq !== seqRef.current) return; // kết quả cũ -> bỏ
-            // Revert UI khi lỗi
-            setIsBookmarked((prev) => !prev);
-            // (optional) toast.error("Update bookmark failed");
+        },
+        {
+            delay: debounceMs,
+            leading: false,
+            flushOnUnmount: true,
         }
-    }, 300);
+    );
 
     useEffect(() => () => commit.cancel(), [commit]);
 

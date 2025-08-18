@@ -3,7 +3,17 @@
 import { ENDPOINT } from "@/constant/endpoint.constant";
 import { clearTokens, setAccessToken, setRefreshToken } from "@/helpers/cookies.helper";
 import { TRes, TResAction } from "@/types/app.type";
-import { TLoginGoogleOneTapReq, TLoginGoogleWithTotpReq, TLoginMagicLinkReq, TLoginRes, TRegisterReq, TRegisterRes, TVerifyMagicLinkReq } from "@/types/auth.type";
+import {
+    TLoginGoogleOneTapReq,
+    TLoginGoogleWithTotpReq,
+    TLoginMagicLinkReq,
+    TLoginRes,
+    TRefreshTokenReq,
+    TRefreshTokenRes,
+    TRegisterReq,
+    TRegisterRes,
+    TVerifyMagicLinkReq,
+} from "@/types/auth.type";
 import { TUser } from "@/types/user.type";
 import api from "../core.api";
 
@@ -89,6 +99,19 @@ export async function getInfoAction(): Promise<TResAction<TUser | null>> {
         const { data } = result;
 
         return { status: "success", message: result.message, data: data };
+    } catch (error: any) {
+        return { status: "error", message: error?.message, data: null };
+    }
+}
+
+export async function refreshTokenAction(payload: TRefreshTokenReq): Promise<TResAction<TRefreshTokenRes | null>> {
+    try {
+        const result = await api.post<TRes<TRefreshTokenRes>>(ENDPOINT.AUTH.REFRESH_TOKEN, payload);
+        setRefreshToken(result.data.refreshToken);
+        setAccessToken(result.data.accessToken);
+        // console.log({ useRefreshToken: data });
+
+        return { status: "success", message: result.message, data: result.data };
     } catch (error: any) {
         return { status: "error", message: error?.message, data: null };
     }
