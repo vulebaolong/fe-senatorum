@@ -1,0 +1,79 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Bookmark } from "lucide-react";
+import { useDebouncedCallback } from "@mantine/hooks";
+import { useAddBookmark, useRemoveBookmark } from "@/api/tantask/article-bookmark.tanstack";
+import { TArticle } from "@/types/article.type";
+// optional: import toast from "@/components/ui/use-toast";
+
+type TProps = {
+    articleId: TArticle["id"];
+    initial?: boolean;
+};
+
+export default function ButtonBookmark({ articleId, initial = false }: TProps) {
+    const addBookmark = useAddBookmark();
+    const removeBookmark = useRemoveBookmark();
+
+    // UI state (optimistic)
+    const [isBookmarked, setIsBookmarked] = useState<boolean>(initial);
+
+    // lưu “trạng thái người dùng muốn” gần nhất
+    const desiredRef = useRef<boolean>(initial);
+    useEffect(() => {
+        desiredRef.current = isBookmarked;
+    }, [isBookmarked]);
+
+    // chống race: chỉ nhận kết quả của lần commit mới nhất
+    const seqRef = useRef(0);
+
+    // Debounce 300ms: chỉ gọi API với trạng thái cuối cùng
+    const commit = useDebouncedCallback(async () => {
+        const desired = desiredRef.current;
+        const seq = ++seqRef.current;
+
+        try {
+            if (desired) {
+                await addBookmark.mutateAsync({ articleId });
+            } else {
+                await removeBookmark.mutateAsync({ articleId });
+            }
+            // chỉ áp dụng kết quả nếu đây là commit mới nhất
+            if (seq !== seqRef.current) return;
+            // (optional) toast.success(desired ? "Bookmarked" : "Unbookmarked");
+        } catch (e) {
+            if (seq !== seqRef.current) return; // kết quả cũ -> bỏ
+            // Revert UI khi lỗi
+            setIsBookmarked((prev) => !prev);
+            // (optional) toast.error("Update bookmark failed");
+        }
+    }, 300);
+
+    useEffect(() => () => commit.cancel(), [commit]);
+
+    const onClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        // Toggle UI ngay, ghi nhận “ý định” rồi để debounce commit
+        setIsBookmarked((prev) => {
+            const next = !prev;
+            desiredRef.current = next;
+            commit();
+            return next;
+        });
+    };
+
+    const busy = addBookmark.isPending || removeBookmark.isPending;
+
+    return (
+        <Button onClick={onClick} size="icon" className="size-6" variant={"ghost"} aria-pressed={isBookmarked} aria-busy={busy}>
+            <Bookmark
+                style={{ width: 15, height: 15 }}
+                className="transition-transform"
+                // tô màu khi đã bookmark
+                fill={isBookmarked ? "currentColor" : "none"}
+            />
+        </Button>
+    );
+}

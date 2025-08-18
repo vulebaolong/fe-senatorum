@@ -86,8 +86,8 @@ export function NavMain() {
             <SidebarGroup>
                 <SidebarGroupLabel>Chapter</SidebarGroupLabel>
                 <SidebarMenu>
-                    <SidebarMenuItem >
-                        <SidebarMenuButton className="items-center justify-center border" variant={"outline"} tooltip={"Create chapter"}>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton onClick={() => router.push(ROUTER_CLIENT.CHAPTER_CREATE)} className="items-center justify-center border" variant={"outline"} tooltip={"Create chapter"}>
                             <span>Create chapter</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>

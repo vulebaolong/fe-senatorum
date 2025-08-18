@@ -20,7 +20,7 @@ type TProps = {
 export default function Articlelist({ filters, id }: TProps) {
     const [page, setPage] = useState(1);
     const [articles, setArticles] = useState<TArticle[]>([]);
-    const pageSize = 10;
+    const pageSize = 3;
     const totalPageRef = useRef(0);
     const containerRef = useRef(null);
     const bottomTriggerRef = useRef(null);
@@ -32,7 +32,7 @@ export default function Articlelist({ filters, id }: TProps) {
         sort: { sortBy: `createdAt`, isDesc: true },
     });
 
-    const getAllArticleBookmark = useGetAllArticleBookmark()
+    // const getAllArticleBookmark = useGetAllArticleBookmark()
 
     useEffect(() => {
         if (!getAllArticle.data?.items) return;
@@ -78,8 +78,7 @@ export default function Articlelist({ filters, id }: TProps) {
                     noDataComponent={<NodataOverlay visible />}
                 >
                     {articles.map((article) => {
-                      const isBookmarked =  getAllArticleBookmark.data?.[article.id]
-                        return <ArticleItem key={article.id} article={article} isBookmarked={!!isBookmarked}/>
+                        return <ArticleItem key={article.id} article={article}/>
                     })}
                 </AppendLoading>
             </div>

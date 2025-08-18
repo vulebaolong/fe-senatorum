@@ -1,4 +1,4 @@
-import { FOLDER_IMAGE_BE, NEXT_PUBLIC_BASE_DOMAIN, NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
+import { FOLDER_IMAGE_BE, NEXT_PUBLIC_BASE_DOMAIN_BE, NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 import dayjs from "dayjs";
 
 export const checkPathImage = (path: string | null | undefined) => {
@@ -8,7 +8,7 @@ export const checkPathImage = (path: string | null | undefined) => {
     }
 
     if (path.includes(`local`)) {
-        return `${NEXT_PUBLIC_BASE_DOMAIN}${FOLDER_IMAGE_BE}${path}`;
+        return `${NEXT_PUBLIC_BASE_DOMAIN_BE}${FOLDER_IMAGE_BE}${path}`;
     } else {
         return `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}${path}`;
     }
@@ -26,7 +26,7 @@ export const resError = (error: any, defaultMes: string) => {
 
 export const formatLocalTime = (time?: dayjs.ConfigType, format = "HH:mm:ss DD/MM/YYYY") => {
     if (typeof time === "string") {
-        if (format === `ago`) return dayjs(time).fromNow()
+        if (format === `ago`) return dayjs(time).fromNow();
         return dayjs.utc(time).local().format(format);
     } else if (typeof time === "number") {
         if (format === `ago`) return dayjs.unix(time).local().fromNow();
@@ -209,3 +209,9 @@ export function hexToRgba(hex: string, alpha: number) {
 
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
+
+export function toUrl(publicId: string) {
+    return `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}${publicId}`;
+}
+
+

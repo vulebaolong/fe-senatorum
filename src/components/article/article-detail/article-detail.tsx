@@ -61,12 +61,12 @@ export default function ArticleDetail({ slug }: TProps) {
                                                     Interest The Feds Interest The Feds Interest
                                                 </div>
                                                 <div className="flex items-center gap-2">
-                                                    <Avatar className="h-10 w-10 rounded-full">
+                                                    {/* <Avatar className="h-10 w-10 rounded-full">
                                                         <AvatarImage src={data.Users.avatar} alt={data.Users.name} />
                                                         <AvatarFallback className="rounded-full text-xs">
                                                             {data.Users.name.slice(0, 2).toUpperCase()}
                                                         </AvatarFallback>
-                                                    </Avatar>
+                                                    </Avatar> */}
 
                                                     <div className="flex flex-1 items-center gap-2 py-1.5 text-left text-sm">
                                                         <Avatar className="h-8 w-8 rounded-full">

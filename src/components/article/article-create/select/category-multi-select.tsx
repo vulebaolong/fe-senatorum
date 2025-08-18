@@ -3,33 +3,31 @@
 import { Button } from "@/components/ui/button";
 import { Command, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { TResPagination } from "@/types/app.type";
 import { TCategory } from "@/types/category.type";
 import { Check, ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 type Props = {
-    value: number[];
-    onChange: (value: number[]) => void;
-    listCategoryArticle: TResPagination<TCategory> | null;
+    value: string[];
+    onChange: (value: string[]) => void;
+    listCategoryArticle: TCategory[] | null;
 };
 
 export function CategoryMultiSelect({ value, onChange, listCategoryArticle }: Props) {
     const [open, setOpen] = useState(false);
 
-    const toggleItem = (itemId: number) => {
+    const toggleItem = (itemId: string) => {
         if (value.includes(itemId)) {
             onChange(value.filter((id) => id !== itemId));
         } else {
             if (value.length >= 3) return;
-            console.log({ value, itemId });
             onChange([...value, itemId]);
         }
     };
 
-    const isSelected = (itemId: number) => value.includes(itemId);
+    const isSelected = (itemId: string) => value.includes(itemId);
 
-    const selectedNames = (listCategoryArticle?.items ?? [])
+    const selectedNames = (listCategoryArticle ?? [])
         .filter((c) => value.includes(c.id))
         .map((c) => c.name)
         .join(", ");
@@ -46,7 +44,7 @@ export function CategoryMultiSelect({ value, onChange, listCategoryArticle }: Pr
                 <Command>
                     <CommandInput placeholder="Tìm danh mục..." />
                     <CommandList className="relative min-h-10">
-                        {listCategoryArticle?.items.map((item) => (
+                        {listCategoryArticle?.map((item) => (
                             <CommandItem key={item.id} onSelect={() => toggleItem(item.id)} className="flex justify-between">
                                 <span>{item.name}</span>
                                 {isSelected(item.id) && <Check className="h-4 w-4" />}

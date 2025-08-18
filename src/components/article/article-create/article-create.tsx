@@ -1,17 +1,18 @@
 "use client";
 
 import { usePublishArticle, useUpsertArticle } from "@/api/tantask/article.tanstack";
+import { useUpsertThumbnail } from "@/api/tantask/image.tanstack";
+import ImageUpload from "@/components/image-upload/image-upload";
 import { Button } from "@/components/ui/button";
 import { ButtonLoading } from "@/components/ui/button-loading";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
-import { formatLocalTime, resError } from "@/helpers/function.helper";
+import { formatLocalTime, resError, toUrl } from "@/helpers/function.helper";
 import { cn } from "@/lib/utils";
-import { TResAction, TResPagination } from "@/types/app.type";
+import { TResAction } from "@/types/app.type";
 import { TArticle, TPublishArticleReq } from "@/types/article.type";
 import { TCategory } from "@/types/category.type";
 import { TType } from "@/types/type.type";
@@ -27,12 +28,11 @@ import { z } from "zod";
 import Editor from "../../lexical/editor";
 import { CategoryMultiSelect } from "./select/category-multi-select";
 import TypeSelect from "./select/type-select";
-import Thumbnail from "./thumbnail/thumbnail";
 
 const FormSchema = z.object({
     title: z.string().nonempty("Title is required."),
     typeId: z.string().nonempty("Type is required."),
-    categoryIds: z.array(z.number()).min(1, "Select at least one category.").max(3, "You can select up to 3 categories."),
+    categoryIds: z.array(z.string()).nonempty("Category is required."),
     content: z.string().refine(
         (val) => {
             try {
@@ -58,8 +58,8 @@ const FormSchema = z.object({
 
 type TProps = {
     dataArticleDaft: TResAction<TArticle | null>;
-    dataListTypeArticle: TResAction<TResPagination<TType> | null>;
-    dataListCategoryArticle: TResAction<TResPagination<TCategory> | null>;
+    dataListTypeArticle: TResAction<TType[] | null>;
+    dataListCategoryArticle: TResAction<TCategory[] | null>;
 };
 
 export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, dataListCategoryArticle }: TProps) {
@@ -69,6 +69,7 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
 
     const upsertArticle = useUpsertArticle();
     const publishArticle = usePublishArticle();
+    const upsertThumbnail = useUpsertThumbnail();
     const editorRef = useRef<LexicalEditor | null>(null);
     const router = useRouter();
     const [settingsOpen, setSettingsOpen] = useState(true);
@@ -93,7 +94,7 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
             title: query.title,
             content: query.content,
             thumbnail: query.thumbnail,
-            typeId: Number(query.typeId) || undefined,
+            typeId: query.typeId || undefined,
             categoryIds: query.categoryIds,
         });
     }, 3000);
@@ -112,19 +113,35 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
 
         publishArticle.mutate(payload, {
             onSuccess: () => {
-                form.reset();
+                form.reset({
+                    title: "",
+                    content: "",
+                    thumbnail: "",
+                    typeId: "",
+                    categoryIds: [],
+                });
+                console.log(form.getValues());
 
                 editorRef.current?.update(() => {
                     const root = $getRoot();
                     root.clear();
                     root.append($createParagraphNode());
                 });
+
+                toast.success("Publish Article successfully.");
             },
             onError: (error) => {
                 toast.error(resError(error, `Publish Article failed`));
             },
         });
     }
+
+    const onUpload = async (file: File) => {
+        const fd = new FormData();
+        fd.append("thumbnail", file);
+        // mutation phải trả về publicId (string)
+        return await upsertThumbnail.mutateAsync(fd);
+    };
 
     return (
         <Form {...form}>
@@ -200,11 +217,27 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormControl>
-                                                    <Thumbnail
-                                                        key={field.value || "empty"}
-                                                        value={field.value || ""}
-                                                        onChange={(v) => field.onChange(v || "")}
-                                                        toUrl={(id) => `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}${id}`} // publicId -> URL
+                                                    <ImageUpload
+                                                        value={field.value ?? ""} // publicId hiện tại
+                                                        onChange={(id) => {
+                                                            // ghi về form
+                                                            field.onChange(id);
+                                                            field.onBlur(); // mark as touched (hữu ích cho validate)
+                                                        }}
+                                                        toUrl={toUrl}
+                                                        onUpload={onUpload} // gọi tanstack bên ngoài
+                                                        isUploading={upsertThumbnail.isPending}
+                                                        onUploadError={(e) => {
+                                                            // tuỳ bạn: toast.error(...)
+                                                            console.error(e);
+                                                        }}
+                                                        onDelete={async () => {
+                                                            // nếu cần gọi API xoá file trên server, làm ở đây
+                                                            // await api.delete(publicId)
+                                                        }}
+                                                        // tuỳ chọn giao diện
+                                                        heightClassName="h-[300px]"
+                                                        className="w-full"
                                                     />
                                                 </FormControl>
                                                 <FormDescription className="text-xs italic">
@@ -289,7 +322,7 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
                                                         <Tag size={16} className="text-muted-foreground" />
                                                         <p className="font-bold text-muted-foreground">Type</p>
                                                     </FormLabel>
-                                                    <Select onValueChange={field.onChange} value={field.value}>
+                                                    <Select onValueChange={field.onChange} value={field.value ?? ""}>
                                                         <FormControl>
                                                             <SelectTrigger className="w-full">
                                                                 <SelectValue placeholder="Select a type article" />

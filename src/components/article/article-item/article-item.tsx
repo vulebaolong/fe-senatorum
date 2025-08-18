@@ -1,29 +1,25 @@
-import { useToggleArticleBookmark } from "@/api/tantask/article-bookmark.tanstack";
+import ButtonBookmark from "@/components/button/button-bookmark";
 import ButtonIcon from "@/components/custom/button-custom/button-icon";
 import ImageCustom from "@/components/custom/image-custom/ImageCustom";
 import IconArrowDown from "@/components/icon/icon-arrow-down";
 import IconArrowUp from "@/components/icon/icon-arrow-up";
+import { OverflowBadges } from "@/components/overflow-badges/OverflowBadges";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { formatLocalTime } from "@/helpers/function.helper";
 import { TArticle } from "@/types/article.type";
-import { Bookmark, Ellipsis, Eye, MessageCircle, Share2 } from "lucide-react";
+import { Ellipsis, Eye, MessageCircle, Share2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 type TProps = {
     article: TArticle;
-    isBookmarked: boolean;
 };
 
-export default function ArticleItem({ article, isBookmarked }: TProps) {
+export default function ArticleItem({ article }: TProps) {
     const router = useRouter();
-    const toggleArticleBookmark = useToggleArticleBookmark();
-    // const [isBookmarked, setIsBookmarked] = useState(article.ArticleBookmarks.length > 0);
-
 
     return (
         <article
@@ -35,10 +31,6 @@ export default function ArticleItem({ article, isBookmarked }: TProps) {
             {/* header */}
             <div className=" h-[40px] flex items-center justify-between px-5 ">
                 <div className="flex basis-[60%] items-center gap-1 min-w-0">
-                    <Avatar className="h-6 w-6 rounded-full">
-                        <AvatarImage src={article.Users.avatar} alt={article.Users.name} />
-                        <AvatarFallback className="rounded-full text-xs">{article.Users.name.slice(0, 2).toUpperCase()}</AvatarFallback>
-                    </Avatar>
                     <Avatar className="h-8 w-8 rounded-full">
                         <AvatarImage src={article.Users.avatar} alt={article.Users.name} />
                         <AvatarFallback className="rounded-full text-sm">{article.Users.name.slice(0, 2).toUpperCase()}</AvatarFallback>
@@ -64,14 +56,13 @@ export default function ArticleItem({ article, isBookmarked }: TProps) {
             <div className="leading-5 text-xl px-5 font-bold line-clamp-3 h-[60px]">{article.title}</div>
 
             {/* category */}
-            <div className="flex flex-col gap-2 px-5 h-[22px]">
-                <div className="flex items-center gap-1 flex-wrap">
-                    {article.ArticleCategories.map((item, i) => (
-                        <Badge variant="outline" key={i}>
-                            {item.Categories.name}
-                        </Badge>
-                    ))}
-                </div>
+            <div className="px-2">
+                <OverflowBadges
+                    className="h-[22px]" // giữ chiều cao 1 dòng nếu muốn
+                    gapPx={4} // khớp với gap-1
+                    items={article.ArticleCategories.map((it) => it.Categories.name)}
+                    // moreLabel={(n) => `+${n}`}                // có thể tuỳ biến
+                />
             </div>
 
             {/* thumbnail */}
@@ -86,7 +77,7 @@ export default function ArticleItem({ article, isBookmarked }: TProps) {
                 <Separator />
 
                 <div className="flex items-center justify-between w-full my-2">
-                    <div className="flex-1">
+                    <div className="">
                         <div className="flex items-center w-min gap-1 p-0.5 rounded-lg border border-border-subtlest-tertiary">
                             <ButtonIcon variant="ghost" size="icon" className="size-6">
                                 <IconArrowUp className="w-6 h-6 pointer-events-none" />
@@ -97,32 +88,22 @@ export default function ArticleItem({ article, isBookmarked }: TProps) {
                             </ButtonIcon>
                         </div>
                     </div>
-                    <div className="flex flex-1 items-center gap-1 justify-center">
+
+                    <div className="flex  items-center gap-1 justify-center">
                         <Eye className="text-muted-foreground" size={12} />
                         <p className="text-xs font-semibold text-muted-foreground">2.1k</p>
+                    </div>
+
+                    <div className="flex  items-center gap-1 justify-center">
                         <MessageCircle className="text-muted-foreground" size={12} />
                         <p className="text-xs font-semibold text-muted-foreground">47</p>
                     </div>
-                    <div className="flex flex-1 items-center gap-1 justify-end">
-                        <Button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                // Toggle UI ngay lập tức
-                                // setIsBookmarked((prev) => !prev);
-                                toggleArticleBookmark.mutate({
-                                    articleId: article.id,
-                                });
-                            }}
-                            variant={isBookmarked ? "default" : "ghost"}
-                            size="icon"
-                            className="size-6"
-                        >
-                            <Bookmark style={{ width: `15px`, height: `15px` }} />
-                        </Button>
-                        <ButtonIcon variant="ghost" size="icon" className="size-6">
-                            <Share2 style={{ width: `15px`, height: `15px` }} />
-                        </ButtonIcon>
-                    </div>
+
+                  <ButtonBookmark articleId={article.id} initial={article.ArticleBookmarks.length > 0} />
+
+                    <ButtonIcon variant="ghost" size="icon" className="size-6">
+                        <Share2 style={{ width: `15px`, height: `15px` }} />
+                    </ButtonIcon>
                 </div>
             </div>
         </article>

@@ -7,7 +7,7 @@ import { TType } from "./type.type";
 import { TUser } from "./user.type";
 
 export type TChapter = {
-    id: number;
+    id: string;
     status: ChapterStatus;
     userId: number;
     name: string;

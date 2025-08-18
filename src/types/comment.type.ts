@@ -3,7 +3,7 @@ import { ECommentStatus } from "./enum/comment-status.enum";
 import { TUser } from "./user.type";
 
 export type TComment = {
-    id: number;
+    id: string;
     status: ECommentStatus;
     content: string;
     level: number;
@@ -21,7 +21,7 @@ export type TCreateCommentReq = {
 };
 
 export type TListComment = {
-    id: number;
+    id: string;
     status: ECommentStatus;
     content: string;
     level: number;
@@ -33,7 +33,7 @@ export type TListComment = {
     updatedAt?: string;
     isDeleted?: boolean;
     Users: {
-        id: number;
+        id: string;
         email: string;
         name: string;
         username: string;

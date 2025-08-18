@@ -1,8 +1,20 @@
 import { clearTokensAction } from "@/api/actions/auth.action";
-import { NEXT_PUBLIC_BASE_DOMAIN_API } from "@/constant/app.constant";
+import { NEXT_PUBLIC_BASE_DOMAIN_BE_API, NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
 import { CHAT_BUBBLE, CHAT_OPENED } from "@/constant/chat.constant";
 import { ENDPOINT } from "@/constant/endpoint.constant";
-import { getAccessToken, getRefreshToken, setAccessToken, setRefreshToken } from "@/helpers/cookies.helper";
+import { getAccessToken, getRefreshToken } from "@/helpers/cookies.helper";
+
+export async function setTokensViaRoute(accessToken: string, refreshToken: string) {
+    const res = await fetch(`${NEXT_PUBLIC_BASE_DOMAIN_FE}api/auth/set-tokens`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accessToken, refreshToken }),
+    });
+    if (!res.ok) {
+        const e = await res.json().catch(() => ({}));
+        throw new Error(e?.message || "Set tokens failed");
+    }
+}
 
 let isRefreshing = false;
 let failedQueue: { resolve: (token: string) => void; reject: (err: any) => void }[] = [];
@@ -31,7 +43,7 @@ export const refreshToken = async () => {
         const accessToken = await getAccessToken();
         const refreshToken = await getRefreshToken();
 
-        const res = await fetch(`${NEXT_PUBLIC_BASE_DOMAIN_API}${ENDPOINT.AUTH.REFRESH_TOKEN}`, {
+        const res = await fetch(`${NEXT_PUBLIC_BASE_DOMAIN_BE_API}${ENDPOINT.AUTH.REFRESH_TOKEN}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -43,8 +55,10 @@ export const refreshToken = async () => {
 
         if (!res.ok) throw new Error(data.message || "Refresh Token Failed");
 
-        await setAccessToken(data.data.accessToken);
-        await setRefreshToken(data.data.refreshToken);
+        // await setAccessToken(data.data.accessToken);
+        // await setRefreshToken(data.data.refreshToken);
+
+        await setTokensViaRoute(data.data.accessToken, data.data.refreshToken);
 
         processQueue(null, data.data.accessToken);
         return data.data.accessToken;
@@ -108,7 +122,7 @@ class APIClient {
         });
         // ✅ Xử lý lỗi 403: Access Token không hợp lệ hoặc đã hết hạn → Cần refresh token
         if (response.status === 403) {
-            console.log(`(${response.status}) Access Token không hợp lệ hoặc đã hết hạn → Cần refresh token`);
+            console.log(`(${response.status}) Access Token không hợp lệ hoặc đã hết hạn → Cần refresh token \n ${response.url}`);
             try {
                 accessToken = await refreshToken();
 
@@ -171,6 +185,6 @@ class APIClient {
 }
 
 // ✅ Khởi tạo API client với BASE_URL từ môi trường
-const api = new APIClient(NEXT_PUBLIC_BASE_DOMAIN_API);
+const api = new APIClient(NEXT_PUBLIC_BASE_DOMAIN_BE_API);
 
 export default api;

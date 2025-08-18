@@ -30,7 +30,7 @@ export type TStateChatMember = {
 };
 
 export type TChatGroup = {
-   id: number;
+   id: string;
    name?: string;
    ownerId: string;
    Owner: TUser;
@@ -38,7 +38,7 @@ export type TChatGroup = {
 } & TBaseTimestamps;
 
 export type TChatGroupMember = {
-   id: number;
+   id: string;
    userId: string;
    chatGroupId: string;
    Users: TUser;

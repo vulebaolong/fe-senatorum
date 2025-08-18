@@ -1,6 +1,6 @@
 import { TArticleBookmarkReq } from "@/types/article-bookmark.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAllArticleBookmarkAction, toggleArticleBookmarkAction } from "../actions/article-bookmark.action";
+import { addBookmarkAction, getAllArticleBookmarkAction, removeBookmarkAction, toggleArticleBookmarkAction } from "../actions/article-bookmark.action";
 import _ from "lodash";
 
 export const useToggleArticleBookmark = () => {
@@ -28,6 +28,28 @@ export const useGetAllArticleBookmark = () => {
             const dataKey = _.keyBy(data, "articleId");
             console.log({ useGetAllArticleBookmark: dataKey });
             return dataKey;
+        },
+    });
+};
+
+export const useAddBookmark = () => {
+    return useMutation({
+        mutationFn: async (payload: TArticleBookmarkReq) => {
+            const { data, status, message } = await addBookmarkAction(payload);
+            if (status === "error" || data === null) throw new Error(message);
+            console.log({ useAddBookmark: data });
+            return data;
+        },
+    });
+};
+
+export const useRemoveBookmark = () => {
+    return useMutation({
+        mutationFn: async (payload: TArticleBookmarkReq) => {
+            const { data, status, message } = await removeBookmarkAction(payload);
+            if (status === "error" || data === null) throw new Error(message);
+            console.log({ useRemoveBookmark: data });
+            return data;
         },
     });
 };

@@ -1,4 +1,4 @@
-import { ArticleBookmark } from "./article-bookmark.type";
+import { TArticleBookmark } from "./article-bookmark.type";
 import { TArticleCategory } from "./article-category.type";
 import { TBaseTimestamps } from "./base.type";
 import { TReactionType } from "./reactioin.type";
@@ -6,17 +6,18 @@ import { TType } from "./type.type";
 import { TUser } from "./user.type";
 
 export type TArticle = {
-    id: number;
+    id: string;
     slug: string;
     title: string;
     content: string;
     thumbnail: string;
     views: number;
-    userId: number;
-    typeId: number;
+    userId: string;
+    typeId: string;
     Users: TUser;
     Types: TType;
     ArticleCategories: TArticleCategory[];
+    ArticleBookmarks: TArticleBookmark[];
     reaction: TReactionType | null;
 } & TBaseTimestamps;
 
@@ -24,8 +25,8 @@ export type TCreateArticleReq = {
     title: string;
     content: string;
     thumbnail: string;
-    typeId: number;
-    categoryIds: number[];
+    typeId: string;
+    categoryIds: string[];
 };
 
 export type TPublishArticleReq = {
@@ -36,6 +37,6 @@ export type TUpsertArticleReq = {
     title?: string;
     content?: string;
     thumbnail?: string;
-    typeId?: number;
-    categoryIds?: number[];
+    typeId?: string;
+    categoryIds?: string[];
 };
