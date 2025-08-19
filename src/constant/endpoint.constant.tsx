@@ -12,6 +12,7 @@ export const ENDPOINT = {
         FACEBOOK_LOGIN: `auth/facebook-login`,
         RESET_PASSWORD: `auth/reset-password`,
         SEND_EMAIL: `auth/send-email`,
+        PROFILE_BY_USERNAME: `auth/get-profile`,
     },
     ROLE: {
         ROLE: `role`,
@@ -27,8 +28,11 @@ export const ENDPOINT = {
     ARTICLE: {
         ARTICLE: "article",
         ARTICLE_ALL: "article/all",
+        ARTICLE_MY: "article/my",
+        ARTICLE_MY_UPVOTED: "article/my-upvoted",
         ARTICLE_OTHER: "article/other",
-        ARTICLE_UPSERT: "article/upsert",
+        ARTICLE_UPSERT_DRAFT: "article/upsert-draft",
+        ARTICLE_UPSERT_EDIT: "article/upsert-edit",
         ARTICLE_GET_DRAFT: "article/draft",
         ARTICLE_UPSERT_THUMBNAIL: "article/upsert-thumbnail",
         ARTICLE_PUBLISH: "article/publish",

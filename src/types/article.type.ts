@@ -21,7 +21,7 @@ export type TArticle = {
     ArticleCategories: TArticleCategory[];
     ArticleBookmarks: TArticleBookmark[];
     ArticleVotes: TArticleVote[];
-    ArticleCounters: TArticleCounter;
+    ArticleCounters: TArticleCounter | null;
     reaction: TReactionType | null;
 } & TBaseTimestamps;
 
@@ -37,7 +37,16 @@ export type TPublishArticleReq = {
     title: string;
 };
 
-export type TUpsertArticleReq = {
+export type TUpsertArticleDarftReq = {
+    title?: string;
+    content?: string;
+    thumbnail?: string;
+    typeId?: string;
+    categoryIds?: string[];
+};
+
+export type TUpsertArticleEditReq = {
+    id: TArticle["id"];
     title?: string;
     content?: string;
     thumbnail?: string;

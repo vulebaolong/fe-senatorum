@@ -2,11 +2,14 @@ import {
     createArticleAction,
     getAllArticleAction,
     getDetailArticleAction,
+    getMyArticleAction,
+    getMyUpvotedArticleAction,
     getOtherArticleAction,
     publishArticleAction,
-    upsertArticleAction,
+    upsertArticleDraftAction,
+    upsertArticleEditAction
 } from "@/api/actions/article.action";
-import { TCreateArticleReq, TPublishArticleReq, TUpsertArticleReq } from "@/types/article.type";
+import { TCreateArticleReq, TPublishArticleReq, TUpsertArticleDarftReq, TUpsertArticleEditReq } from "@/types/article.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useGetAllArticle = (payload: any) => {
@@ -22,6 +25,41 @@ export const useGetAllArticle = (payload: any) => {
 
             // await wait(5000);
             console.log({ useGetAllArticle: data });
+            return data;
+        },
+    });
+};
+
+export const useGetMyUpvotedArticle = (payload: any) => {
+    return useQuery({
+        queryKey: ["get-my-upvoted-article", payload],
+        queryFn: async () => {
+            const { pagination, filters, sort } = payload;
+            const { pageIndex, pageSize } = pagination;
+            const query = `page=${pageIndex}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
+
+            const { data, status, message } = await getMyUpvotedArticleAction(query);
+            if (status === "error" || data === null) throw new Error(message);
+
+            // await wait(5000);
+            console.log({ useGetAllArticle: data });
+            return data;
+        },
+    });
+};
+
+export const useGetMyArticle = (payload: any) => {
+    return useQuery({
+        queryKey: ["get-my-article", payload],
+        queryFn: async () => {
+            const { pagination, filters, sort } = payload;
+            const { pageIndex, pageSize } = pagination;
+            const query = `page=${pageIndex}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
+
+            const { data, status, message } = await getMyArticleAction(query);
+            if (status === "error" || data === null) throw new Error(message);
+
+            console.log({ useGetMyArticle: data });
             return data;
         },
     });
@@ -98,10 +136,21 @@ export const usePublishArticle = () => {
     });
 };
 
-export const useUpsertArticle = () => {
+export const useUpsertArticleDarft = () => {
     return useMutation({
-        mutationFn: async (payload: TUpsertArticleReq) => {
-            const { data, status, message } = await upsertArticleAction(payload);
+        mutationFn: async (payload: TUpsertArticleDarftReq) => {
+            const { data, status, message } = await upsertArticleDraftAction(payload);
+            if (status === "error" || data === null) throw new Error(message);
+            console.log({ useUpsertArticle: data });
+            return data;
+        },
+    });
+};
+
+export const useUpsertArticleEdit = () => {
+    return useMutation({
+        mutationFn: async (payload: TUpsertArticleEditReq) => {
+            const { data, status, message } = await upsertArticleEditAction(payload);
             if (status === "error" || data === null) throw new Error(message);
             console.log({ useUpsertArticle: data });
             return data;

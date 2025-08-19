@@ -13,6 +13,14 @@ export type TUser = {
    isTotp: boolean;
 } & TBaseTimestamps;
 
+export type TProfile = {
+   id: TUser["id"];
+   email: TUser["email"];
+   name: TUser["name"];
+   username: TUser["username"];
+   avatar?: TUser["avatar"];
+} & TBaseTimestamps;
+
 export type TUploadAvatarLocalRes = {
    folder: string;
    filename: string;

@@ -1,3 +1,4 @@
+import { getDetailArticleAction } from "@/api/actions/article.action";
 import ArticleDetail from "@/components/article/article-detail/article-detail";
 
 type TProps = {
@@ -6,5 +7,7 @@ type TProps = {
 
 export default async function Page({ params }: TProps) {
     const { slug } = await params;
-    return <ArticleDetail slug={slug} />;
+    const dataDetailArticle = await getDetailArticleAction(slug);
+
+    return <ArticleDetail dataDetailArticle={dataDetailArticle} />;
 }

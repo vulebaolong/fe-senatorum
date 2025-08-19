@@ -12,7 +12,8 @@ export default async function Page() {
 
     return (
         <ArticleCreate
-            dataArticleDaft={dataArticleDaft}
+            type="create"
+            dataArticle={dataArticleDaft}
             dataListTypeArticle={dataListTypeArticle}
             dataListCategoryArticle={dataListCategoryArticle}
         />

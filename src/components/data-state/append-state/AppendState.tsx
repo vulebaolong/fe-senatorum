@@ -1,5 +1,6 @@
+import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 
 type AppendLoadingProps = {
     isLoading: boolean;
@@ -11,7 +12,6 @@ type AppendLoadingProps = {
     children: ReactNode;
     onBottom?: () => void;
     containerRef: React.RefObject<HTMLElement | null>;
-    bottomTriggerRef: React.RefObject<HTMLElement | null>;
     debug?: boolean;
 };
 
@@ -25,12 +25,12 @@ export function AppendLoading({
     children,
     onBottom,
     containerRef,
-    bottomTriggerRef,
     noDataComponent,
 }: AppendLoadingProps) {
     const showFooter = isLoading && !isEmpty && !isError;
     const showNoData = (isEmpty || isError) && !isLoading;
     const showInitialLoading = isLoading && isEmpty && !isError;
+    const bottomTriggerRef = useRef(null);
 
     if (debug) console.log({ showFooter, showNoData, showInitialLoading });
 
@@ -77,6 +77,7 @@ export function AppendLoading({
         <>
             {children}
             {showFooter && <>{footerLoadingComponent || <Loader2 className="h-5 w-5 animate-spin" />}</>}
+            <div ref={bottomTriggerRef} className={cn("absolute bottom-0 w-full h-[1px]", debug && "bg-red-500")}></div>
         </>
     );
 }

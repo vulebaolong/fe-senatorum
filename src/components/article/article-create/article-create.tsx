@@ -1,6 +1,6 @@
 "use client";
 
-import { usePublishArticle, useUpsertArticle } from "@/api/tantask/article.tanstack";
+import { usePublishArticle, useUpsertArticleDarft, useUpsertArticleEdit } from "@/api/tantask/article.tanstack";
 import { useUpsertThumbnail } from "@/api/tantask/image.tanstack";
 import ImageUpload from "@/components/image-upload/image-upload";
 import { Button } from "@/components/ui/button";
@@ -57,17 +57,19 @@ const FormSchema = z.object({
 });
 
 type TProps = {
-    dataArticleDaft: TResAction<TArticle | null>;
+    type: "create" | "edit";
+    dataArticle: TResAction<TArticle | null>;
     dataListTypeArticle: TResAction<TType[] | null>;
     dataListCategoryArticle: TResAction<TCategory[] | null>;
 };
 
-export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, dataListCategoryArticle }: TProps) {
-    const { data: articleDaft } = dataArticleDaft;
+export default function ArticleCreate({ type, dataArticle, dataListTypeArticle, dataListCategoryArticle }: TProps) {
+    const { data: article } = dataArticle;
     const { data: listTypeArticle } = dataListTypeArticle;
     const { data: listCategoryArticle } = dataListCategoryArticle;
 
-    const upsertArticle = useUpsertArticle();
+    const upsertArticleDarft = useUpsertArticleDarft();
+    const upsertArticleEdit = useUpsertArticleEdit();
     const publishArticle = usePublishArticle();
     const upsertThumbnail = useUpsertThumbnail();
     const editorRef = useRef<LexicalEditor | null>(null);
@@ -78,11 +80,11 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            title: articleDaft?.title ?? "",
-            content: articleDaft?.content ?? "",
-            thumbnail: articleDaft?.thumbnail ?? "",
-            typeId: articleDaft?.typeId?.toString() ?? "",
-            categoryIds: articleDaft?.ArticleCategories?.map((item) => item.Categories.id) ?? [],
+            title: article?.title ?? "",
+            content: article?.content ?? "",
+            thumbnail: article?.thumbnail ?? "",
+            typeId: article?.typeId?.toString() ?? "",
+            categoryIds: article?.ArticleCategories?.map((item) => item.Categories.id) ?? [],
         },
     });
 
@@ -90,14 +92,35 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
     const handleUpsert = useDebouncedCallback(
         async (query: any) => {
             if (firstRunRef.current) return (firstRunRef.current = false);
-            console.log({ Debounce: query });
-            upsertArticle.mutate({
-                title: query.title,
-                content: query.content,
-                thumbnail: query.thumbnail,
-                typeId: query.typeId || undefined,
-                categoryIds: query.categoryIds,
-            });
+
+            switch (type) {
+                case "create":
+                    console.log({ Debounce: query });
+                    upsertArticleDarft.mutate({
+                        title: query.title,
+                        content: query.content,
+                        thumbnail: query.thumbnail,
+                        typeId: query.typeId || undefined,
+                        categoryIds: query.categoryIds,
+                    });
+                    break;
+
+                case "edit":
+                    if (!article) return;
+
+                    upsertArticleEdit.mutate({
+                        id: article.id,
+                        title: query.title,
+                        content: query.content,
+                        thumbnail: query.thumbnail,
+                        typeId: query.typeId || undefined,
+                        categoryIds: query.categoryIds,
+                    });
+                    break;
+
+                default:
+                    break;
+            }
         },
         {
             delay: 1000,
@@ -110,7 +133,7 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
     }, [values]);
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        if (upsertArticle.isPending) return;
+        if (upsertArticleDarft.isPending) return;
 
         const payload: TPublishArticleReq = {
             title: data.title.trim(),
@@ -170,7 +193,7 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
                                 Back to Articles
                             </Button>
                             <Separator orientation="vertical" className="!h-[20px]" />
-                            <p className="text-lg font-semibold">Create New Article</p>
+                            <p className="text-lg font-semibold">{type === "create" ? "Create Article" : "Edit Article"}</p>
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -178,14 +201,14 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
                                 <Settings />
                                 Settings
                             </Button>
-                            <Button type="button" variant="outline" size={"sm"}>
+                            {/* <Button type="button" variant="outline" size={"sm"}>
                                 <Eye />
                                 Preview
                             </Button>
                             <Button type="button" variant="default" size={"sm"}>
                                 <Globe />
                                 Public
-                            </Button>
+                            </Button> */}
                         </div>
                     </div>
 
@@ -264,11 +287,7 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
                                             <FormItem>
                                                 {/* <FormLabel>Content</FormLabel> */}
                                                 <div className="rounded-2xl border">
-                                                    <Editor
-                                                        initialContentJSON={articleDaft?.content}
-                                                        onChange={field.onChange}
-                                                        editorRef={editorRef}
-                                                    />
+                                                    <Editor initialContentJSON={article?.content} onChange={field.onChange} editorRef={editorRef} />
                                                 </div>
                                                 <FormDescription className="text-xs italic">
                                                     Write the main body of your article here. Make it informative, structured, and engaging
@@ -280,17 +299,26 @@ export default function ArticleCreate({ dataArticleDaft, dataListTypeArticle, da
 
                                     <Separator />
 
-                                    <div className="">
-                                        <ButtonLoading loading={publishArticle.isPending} type="submit" className="w-[200px]">
-                                            Publish
-                                        </ButtonLoading>
+                                    <div>
+                                        {type === "create" && (
+                                            <ButtonLoading
+                                                loading={publishArticle.isPending}
+                                                type="submit"
+                                                className="w-[200px]"
+                                            >
+                                                Publish
+                                            </ButtonLoading>
+                                        )}
                                         <div className="flex items-center gap-2">
                                             <p className="text-xs text-muted-foreground italic">Last updated:</p>
-                                            {upsertArticle.isPending ? (
+                                            {upsertArticleDarft.isPending || upsertArticleEdit.isPending ? (
                                                 <Loader2 className="animate-spin w-4 h-4 text-muted-foreground" />
                                             ) : (
                                                 <p className="text-xs text-muted-foreground italic">
-                                                    {formatLocalTime(upsertArticle.data?.updatedAt || articleDaft?.updatedAt, "ago")}
+                                                    {formatLocalTime(
+                                                        upsertArticleDarft.data?.updatedAt || upsertArticleEdit.data?.updatedAt || article?.updatedAt,
+                                                        "ago"
+                                                    )}
                                                 </p>
                                             )}
                                         </div>
