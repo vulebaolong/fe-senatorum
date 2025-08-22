@@ -15,7 +15,7 @@ export const NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY = process.env.NEXT_PUBLIC_BASE_D
 export const FOLDER_IMAGE_BE = `/public/images`;
 
 export const TITLE = `Senatorum`;
-export const LOGO = `/images/logo/logo-512x512.png`;
+export const LOGO = `/logo.png`;
 
 console.log({
    NEXT_PUBLIC_BASE_DOMAIN_BE,

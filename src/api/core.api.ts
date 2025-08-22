@@ -43,7 +43,7 @@ export const refreshToken = async () => {
         const accessToken = await getAccessToken();
         const refreshToken = await getRefreshToken();
 
-        const res = await fetch(`${NEXT_PUBLIC_BASE_DOMAIN_BE_API}/${ENDPOINT.AUTH.REFRESH_TOKEN}`, {
+        const res = await fetch(`${NEXT_PUBLIC_BASE_DOMAIN_BE_API}${ENDPOINT.AUTH.REFRESH_TOKEN}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -115,7 +115,7 @@ class APIClient {
             ...(headers || {}), // thêm các header gốc nếu có
         };
 
-        let response = await fetch(`${this.baseURL}/${url}`, {
+        let response = await fetch(`${this.baseURL}${url}`, {
             ...restOptions,
             headers: newHeaders,
             body: handleBody(),

@@ -1,10 +1,5 @@
-import { BellRing } from "lucide-react";
-import ButtonIcon from "../custom/button-custom/button-icon";
 import { Logo } from "../logo/Logo";
-import Marquee from "./marquee";
 import Search from "./search";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import Notification from "../notification/notification";
 
 export default function Header() {
     return (
