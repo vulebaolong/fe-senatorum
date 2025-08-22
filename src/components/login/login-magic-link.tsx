@@ -15,6 +15,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import LoginAppleButton from "./login-apple-button";
 import LoginGoogleButton from "./login-google-button";
 import LoginGoogleOneTap from "./login-google-one-tap";
+import { TITLE } from "@/constant/app.constant";
 
 const FormSchema = z.object({
     email: z.email({ message: "Email không hợp lệ" }),
@@ -60,7 +61,7 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
                             </div>
                             <span className="sr-only">Acme Inc.</span>
                         </a>
-                        <h1 className="text-xl font-bold">Welcome to Acme Inc.</h1>
+                        <h1 className="text-xl font-bold">Welcome to {TITLE}.</h1>
                     </div>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -88,8 +89,8 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
                     <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                         <span className="text-muted-foreground relative z-10 px-2">Or</span>
                     </div>
-                    <div className="grid gap-4 sm:grid-cols-2">
-                        <LoginAppleButton />
+                    <div className="grid gap-4 sm:grid-cols-1">
+                        {/* <LoginAppleButton /> */}
                         <LoginGoogleButton />
                     </div>
 

@@ -8,9 +8,9 @@ export const checkPathImage = (path: string | null | undefined) => {
     }
 
     if (path.includes(`local`)) {
-        return `${NEXT_PUBLIC_BASE_DOMAIN_BE}${FOLDER_IMAGE_BE}${path}`;
+        return `${NEXT_PUBLIC_BASE_DOMAIN_BE}${FOLDER_IMAGE_BE}/${path}`;
     } else {
-        return `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}${path}`;
+        return `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${path}`;
     }
 };
 
@@ -211,7 +211,7 @@ export function hexToRgba(hex: string, alpha: number) {
 }
 
 export function toUrl(publicId: string) {
-    return `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}${publicId}`;
+    return `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${publicId}`;
 }
 
 /**

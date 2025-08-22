@@ -63,7 +63,7 @@ export default function ArticleItem({ article }: TProps) {
             {/* thumbnail */}
             <div className="flex-1 px-2 flex flex-col justify-between gap-2">
                 <div className="w-full aspect-video border border-border rounded-lg overflow-hidden">
-                    <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}${article.thumbnail}`} alt={"article image"} />
+                    <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`} alt={"article image"} />
                 </div>
             </div>
 

@@ -5,7 +5,7 @@ import { ENDPOINT } from "@/constant/endpoint.constant";
 import { getAccessToken, getRefreshToken } from "@/helpers/cookies.helper";
 
 export async function setTokensViaRoute(accessToken: string, refreshToken: string) {
-    const res = await fetch(`${NEXT_PUBLIC_BASE_DOMAIN_FE}api/auth/set-tokens`, {
+    const res = await fetch(`${NEXT_PUBLIC_BASE_DOMAIN_FE}/api/auth/set-tokens`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ accessToken, refreshToken }),
@@ -43,7 +43,7 @@ export const refreshToken = async () => {
         const accessToken = await getAccessToken();
         const refreshToken = await getRefreshToken();
 
-        const res = await fetch(`${NEXT_PUBLIC_BASE_DOMAIN_BE_API}${ENDPOINT.AUTH.REFRESH_TOKEN}`, {
+        const res = await fetch(`${NEXT_PUBLIC_BASE_DOMAIN_BE_API}/${ENDPOINT.AUTH.REFRESH_TOKEN}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -115,7 +115,7 @@ class APIClient {
             ...(headers || {}), // thêm các header gốc nếu có
         };
 
-        let response = await fetch(`${this.baseURL}${url}`, {
+        let response = await fetch(`${this.baseURL}/${url}`, {
             ...restOptions,
             headers: newHeaders,
             body: handleBody(),

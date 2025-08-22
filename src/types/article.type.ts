@@ -23,6 +23,7 @@ export type TArticle = {
     ArticleVotes: TArticleVote[];
     ArticleCounters: TArticleCounter | null;
     reaction: TReactionType | null;
+    publishedAt: string | null;
 } & TBaseTimestamps;
 
 export type TCreateArticleReq = {

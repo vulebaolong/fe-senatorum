@@ -8,7 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
+import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
 import useRouter from "@/hooks/use-router-custom";
 import { useAppSelector } from "@/redux/hooks";
 import { TResAction } from "@/types/app.type";
@@ -26,16 +26,29 @@ type TProps = {
     dataDetailArticle: TResAction<TArticle | null>;
 };
 
+
 export default function ArticleDetail({ dataDetailArticle }: TProps) {
     const { data: detailArticle } = dataDetailArticle;
     const info = useAppSelector((state) => state.user.info);
     const [listComment, setListComment] = useState<TListComment[]>([]);
     const router = useRouter();
 
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: dataDetailArticle.data?.title,
+        image: dataDetailArticle.data?.thumbnail ? [`${NEXT_PUBLIC_BASE_DOMAIN_FE}/${dataDetailArticle.data?.thumbnail}`] : undefined,
+        datePublished: dataDetailArticle.data?.publishedAt,
+        dateModified: dataDetailArticle.data?.updatedAt,
+        author: dataDetailArticle.data?.Users?.username ? [{ "@type": "Person", name: dataDetailArticle.data?.Users.username }] : undefined,
+        mainEntityOfPage: `${NEXT_PUBLIC_BASE_DOMAIN_FE}/articles/${dataDetailArticle.data?.slug}`,
+        description: dataDetailArticle.data?.title,
+    };
+
     return (
         <div className="p-5 h-[calc(100vh-var(--header-height))] overflow-y-scroll">
             {detailArticle ? (
-                <div className="relative h-full flex flex-col">
+                <article className="relative h-full flex flex-col">
                     <div className="overflow-y-auto space-y-2">
                         <Badge variant="secondary">{detailArticle.Types.name}</Badge>
 
@@ -44,7 +57,7 @@ export default function ArticleDetail({ dataDetailArticle }: TProps) {
                                 <div className=" grid gap-5 [grid-template-columns:0.45fr_0.55fr]">
                                     <div className="w-full h-full border-sidebar-border border shadow-sm aspect-video overflow-hidden rounded-xl">
                                         <ImageCustom
-                                            src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}${detailArticle.thumbnail}`}
+                                            src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${detailArticle.thumbnail}`}
                                             alt={detailArticle.slug}
                                         />
                                     </div>
@@ -116,7 +129,9 @@ export default function ArticleDetail({ dataDetailArticle }: TProps) {
                             <div className="sticky top-0 self-start h-fit"></div>
                         </div>
                     </div>
-                </div>
+                    {/* JSON-LD Article */}
+                    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+                </article>
             ) : (
                 <Alert variant="default">
                     <CircleX color="red" />

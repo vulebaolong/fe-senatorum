@@ -159,7 +159,7 @@ export default function Search() {
                                             <div className="flex items-center gap-3">
                                                 <div className="relative w-8 h-8 overflow-hidden rounded-md border bg-muted shrink-0">
                                                     <ImageCustom
-                                                        src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}${a.thumbnail}`}
+                                                        src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${a.thumbnail}`}
                                                         alt={a.title}
                                                         sizes="32px"
                                                         className="object-cover"

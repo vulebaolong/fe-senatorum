@@ -43,7 +43,7 @@ export default function ImagesPlugin() {
                 const formData = new FormData();
                 formData.append("draft", file);
                 const publicId = await uploadImageDraft.mutateAsync(formData);
-                src = `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}${publicId}`;
+                src = `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${publicId}`;
             } else {
                 toast.warning("Please select image");
             }

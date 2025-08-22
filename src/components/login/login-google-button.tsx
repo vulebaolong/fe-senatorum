@@ -1,6 +1,6 @@
 import { NEXT_PUBLIC_BASE_DOMAIN_BE_API } from "@/constant/app.constant";
-import { ButtonLoading } from "../ui/button-loading";
 import { useState } from "react";
+import { ButtonLoading } from "../ui/button-loading";
 
 export default function LoginGoogleButton() {
     const [loading, setLoading] = useState(false);
@@ -10,7 +10,7 @@ export default function LoginGoogleButton() {
             loading={loading}
             onClick={() => {
                 setLoading(true);
-                window.location.href = `${NEXT_PUBLIC_BASE_DOMAIN_BE_API}auth/google`;
+                window.location.href = `${NEXT_PUBLIC_BASE_DOMAIN_BE_API}/auth/google`;
             }}
             variant="outline"
             type="button"
