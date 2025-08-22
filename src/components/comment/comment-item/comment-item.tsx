@@ -1,7 +1,7 @@
 import { useMutationCommentByParent } from "@/api/tantask/comment.tanstack";
 import { formatLocalTime } from "@/helpers/function.helper";
 import { TArticle } from "@/types/article.type";
-import { TListComment } from "@/types/comment.type";
+import { TComment, TListComment } from "@/types/comment.type";
 import { useState } from "react";
 import { typingText } from "@/helpers/motion.helper";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -20,16 +20,16 @@ type CommentItemProps = {
 
 export default function CommentItem({ comment, article, level = 0, isLast }: CommentItemProps) {
     console.log({ level });
-    const [replyingCommentId, setReplyingCommentId] = useState<number | null>(null);
+    const [replyingCommentId, setReplyingCommentId] = useState< TComment["id"] | null>(null);
     const [listComment, setListComment] = useState<TListComment[]>([]);
 
     const mutationCommentByParent = useMutationCommentByParent();
 
-    const handleReplyComment = (commentId: number) => {
+    const handleReplyComment = (commentId:  TComment["id"]) => {
         setReplyingCommentId(commentId);
     };
 
-    const handleGetCommentByParent = (commentId: number) => {
+    const handleGetCommentByParent = (commentId: TComment["id"]) => {
         mutationCommentByParent.mutate(
             {
                 pagination: { pageIndex: mutationCommentByParent.data ? mutationCommentByParent.data.page + 1 : 1, pageSize: 10 },

@@ -59,8 +59,6 @@ export default function ArticleBookmark({ articleId, initial = false, debounceMs
         }
     );
 
-    useEffect(() => () => commit.cancel(), [commit]);
-
     const onClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         // Toggle UI ngay, ghi nhận “ý định” rồi để debounce commit
@@ -72,10 +70,8 @@ export default function ArticleBookmark({ articleId, initial = false, debounceMs
         });
     };
 
-    const busy = addBookmark.isPending || removeBookmark.isPending;
-
     return (
-        <Button onClick={onClick} size="icon" className="size-6" variant={"ghost"} aria-pressed={isBookmarked} aria-busy={busy}>
+        <Button onClick={onClick} size="icon" className="size-6" variant={"ghost"} aria-pressed={isBookmarked}>
             <Bookmark
                 style={{ width: 15, height: 15 }}
                 className="transition-transform"

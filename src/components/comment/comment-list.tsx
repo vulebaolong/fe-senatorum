@@ -2,10 +2,9 @@ import { useGetCommentByArticle } from "@/api/tantask/comment.tanstack";
 import { TArticle } from "@/types/article.type";
 import { TListComment } from "@/types/comment.type";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import Nodata from "../no-data/Nodata";
 import { AppendLoading } from "../data-state/append-state/AppendState";
-import { Skeleton } from "../ui/skeleton";
 import NodataOverlay from "../no-data/NodataOverlay";
+import { Skeleton } from "../ui/skeleton";
 import CommentItem from "./comment-item/comment-item";
 
 type TProps = {
@@ -52,7 +51,6 @@ export default function CommentList({ article, listComment, setListComment }: TP
                     isLoading={getCommentByArticle.isLoading}
                     isEmpty={!getCommentByArticle.data || listComment.length === 0}
                     isError={getCommentByArticle.isError}
-                    bottomTriggerRef={bottomTriggerRef}
                     onBottom={handleEndReached}
                     containerRef={containerRef}
                     footerLoadingComponent={<Skeleton className="min-h-[50px] h-full w-full rounded-xl" />}

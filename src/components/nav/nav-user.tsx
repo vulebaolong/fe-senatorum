@@ -26,12 +26,13 @@ export function NavUser() {
         <SidebarMenu>
             <SidebarMenuItem>
                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
+                    <DropdownMenuTrigger asChild className="rounded-full">
                         <SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
                             <NavUserInfo />
                             <ChevronsUpDown className="ml-auto size-4" />
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
+
                     <DropdownMenuContent
                         className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
                         side={isMobile ? "bottom" : "right"}
@@ -41,13 +42,13 @@ export function NavUser() {
                         <DropdownMenuLabel className="p-0 px-1 font-normal">
                             <NavUserInfo />
                         </DropdownMenuLabel>
-                        <DropdownMenuSeparator />
+                        {/* <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             <DropdownMenuItem>
                                 <Sparkles />
                                 Upgrade to Pro
                             </DropdownMenuItem>
-                        </DropdownMenuGroup>
+                        </DropdownMenuGroup> */}
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             <DropdownMenuItem
@@ -62,7 +63,7 @@ export function NavUser() {
                                 <User />
                                 Your Profile
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            {/* <DropdownMenuItem>
                                 <BadgeCheck />
                                 Account
                             </DropdownMenuItem>
@@ -73,7 +74,7 @@ export function NavUser() {
                             <DropdownMenuItem>
                                 <Bell />
                                 Notifications
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={logout}>

@@ -1,4 +1,5 @@
 import { TBaseTimestamps } from "./base.type";
+import { TFollow } from "./follow.type";
 import { TRole } from "./role.type";
 
 export type TUser = {
@@ -19,6 +20,7 @@ export type TProfile = {
    name: TUser["name"];
    username: TUser["username"];
    avatar?: TUser["avatar"];
+   Follows_Follows_followerIdToUsers: TFollow[] | [];
 } & TBaseTimestamps;
 
 export type TUploadAvatarLocalRes = {

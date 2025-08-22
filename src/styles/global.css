@@ -44,7 +44,8 @@
 }
 
 :root {
-    --header-height: 70px; /* 3rem */
+    /* --header-height: 70px; */
+    --header-height: 50px;
 
     --radius: 0.625rem;
     --background: oklch(1 0 0);

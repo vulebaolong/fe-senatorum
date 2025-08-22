@@ -65,7 +65,6 @@ export default function ArticleSelf({ filters, id }: TProps) {
                     isError={getAllArticle.isError}
                     onBottom={handleEndReached}
                     containerRef={containerRef}
-                    bottomTriggerRef={bottomTriggerRef}
                     footerLoadingComponent={Array.from({ length: skeletonCount }).map((_, i) => (
                         <Skeleton key={i} className="min-h-[430px] h-full w-full rounded-xl" />
                     ))}

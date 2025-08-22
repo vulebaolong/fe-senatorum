@@ -1,17 +1,12 @@
-import ArticleBookmark from "@/components/article/article-bookmark/article-bookmark";
-import ButtonIcon from "@/components/custom/button-custom/button-icon";
 import ImageCustom from "@/components/custom/image-custom/ImageCustom";
 import { OverflowBadges } from "@/components/overflow-badges/OverflowBadges";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { formatLocalTime } from "@/helpers/function.helper";
 import { TArticle } from "@/types/article.type";
-import { Ellipsis, Eye, MessageCircle, Share2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import ArticleVote from "../article-vote/article-vote";
 import ArticleFooter from "../article-footer/article-footer";
 
 type TProps = {

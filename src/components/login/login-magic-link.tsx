@@ -26,7 +26,7 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            email: `example@gmail.com`,
+            email: ``,
         },
     });
 

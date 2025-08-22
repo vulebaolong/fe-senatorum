@@ -84,4 +84,9 @@ export const ENDPOINT = {
     ARTICLE_VOTE: {
         ARTICLE_VOTE: "article-vote",
     },
+    FOLLOW: {
+        FOLLOW: "follow",
+        UN_FOLLOW: "follow",
+        GET_COUNT_FOLLOW: "follow/counts",
+    },
 };

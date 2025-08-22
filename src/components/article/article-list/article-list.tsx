@@ -23,6 +23,7 @@ export default function Articlelist({ filters, id, type }: TProps) {
     const pageSize = 3;
     const totalPageRef = useRef(0);
     const containerRef = useRef(null);
+    const bottomTriggerRef = useRef(null);
 
     const getAllArticle = (() => {
         if (type === "all") return useGetAllArticle;
@@ -81,10 +82,11 @@ export default function Articlelist({ filters, id, type }: TProps) {
                     noDataComponent={<NodataOverlay visible />}
                 >
                     {articles.map((article) => {
-                        return <ArticleItem key={article.id} article={article}/>
+                        return <ArticleItem key={article.id} article={article} />;
                     })}
                 </AppendLoading>
             </div>
+            <div ref={bottomTriggerRef} className="w-full h-1"></div>
         </div>
     );
 }

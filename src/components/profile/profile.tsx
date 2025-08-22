@@ -1,37 +1,24 @@
 "use client";
 
-import { MoreHorizontal, Settings, Share, Shield, User, UserPlus } from "lucide-react";
-import Articlelist from "../article/article-list/article-list";
-import { Button } from "../ui/button";
-import { Card, CardContent } from "../ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { TResAction } from "@/types/app.type";
 import { TProfile } from "@/types/user.type";
+import { MoreHorizontal, Settings, Share, Shield, User } from "lucide-react";
+import { useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { useCallback, useRef } from "react";
+import { Button } from "../ui/button";
+import { Card, CardContent } from "../ui/card";
+import ProfileFollow from "./profile-follow/profile-follow";
+import ProfileTabs from "./profile-tabs/profile-tabs";
+import ProfileCount from "./profile-count/profile-count";
 
 type Props = {
     dataProfile: TResAction<TProfile | null>;
 };
 
 export default function Profile({ dataProfile }: Props) {
+    console.log({ dataProfile });
     const bodyRef = useRef<HTMLDivElement>(null); // khung scroll
     const tabsAnchorRef = useRef<HTMLDivElement>(null); // neo ở chỗ TabsList
-
-    const scrollTabsIntoView = useCallback(() => {
-        const scroller = bodyRef.current;
-        const anchor = tabsAnchorRef.current;
-        if (!scroller || !anchor) return;
-
-        // khoảng cách từ anchor tới mép trên của khung scroll
-        const scrollerRect = scroller.getBoundingClientRect();
-        const anchorRect = anchor.getBoundingClientRect();
-        const delta = anchorRect.top - scrollerRect.top;
-
-        // trừ 1 khoảng đệm nhỏ nếu muốn sát hơn
-        const GAP = 8; // px
-        scroller.scrollTo({ top: scroller.scrollTop + delta - GAP, behavior: "smooth" });
-    }, []);
 
     return (
         <div className="h-[calc(100vh-var(--header-height))] flex flex-col">
@@ -54,7 +41,7 @@ export default function Profile({ dataProfile }: Props) {
             </div>
 
             {/* body */}
-            <div ref={bodyRef} className="flex-1 px-3 py-5 overflow-y-auto ">
+            <div ref={bodyRef} className="flex-1 px-3 py-5 overflow-y-auto scroll-smooth">
                 <div className="max-w-6xl mx-auto px-6 flex flex-col gap-5">
                     {/* Profile Header */}
                     <Card className="py-0">
@@ -81,13 +68,11 @@ export default function Profile({ dataProfile }: Props) {
 
                                     {/* Actions */}
                                     <div className="flex gap-2 sm:ml-auto">
-                                        <Button className="gap-2">
-                                            <UserPlus className="w-4 h-4" />
-                                            Following
-                                        </Button>
-                                        <Button variant="outline" size="sm">
+                                        <ProfileFollow profile={dataProfile.data} />
+
+                                        {/* <Button variant="outline" size="sm">
                                             <Settings className="w-4 h-4" />
-                                        </Button>
+                                        </Button> */}
                                     </div>
                                 </div>
 
@@ -97,7 +82,7 @@ export default function Profile({ dataProfile }: Props) {
                                         <h1 className="text-2xl font-bold">{dataProfile.data?.name}</h1>
                                         <Shield className="w-5 h-5 text-blue-500" />
                                     </div>
-                                    <p className="text-muted-foreground mt-1">@{dataProfile.data?.username}</p>
+                                    <p className="text-sm text-muted-foreground mt-1">@{dataProfile.data?.username}</p>
                                     <p className="text-shadow-muted mt-3 max-w-2xl">
                                         Full-stack developer passionate about creating amazing user experiences. Building the future one line of code
                                         at a time.
@@ -121,50 +106,14 @@ export default function Profile({ dataProfile }: Props) {
                                         </div>
                                     </div> */}
 
-                                    {/* Stats */}
-                                    <div className="flex gap-6 mt-4">
-                                        <div>
-                                            <span className="font-semibold text-accent-foreground">123123</span>
-                                            <span className="text-muted-foreground ml-1">Followers</span>
-                                        </div>
-                                        <div>
-                                            <span className="font-semibold text-accent-foreground">123123</span>
-                                            <span className="text-muted-foreground ml-1">Following</span>
-                                        </div>
-                                        {/* <div>
-                                            <span className="font-semibold text-slate-900">{userData.stats.chapters}</span>
-                                            <span className="text-slate-600 ml-1">Chapters</span>
-                                        </div>
-                                        <div>
-                                            <span className="font-semibold text-slate-900">{userData.stats.houses}</span>
-                                            <span className="text-slate-600 ml-1">Houses</span>
-                                        </div> */}
-                                    </div>
+                                    {/* Count */}
+                                    <ProfileCount profile={dataProfile.data} />
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
 
-                    <Tabs defaultValue="my-article" onValueChange={() => scrollTabsIntoView()}>
-                        <div ref={tabsAnchorRef} className="scroll-mt-2">
-                            <TabsList>
-                                <TabsTrigger value="my-article">My Article</TabsTrigger>
-                                <TabsTrigger value="upvoted">Upvoted</TabsTrigger>
-                            </TabsList>
-                        </div>
-
-                        <TabsContent value="my-article">
-                            <Card className="p-0">
-                                <Articlelist type="my" />
-                            </Card>
-                        </TabsContent>
-
-                        <TabsContent value="upvoted">
-                            <Card className="p-0">
-                                <Articlelist type="upvoted" />
-                            </Card>
-                        </TabsContent>
-                    </Tabs>
+                    <ProfileTabs bodyRef={bodyRef} profile={dataProfile.data} tabsAnchorRef={tabsAnchorRef} />
                 </div>
             </div>
         </div>

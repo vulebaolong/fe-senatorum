@@ -7,25 +7,7 @@ import { ROUTER_CLIENT } from "@/constant/router.constant";
 import useRouter from "@/hooks/use-router-custom";
 import ThemeToggleV2 from "../theme-toggle/theme-toggle-v2";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-
-const groups = [
-    {
-        title: "Discover groups",
-        url: "#",
-    },
-    {
-        title: "Current group 1",
-        url: "#",
-    },
-    {
-        title: "Current group 2",
-        url: "#",
-    },
-    {
-        title: "New Group",
-        url: "#",
-    },
-];
+import { useAppSelector } from "@/redux/hooks";
 
 const collections = [
     {
@@ -49,6 +31,8 @@ const collections = [
 export function NavMain() {
     const { isMobile, state } = useSidebar();
     const router = useRouter();
+    const info = useAppSelector((state) => state.user.info);
+
     return (
         <>
             <SidebarGroup>
@@ -72,7 +56,11 @@ export function NavMain() {
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             onClick={() => {
-                                router.push(ROUTER_CLIENT.ARTICLE_SELF);
+                                if (info?.name) {
+                                    router.push(`/${info?.username}#my-article`);
+                                } else {
+                                    console.log("info?.name is null");
+                                }
                             }}
                             className="items-center justify-center border"
                             variant={"outline"}
@@ -83,11 +71,16 @@ export function NavMain() {
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarGroup>
-            <SidebarGroup>
+            {/* <SidebarGroup>
                 <SidebarGroupLabel>Chapter</SidebarGroupLabel>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton onClick={() => router.push(ROUTER_CLIENT.CHAPTER_CREATE)} className="items-center justify-center border" variant={"outline"} tooltip={"Create chapter"}>
+                        <SidebarMenuButton
+                            onClick={() => router.push(ROUTER_CLIENT.CHAPTER_CREATE)}
+                            className="items-center justify-center border"
+                            variant={"outline"}
+                            tooltip={"Create chapter"}
+                        >
                             <span>Create chapter</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -104,7 +97,7 @@ export function NavMain() {
                         </SidebarMenuItem>
                     ))}
                 </SidebarMenu>
-            </SidebarGroup>
+            </SidebarGroup> */}
         </>
     );
 }
