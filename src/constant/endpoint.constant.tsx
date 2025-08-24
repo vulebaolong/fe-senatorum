@@ -43,6 +43,9 @@ export const ENDPOINT = {
         ADD_BOOKMARK: "/article-bookmark/add",
         REMOVE_BOOKMARK: "/article-bookmark/remove",
     },
+    ARTICLE_VIEW: {
+        ARTICLE_VIEW: "/article-view",
+    },
     CHAPTER: {
         CHAPTER: "/chapter",
         CHAPTER_ALL: "/chapter/all",

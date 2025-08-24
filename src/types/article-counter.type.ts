@@ -6,6 +6,8 @@ export type TArticleCounter = {
     articleId: TArticle["id"];
     commentCount: number;
     viewCount: number;
-    voteCount: number;
     bookmarkCount: number;
+    voteCount: number;
+    upvoteCount: number;
+    downvoteCount: number;
 } & TBaseTimestamps;

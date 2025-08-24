@@ -21,17 +21,18 @@ import FacebookIcon from "./icon-social/facebook-icon";
 import InstagramIcon from "./icon-social/instagram-icon";
 import RedditIcon from "./icon-social/reddit-icon";
 import XIcon from "./icon-social/x-icon";
+import { useAutoArticleView } from "@/hooks/use-article-view";
 
 type TProps = {
     dataDetailArticle: TResAction<TArticle | null>;
 };
-
 
 export default function ArticleDetail({ dataDetailArticle }: TProps) {
     const { data: detailArticle } = dataDetailArticle;
     const info = useAppSelector((state) => state.user.info);
     const [listComment, setListComment] = useState<TListComment[]>([]);
     const router = useRouter();
+    dataDetailArticle.data?.id && useAutoArticleView(dataDetailArticle.data?.id, { delayMs: 3500 });
 
     const jsonLd = {
         "@context": "https://schema.org",
