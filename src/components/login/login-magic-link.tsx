@@ -16,6 +16,9 @@ import LoginAppleButton from "./login-apple-button";
 import LoginGoogleButton from "./login-google-button";
 import LoginGoogleOneTap from "./login-google-one-tap";
 import { TITLE } from "@/constant/app.constant";
+import { Logo } from "../logo/Logo";
+import useRouter from "@/hooks/use-router-custom";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
 
 const FormSchema = z.object({
     email: z.email({ message: "Email không hợp lệ" }),
@@ -23,6 +26,7 @@ const FormSchema = z.object({
 
 export function LoginMagicLink({ className, ...props }: React.ComponentProps<"div">) {
     const loginMagicLink = useLoginMagicLink();
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -54,12 +58,13 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
         <>
             <div className={cn("flex flex-col gap-6", className)} {...props}>
                 <div className="flex flex-col gap-6">
-                    <div className="flex flex-col items-center gap-2">
+                    <div className="flex flex-col items-center gap-5">
                         <a href="#" className="flex flex-col items-center gap-2 font-medium">
                             <div className="flex size-8 items-center justify-center rounded-md">
-                                <GalleryVerticalEnd className="size-6" />
+                                {/* <GalleryVerticalEnd className="size-6" /> */}
+                                <Logo className="w-[80px] h-[80px]" />
                             </div>
-                            <span className="sr-only">Acme Inc.</span>
+                            <span className="sr-only">Senatorum</span>
                         </a>
                         <h1 className="text-xl font-bold">Welcome to {TITLE}.</h1>
                     </div>
@@ -99,7 +104,25 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
                     </div>
                 </div>
                 <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-                    By clicking continue, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+                    By clicking continue, you agree to our{" "}
+                    <p
+                        className="inline-block hover:underline cursor-pointer"
+                        onClick={() => {
+                            router.push(ROUTER_CLIENT.POLYCY.POLICY);
+                        }}
+                    >
+                        Terms of Service
+                    </p>{" "}
+                    and{" "}
+                    <p
+                        className="inline-block hover:underline cursor-pointer"
+                        onClick={() => {
+                            router.push(ROUTER_CLIENT.POLYCY.TERM);
+                        }}
+                    >
+                        Privacy Policy
+                    </p>
+                    .
                 </div>
             </div>
             <LoginGoogleOneTap />

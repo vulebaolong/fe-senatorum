@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
-import user from "./user.slice";
-import setting from "./setting.slice";
 import ga from "./ga.slice";
+import setting from "./setting.slice";
+import user from "./user.slice";
 
 const combinedReducer = combineReducers({
     user,

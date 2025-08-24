@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
@@ -21,7 +23,7 @@ import {
   Mail
 } from 'lucide-react';
 
-export default function PrivacyPolicyPage() {
+export default function Policy() {
   const [activeSection, setActiveSection] = useState('');
 
   const sections = [

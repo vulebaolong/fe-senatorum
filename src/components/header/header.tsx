@@ -1,5 +1,9 @@
+import { BellRing } from "lucide-react";
+import ButtonIcon from "../custom/button-custom/button-icon";
 import { Logo } from "../logo/Logo";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import Search from "./search";
+import Notification from "../notification/notification";
 
 export default function Header() {
     return (
@@ -7,13 +11,12 @@ export default function Header() {
             <header className=" fixed w-full h-[var(--header-height)] flex items-center justify-between flex-col bg-sidebar border-sidebar-border border shadow-sm">
                 {/* <Marquee /> */}
                 <div className="px-[15px] py-2 w-full h-[50px] rounded-xl flex items-center justify-between">
-                    <Logo className="h-full" />
-
+                    <Logo />
                     <Search />
 
                     <div className=""></div>
 
-                    {/* <Popover>
+                    <Popover>
                         <PopoverTrigger asChild>
                             <ButtonIcon variant="secondary" size="icon" className="size-8 relative mr-2">
                                 <BellRing className="size-5" />
@@ -25,7 +28,7 @@ export default function Header() {
                         <PopoverContent className="w-90 p-0" align="end" sideOffset={5}>
                             <Notification />
                         </PopoverContent>
-                    </Popover> */}
+                    </Popover>
                 </div>
             </header>
         </div>

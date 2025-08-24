@@ -25,6 +25,7 @@ magick public/maskable-1024.png -resize 512x512 public/maskable-icon-512.png
 
 # 5) Ảnh chia sẻ mạng xã hội (OG 1200×630, nền màu thương hiệu)
 
-# Đổi #0ea5e9 thành màu của bạn và resize logo về ~720px cho cân đối
+# Đổi #2d2d2d thành màu của bạn và resize logo về ~720px cho cân đối
 
-magick -size 1200x630 canvas:"#0ea5e9" \( logo.png -resize 720x720 \) -gravity center -composite public/og-default.jpg
+magick -size 1200x630 canvas:"#2d2d2d" \( logo.png -resize 720x720 \) -gravity center -composite public/og-default.jpg
+

@@ -2,6 +2,7 @@
 
 import { LOGO } from "@/constant/app.constant";
 import useRouter from "@/hooks/use-router-custom";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { DetailedHTMLProps, HTMLAttributes } from "react";
 
@@ -10,7 +11,7 @@ type TProps = {
     src?: string;
 } & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
-export function Logo({ src = LOGO, ...props }: TProps) {
+export function Logo({ className, src = LOGO, ...props }: TProps) {
     const router = useRouter();
 
     const handleClickLogo = () => {
@@ -18,7 +19,7 @@ export function Logo({ src = LOGO, ...props }: TProps) {
     };
 
     return (
-        <div onClick={handleClickLogo} className="cursor-pointer w-[40px] h=[40px] aspect-[1/1]" {...props}>
+        <div onClick={handleClickLogo} className={cn("cursor-pointer w-[40px] h-[40px] aspect-[1/1]", className)} {...props}>
             <Image
                 src={src}
                 width={0}
