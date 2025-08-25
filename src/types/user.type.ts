@@ -20,7 +20,7 @@ export type TProfile = {
    name: TUser["name"];
    username: TUser["username"];
    avatar?: TUser["avatar"];
-   Follows_Follows_followerIdToUsers: TFollow[] | [];
+   Follows_Follows_followingIdToUsers: TFollow[] | [];
 } & TBaseTimestamps;
 
 export type TUploadAvatarLocalRes = {

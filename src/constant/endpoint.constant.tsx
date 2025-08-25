@@ -92,4 +92,9 @@ export const ENDPOINT = {
         UN_FOLLOW: "/follow",
         GET_COUNT_FOLLOW: "/follow/counts",
     },
+    NOTIFICATION: {
+        NOTIFICATION: "/notification",
+        COUNT_UNREAD_NOTIFICATION: "/notification/count-unread",
+        READ_NOTIFICATION: "/notification/read",
+    },
 };

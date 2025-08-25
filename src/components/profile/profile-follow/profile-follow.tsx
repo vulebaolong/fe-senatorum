@@ -16,7 +16,7 @@ export default function ProfileFollow({ profile, debounceMs = 300 }: TProps) {
     const info = useAppSelector((state) => state.user.info);
 
     // initial theo data hiện có
-    const initial = (profile?.Follows_Follows_followerIdToUsers || []).length > 0;
+    const initial = (profile?.Follows_Follows_followingIdToUsers || []).length > 0;
 
     // UI state (optimistic)
     const [isFollow, setIsFollow] = useState<boolean>(initial);
@@ -24,7 +24,7 @@ export default function ProfileFollow({ profile, debounceMs = 300 }: TProps) {
     // Nếu profile thay đổi (sang trang khác), sync lại initial & reset seq
     const seqRef = useRef(0);
     useEffect(() => {
-        const nextInitial = (profile?.Follows_Follows_followerIdToUsers || []).length > 0;
+        const nextInitial = (profile?.Follows_Follows_followingIdToUsers || []).length > 0;
         setIsFollow(nextInitial);
         desiredRef.current = nextInitial;
         seqRef.current = 0;

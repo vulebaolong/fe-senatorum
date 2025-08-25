@@ -26,12 +26,26 @@ export default function ArticleItem({ article }: TProps) {
             {/* header */}
             <div className=" h-[40px] flex items-center justify-between px-5 ">
                 <div className="flex basis-[60%] items-center gap-1 min-w-0">
-                    <Avatar className="h-8 w-8 rounded-full">
+                    <Avatar
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`${article.Users.username}`);
+                        }}
+                        className="h-8 w-8 rounded-full"
+                    >
                         <AvatarImage src={article.Users.avatar} alt={article.Users.name} />
                         <AvatarFallback className="rounded-full text-sm">{article.Users.name.slice(0, 2).toUpperCase()}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col min-w-0">
-                        <p className="text-sm font-semibold truncate">{article.Users.name}</p>
+                        <p
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                router.push(`${article.Users.username}`);
+                            }}
+                            className="text-sm font-semibold truncate hover:underline"
+                        >
+                            {article.Users.name}
+                        </p>
                         <p className="text-xs text-muted-foreground">{formatLocalTime(article.createdAt, `ago`)}</p>
                     </div>
                 </div>
