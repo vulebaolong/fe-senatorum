@@ -7,7 +7,7 @@ import { NavMain } from "@/components/nav/nav-main";
 import { NavUser } from "@/components/nav/nav-user";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, useSidebar } from "@/components/ui/sidebar";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
-import useRouter from "@/hooks/use-router-custom";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { SidebarTrigger } from "../custom/sidebar-custom";
 import { Button } from "../ui/button";

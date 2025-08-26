@@ -9,7 +9,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
-import useRouter from "@/hooks/use-router-custom";
 import { useAppSelector } from "@/redux/hooks";
 import { TResAction } from "@/types/app.type";
 import { TArticle } from "@/types/article.type";
@@ -22,6 +21,7 @@ import InstagramIcon from "./icon-social/instagram-icon";
 import RedditIcon from "./icon-social/reddit-icon";
 import XIcon from "./icon-social/x-icon";
 import { useAutoArticleView } from "@/hooks/use-article-view";
+import { useRouter } from "next/navigation";
 
 type TProps = {
     dataDetailArticle: TResAction<TArticle | null>;
@@ -71,8 +71,7 @@ export default function ArticleDetail({ dataDetailArticle }: TProps) {
                                             ))}
                                         </div>
                                         <div className="text-3xl font-bold line-clamp-3 h-[110px]">
-                                            {detailArticle.title}The Feds Interest The Feds Interest The Feds Interest The Feds Interest The Feds
-                                            Interest The Feds Interest The Feds Interest
+                                            {detailArticle.title}
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <div className="flex flex-1 items-center gap-2 py-1.5 text-left text-sm">

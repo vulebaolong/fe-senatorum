@@ -17,7 +17,7 @@ import LoginGoogleButton from "./login-google-button";
 import LoginGoogleOneTap from "./login-google-one-tap";
 import { TITLE } from "@/constant/app.constant";
 import { Logo } from "../logo/Logo";
-import useRouter from "@/hooks/use-router-custom";
+import { useRouter } from "next/navigation";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
 
 const FormSchema = z.object({

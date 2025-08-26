@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
-import useRouter from "@/hooks/use-router-custom";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -15,6 +14,7 @@ import { ThemeToggleV1 } from "../theme-toggle/theme-toggle-v1";
 import { ButtonLoading } from "../ui/button-loading";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { PasswordInput } from "../ui/password-input";
+import { useRouter } from "next/navigation";
 
 export const validatePassword = [
     { re: /[0-9]/, label: "Includes number." },

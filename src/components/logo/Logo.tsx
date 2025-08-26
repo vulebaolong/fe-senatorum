@@ -1,7 +1,7 @@
 "use client";
 
 import { LOGO } from "@/constant/app.constant";
-import useRouter from "@/hooks/use-router-custom";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { DetailedHTMLProps, HTMLAttributes } from "react";

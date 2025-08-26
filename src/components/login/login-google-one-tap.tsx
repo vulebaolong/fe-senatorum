@@ -2,7 +2,7 @@ import { useLoginGooleOneTap } from "@/api/tantask/auth.tanstack";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { resError } from "@/helpers/function.helper";
 import { useGoogleOneTapLogin } from "@/hooks/google-tap-login.hook";
-import useRouter from "@/hooks/use-router-custom";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { toast } from "sonner";
 

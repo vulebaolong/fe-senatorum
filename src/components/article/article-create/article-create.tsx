@@ -19,7 +19,7 @@ import { TType } from "@/types/type.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { $createParagraphNode, $getRoot, LexicalEditor } from "lexical";
-import { ArrowLeft, Eye, Globe, Loader2, Settings, Tag } from "lucide-react";
+import { ArrowLeft, Loader2, Settings, Tag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";

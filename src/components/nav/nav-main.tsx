@@ -4,7 +4,7 @@ import { Palette } from "lucide-react";
 
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
-import useRouter from "@/hooks/use-router-custom";
+import { useRouter } from "next/navigation";
 import ThemeToggleV2 from "../theme-toggle/theme-toggle-v2";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { useAppSelector } from "@/redux/hooks";
