@@ -16,10 +16,11 @@ export const FOLDER_IMAGE_BE = `/public/images`;
 
 export const TITLE = `Senatorum`;
 export const LOGO = `/base-1024.png`;
+export const FALLBACK_IMAGE = "/images/fallback-image.png";
 
 console.log({
-   NEXT_PUBLIC_BASE_DOMAIN_BE,
-   NEXT_PUBLIC_BASE_DOMAIN_BE_API,
-   NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-   NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY,
+    NEXT_PUBLIC_BASE_DOMAIN_BE,
+    NEXT_PUBLIC_BASE_DOMAIN_BE_API,
+    NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY,
 });

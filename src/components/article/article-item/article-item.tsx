@@ -2,7 +2,7 @@ import ImageCustom from "@/components/custom/image-custom/ImageCustom";
 import { OverflowBadges } from "@/components/overflow-badges/OverflowBadges";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
+import { FALLBACK_IMAGE, NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { formatLocalTime } from "@/helpers/function.helper";
 import { TArticle } from "@/types/article.type";
@@ -77,7 +77,10 @@ export default function ArticleItem({ article }: TProps) {
             {/* thumbnail */}
             <div className="flex-1 px-2 flex flex-col justify-between gap-2">
                 <div className="w-full aspect-video border border-border rounded-lg overflow-hidden">
-                    <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`} alt={"article image"} />
+                    <ImageCustom
+                        src={!article.thumbnail ? FALLBACK_IMAGE : `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`}
+                        alt={"article image"}
+                    />
                 </div>
             </div>
 
