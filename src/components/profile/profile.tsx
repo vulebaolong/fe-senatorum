@@ -1,18 +1,18 @@
 "use client";
 
 import { TResAction } from "@/types/app.type";
-import { TProfile } from "@/types/user.type";
-import { MoreHorizontal, Settings, Share, Shield, User } from "lucide-react";
+import { TUser } from "@/types/user.type";
+import { MoreHorizontal, Share, Shield, User } from "lucide-react";
 import { useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
+import ProfileCount from "./profile-count/profile-count";
 import ProfileFollow from "./profile-follow/profile-follow";
 import ProfileTabs from "./profile-tabs/profile-tabs";
-import ProfileCount from "./profile-count/profile-count";
 
 type Props = {
-    dataProfile: TResAction<TProfile | null>;
+    dataProfile: TResAction<TUser | null>;
 };
 
 export default function Profile({ dataProfile }: Props) {
@@ -68,7 +68,7 @@ export default function Profile({ dataProfile }: Props) {
 
                                     {/* Actions */}
                                     <div className="flex gap-2 sm:ml-auto">
-                                        <ProfileFollow profile={dataProfile.data} />
+                                        <ProfileFollow user={dataProfile.data} />
 
                                         {/* <Button variant="outline" size="sm">
                                             <Settings className="w-4 h-4" />

@@ -14,7 +14,7 @@ type TProps = {
 export default function Template({ children }: TProps) {
     const getInfo = useGetInfoMutation();
     const [allowRender, setAllowRender] = useState(false);
-    const loadingPage = useAppSelector((state) => state.setting.loadingPage);
+    // const loadingPage = useAppSelector((state) => state.setting.loadingPage);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -33,7 +33,7 @@ export default function Template({ children }: TProps) {
     return (
         <>
             {allowRender && children}
-            <div
+            {/* <div
                 style={{
                     position: "fixed",
                     zIndex: 99999,
@@ -44,7 +44,7 @@ export default function Template({ children }: TProps) {
                 className="flex items-center justify-center"
             >
                 <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-            </div>
+            </div> */}
         </>
     );
 }

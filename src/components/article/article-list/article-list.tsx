@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetAllArticle, useGetMyArticle, useGetMyUpvotedArticle } from "@/api/tantask/article.tanstack";
+import { useGetAllArticle, useGetMyArticle, useGetMyBookmarkedArticle, useGetMyUpvotedArticle } from "@/api/tantask/article.tanstack";
 import { useFillSkeletons } from "@/hooks/fill-skeleton-article";
 import { TArticle } from "@/types/article.type";
 import { useEffect, useRef, useState } from "react";
@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 type TProps = {
     filters?: Record<string, any>;
     id?: string;
-    type: "all" | "my" | "upvoted";
+    type: "all" | "my" | "upvoted" | "bookmarked";
     // className?: string;
 };
 
@@ -28,6 +28,7 @@ export default function Articlelist({ filters, id, type }: TProps) {
     const getAllArticle = (() => {
         if (type === "all") return useGetAllArticle;
         if (type === "upvoted") return useGetMyUpvotedArticle;
+        if (type === "bookmarked") return useGetMyBookmarkedArticle;
         return useGetMyArticle;
         // return useGetOtherArticle;
     })()({
@@ -65,7 +66,9 @@ export default function Articlelist({ filters, id, type }: TProps) {
     return (
         <div ref={containerRef} className={`relative p-5 gap-5 h-[calc(100vh-var(--header-height))] overflow-y-scroll`}>
             <div
-                className={`relative grid gap-5 justify-center [grid-template-columns:repeat(auto-fill,minmax(${itemWidth}px,${itemWidth}px))] min-h-full`}
+                className={cn(
+                    `relative grid gap-5 justify-center [grid-template-columns:repeat(auto-fill,minmax(${itemWidth}px,${itemWidth}px))] min-h-[calc(100%-4px)]`
+                )}
             >
                 <AppendLoading
                     isLoading={getAllArticle.isLoading}

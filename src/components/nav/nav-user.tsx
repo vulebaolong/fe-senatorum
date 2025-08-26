@@ -1,6 +1,6 @@
 "use client";
 
-import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles, User } from "lucide-react";
+import { ChevronsUpDown, LogOut, User } from "lucide-react";
 
 import { logout } from "@/api/core.api";
 import {
@@ -13,8 +13,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
-import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/redux/hooks";
+import { useRouter } from "next/navigation";
 import NavUserInfo from "./nav-user-info";
 
 export function NavUser() {

@@ -2,31 +2,11 @@
 
 import { Palette } from "lucide-react";
 
-import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
-import { ROUTER_CLIENT } from "@/constant/router.constant";
+import { SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
+import { useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 import ThemeToggleV2 from "../theme-toggle/theme-toggle-v2";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { useAppSelector } from "@/redux/hooks";
-
-const collections = [
-    {
-        title: "Bookmarks",
-        url: "#",
-    },
-    {
-        title: "Custom collections 1",
-        url: "#",
-    },
-    {
-        title: "Custom collections 2",
-        url: "#",
-    },
-    {
-        title: "New Collection",
-        url: "#",
-    },
-];
 
 export function NavMain() {
     const { isMobile, state } = useSidebar();

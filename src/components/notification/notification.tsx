@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 import { Tabs } from "../ui/tabs";
+import { cn } from "@/lib/utils";
 
 const rowV = { rest: {}, hover: {} };
 
@@ -111,7 +112,7 @@ export default function Notification() {
                     </div>
                 </div>
                 <div ref={containerRef} className="relative h-[200px] overflow-y-auto rounded-xl">
-                    <div className={`relative flex flex-col min-h-full`}>
+                    <div className={`relative flex flex-col min-h-[calc(100%-4px)]`}>
                         <AppendLoading
                             // debug
                             isLoading={getAllNotification.isLoading}
@@ -131,7 +132,7 @@ export default function Notification() {
                                 return (
                                     <motion.div
                                         key={notification.id}
-                                        className="group relative flex items-start gap-3 p-3"
+                                        className={cn("group relative flex items-start gap-3 p-3", notification.isRead ? "bg-transparent" : "bg-muted")}
                                         variants={rowV}
                                         initial="rest"
                                         animate="rest"
@@ -140,7 +141,7 @@ export default function Notification() {
                                         onFocus={(e) => ((e.currentTarget as any).dataset.fm = "hover")}
                                         onBlur={(e) => ((e.currentTarget as any).dataset.fm = "rest")}
                                     >
-                                        <Avatar className="h-10 w-10 rounded-full">
+                                        <Avatar className="h-8 w-8 rounded-full">
                                             <AvatarImage src={notification.Users_Notifications_actorIdToUsers.avatar} alt="avatar" />
                                             <AvatarFallback className="rounded-lg">{"vulebaolong".slice(0, 2).toUpperCase()}</AvatarFallback>
                                         </Avatar>

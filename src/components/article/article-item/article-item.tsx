@@ -29,9 +29,9 @@ export default function ArticleItem({ article }: TProps) {
                     <Avatar
                         onClick={(e) => {
                             e.stopPropagation();
-                            router.push(`${article.Users.username}`);
+                            router.push(`/${article.Users.username}`);
                         }}
-                        className="h-8 w-8 rounded-full"
+                        className="h-8 w-8 rounded-full cursor-pointer"
                     >
                         <AvatarImage src={article.Users.avatar} alt={article.Users.name} />
                         <AvatarFallback className="rounded-full text-sm">{article.Users.name.slice(0, 2).toUpperCase()}</AvatarFallback>
@@ -40,7 +40,7 @@ export default function ArticleItem({ article }: TProps) {
                         <p
                             onClick={(e) => {
                                 e.stopPropagation();
-                                router.push(`${article.Users.username}`);
+                                router.push(`/${article.Users.username}`);
                             }}
                             className="text-sm font-semibold truncate hover:underline"
                         >

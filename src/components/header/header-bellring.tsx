@@ -101,7 +101,7 @@ export default function HeaderBellring() {
                 </ButtonIcon>
             </PopoverTrigger>
 
-            <PopoverContent className="w-90 rounded-xl p-0" align="end" sideOffset={5}>
+            <PopoverContent className="w-95 rounded-xl p-0" align="end" sideOffset={5}>
                 <Notification />
             </PopoverContent>
         </Popover>

@@ -38,7 +38,6 @@ const SHORTCUTS = {
     CODE_BLOCK: "⌘+Opt+C",
 };
 
-
 export default function BlockFormatDropDown(): JSX.Element {
     const [editor] = useLexicalComposerContext();
     const { toolbarState, updateToolbarState } = useToolbarState();
@@ -89,7 +88,8 @@ export default function BlockFormatDropDown(): JSX.Element {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm">
-                    <AudioLines /> {blockTypeToBlockName[toolbarState.blockType] ?? "Formatting"}
+                    {/* <AudioLines /> {blockTypeToBlockName[toolbarState.blockType] ?? "Formatting"} */}
+                    {blockTypeToBlockName[toolbarState.blockType] ?? "Formatting"}
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">

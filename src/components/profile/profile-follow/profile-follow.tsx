@@ -1,34 +1,34 @@
 import { useFollow, useUnfollow } from "@/api/tantask/follow.action";
 import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/redux/hooks";
-import { TProfile } from "@/types/user.type";
+import { TUser } from "@/types/user.type";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { UserCheck, UserPlus } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
 type TProps = {
-    profile: TProfile | null;
+    user: TUser | null;
     debounceMs?: number; // mặc định 300ms
 };
 
-export default function ProfileFollow({ profile, debounceMs = 300 }: TProps) {
+export default function ProfileFollow({ user, debounceMs = 300 }: TProps) {
     const info = useAppSelector((state) => state.user.info);
 
     // initial theo data hiện có
-    const initial = (profile?.Follows_Follows_followingIdToUsers || []).length > 0;
+    const initial = (user?.Follows_Follows_followingIdToUsers || []).length > 0;
 
     // UI state (optimistic)
     const [isFollow, setIsFollow] = useState<boolean>(initial);
 
-    // Nếu profile thay đổi (sang trang khác), sync lại initial & reset seq
+    // Nếu User thay đổi (sang trang khác), sync lại initial & reset seq
     const seqRef = useRef(0);
     useEffect(() => {
-        const nextInitial = (profile?.Follows_Follows_followingIdToUsers || []).length > 0;
+        const nextInitial = (user?.Follows_Follows_followingIdToUsers || []).length > 0;
         setIsFollow(nextInitial);
         desiredRef.current = nextInitial;
         seqRef.current = 0;
-    }, [profile?.id]);
+    }, [user?.id]);
 
     const follow = useFollow();
     const unfollow = useUnfollow();
@@ -42,16 +42,16 @@ export default function ProfileFollow({ profile, debounceMs = 300 }: TProps) {
     // Debounce commit + chống race (chỉ chấp nhận kết quả mới nhất)
     const commit = useDebouncedCallback(
         async () => {
-            if (!profile?.id) return;
+            if (!user?.id) return;
 
             const desired = desiredRef.current;
             const seq = ++seqRef.current;
 
             try {
                 if (desired) {
-                    await follow.mutateAsync({ followingId: profile.id });
+                    await follow.mutateAsync({ followingId: user.id });
                 } else {
-                    await unfollow.mutateAsync({ followingId: profile.id });
+                    await unfollow.mutateAsync({ followingId: user.id });
                 }
 
                 // Nếu đã có commit mới hơn thì bỏ qua kết quả cũ
@@ -77,7 +77,7 @@ export default function ProfileFollow({ profile, debounceMs = 300 }: TProps) {
 
     const onClick = (e: React.MouseEvent) => {
         e.stopPropagation();
-        if (!profile?.id || profile.id === info?.id) return;
+        if (!user?.id || user.id === info?.id) return;
 
         // Toggle UI ngay (optimistic) + ghi ý định rồi để debounce commit
         setIsFollow((prev) => {
@@ -91,7 +91,7 @@ export default function ProfileFollow({ profile, debounceMs = 300 }: TProps) {
     // (optional) vô hiệu hóa khi có request đang bay
     const inFlight = follow.isPending || unfollow.isPending;
 
-    if (!profile?.id || profile.id === info?.id) return null;
+    if (!user?.id || user.id === info?.id) return null;
 
     return (
         <Button

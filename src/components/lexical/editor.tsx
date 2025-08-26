@@ -163,7 +163,7 @@ export default function Editor({ onChange, initialContentJSON, editorRef, isView
         if (onChange) onChange(JSON.stringify(editorStateJSON), editorState);
     };
     return (
-        <LexicalComposer initialConfig={{ ...editorConfig }}>
+        <LexicalComposer initialConfig={{ ...editorConfig, editable: !isViewOnly }}>
             <EditorRefPlugin editorRef={editorRef} />
             <ToolbarContext>
                 <div className="editor-container">

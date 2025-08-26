@@ -22,6 +22,7 @@ import RedditIcon from "./icon-social/reddit-icon";
 import XIcon from "./icon-social/x-icon";
 import { useAutoArticleView } from "@/hooks/use-article-view";
 import { useRouter } from "next/navigation";
+import ProfileFollow from "@/components/profile/profile-follow/profile-follow";
 
 type TProps = {
     dataDetailArticle: TResAction<TArticle | null>;
@@ -70,19 +71,31 @@ export default function ArticleDetail({ dataDetailArticle }: TProps) {
                                                 </Badge>
                                             ))}
                                         </div>
-                                        <div className="text-3xl font-bold line-clamp-3 h-[110px]">
-                                            {detailArticle.title}
-                                        </div>
+                                        <div className="text-3xl font-bold line-clamp-3 h-[110px]">{detailArticle.title}</div>
                                         <div className="flex items-center gap-2">
                                             <div className="flex flex-1 items-center gap-2 py-1.5 text-left text-sm">
-                                                <Avatar className="h-8 w-8 rounded-full">
+                                                <Avatar
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        router.push(`/${detailArticle.Users.username}`);
+                                                    }}
+                                                    className="h-8 w-8 rounded-full cursor-pointer"
+                                                >
                                                     <AvatarImage src={detailArticle.Users.avatar} alt={detailArticle.Users.name} />
                                                     <AvatarFallback className="rounded-lg">
                                                         {detailArticle.Users.name.slice(0, 2).toUpperCase()}
                                                     </AvatarFallback>
                                                 </Avatar>
                                                 <div className="grid flex-1 text-left text-sm leading-tight">
-                                                    <span className="truncate font-medium">{detailArticle.Users.name}</span>
+                                                    <span
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            router.push(`/${detailArticle.Users.username}`);
+                                                        }}
+                                                        className="truncate font-medium hover:underline cursor-pointer"
+                                                    >
+                                                        {detailArticle.Users.name}
+                                                    </span>
                                                     <span className="truncate text-xs text-muted-foreground">{detailArticle.Users.email}</span>
                                                 </div>
                                             </div>
@@ -98,7 +111,7 @@ export default function ArticleDetail({ dataDetailArticle }: TProps) {
                                                             <Pencil />
                                                         </Button>
                                                     ) : (
-                                                        <Button>Follow</Button>
+                                                        <ProfileFollow user={detailArticle.Users} />
                                                     )}
                                                 </>
                                             )}

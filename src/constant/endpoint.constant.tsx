@@ -30,6 +30,7 @@ export const ENDPOINT = {
         ARTICLE_ALL: "/article/all",
         ARTICLE_MY: "/article/my",
         ARTICLE_MY_UPVOTED: "/article/my-upvoted",
+        ARTICLE_MY_BOOKMARKED: "/article/my-bookmarked",
         ARTICLE_OTHER: "/article/other",
         ARTICLE_UPSERT_DRAFT: "/article/upsert-draft",
         ARTICLE_UPSERT_EDIT: "/article/upsert-edit",

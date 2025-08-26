@@ -8,18 +8,9 @@ export type TUser = {
    name: string;
    username: string;
    avatar?: string;
-   googleId?: string;
    roleId: string;
    Roles: TRole;
    isTotp: boolean;
-} & TBaseTimestamps;
-
-export type TProfile = {
-   id: TUser["id"];
-   email: TUser["email"];
-   name: TUser["name"];
-   username: TUser["username"];
-   avatar?: TUser["avatar"];
    Follows_Follows_followingIdToUsers: TFollow[] | [];
 } & TBaseTimestamps;
 

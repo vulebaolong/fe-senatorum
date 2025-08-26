@@ -3,11 +3,12 @@ import {
     getAllArticleAction,
     getDetailArticleAction,
     getMyArticleAction,
+    getMyBookmarkedArticleAction,
     getMyUpvotedArticleAction,
     getOtherArticleAction,
     publishArticleAction,
     upsertArticleDraftAction,
-    upsertArticleEditAction
+    upsertArticleEditAction,
 } from "@/api/actions/article.action";
 import { TCreateArticleReq, TPublishArticleReq, TUpsertArticleDarftReq, TUpsertArticleEditReq } from "@/types/article.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -41,8 +42,24 @@ export const useGetMyUpvotedArticle = (payload: any) => {
             const { data, status, message } = await getMyUpvotedArticleAction(query);
             if (status === "error" || data === null) throw new Error(message);
 
-            // await wait(5000);
-            console.log({ useGetAllArticle: data });
+            console.log({ useGetMyUpvotedArticle: data });
+            return data;
+        },
+    });
+};
+
+export const useGetMyBookmarkedArticle = (payload: any) => {
+    return useQuery({
+        queryKey: ["get-my-bookmarked-article", payload],
+        queryFn: async () => {
+            const { pagination, filters, sort } = payload;
+            const { pageIndex, pageSize } = pagination;
+            const query = `page=${pageIndex}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
+
+            const { data, status, message } = await getMyBookmarkedArticleAction(query);
+            if (status === "error" || data === null) throw new Error(message);
+
+            console.log({ useGetMyBookmarkedArticle: data });
             return data;
         },
     });
