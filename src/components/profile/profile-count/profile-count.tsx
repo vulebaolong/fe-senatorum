@@ -1,13 +1,13 @@
 import { useGetCountFollow } from "@/api/tantask/follow.action";
-import { TProfile } from "@/types/user.type";
+import { TUser } from "@/types/user.type";
 
 type TProps = {
-    profile: TProfile | null;
+    profile: TUser | null;
 };
 
 export default function ProfileCount({ profile }: TProps) {
     const getCountFollow = profile ? useGetCountFollow(profile?.id) : { data: null };
-    console.log({ getCountFollow: getCountFollow.data });
+    // console.log({ getCountFollow: getCountFollow.data });
     return (
         <div className="flex gap-6 mt-4 text-sm">
             <div>

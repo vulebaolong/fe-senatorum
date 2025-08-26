@@ -14,7 +14,7 @@ import {
     TRegisterRes,
     TVerifyMagicLinkReq,
 } from "@/types/auth.type";
-import { TProfile, TUser } from "@/types/user.type";
+import { TUser } from "@/types/user.type";
 import api from "../core.api";
 
 export async function registerAction(payload: TRegisterReq): Promise<TResAction<TRegisterRes | null>> {
@@ -127,9 +127,9 @@ export async function clearTokensAction() {
     }
 }
 
-export async function getProfileByUsername(payload: TUser[`username`]): Promise<TResAction<TProfile | null>> {
+export async function getProfileByUsername(payload: TUser[`username`]): Promise<TResAction<TUser | null>> {
     try {
-        const result = await api.get<TRes<TProfile>>(`${ENDPOINT.AUTH.PROFILE_BY_USERNAME}/${payload}`, );
+        const result = await api.get<TRes<TUser>>(`${ENDPOINT.AUTH.PROFILE_BY_USERNAME}/${payload}`, );
         return { status: "success", message: result.message, data: result.data };
     } catch (error: any) {
         return { status: "error", message: error?.message, data: null };
