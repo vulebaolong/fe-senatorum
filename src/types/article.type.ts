@@ -54,3 +54,7 @@ export type TUpsertArticleEditReq = {
     typeId?: string;
     categoryIds?: string[];
 };
+
+export type TDeleteArticleReq = {
+    id: TArticle["id"];
+};

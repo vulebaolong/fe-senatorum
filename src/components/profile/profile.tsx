@@ -2,7 +2,7 @@
 
 import { TResAction } from "@/types/app.type";
 import { TUser } from "@/types/user.type";
-import { MoreHorizontal, Share, Shield, User } from "lucide-react";
+import { MoreHorizontal, Pencil, Share, Shield, User } from "lucide-react";
 import { useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
@@ -10,15 +10,19 @@ import { Card, CardContent } from "../ui/card";
 import ProfileCount from "./profile-count/profile-count";
 import ProfileFollow from "./profile-follow/profile-follow";
 import ProfileTabs from "./profile-tabs/profile-tabs";
+import { useAppSelector } from "@/redux/hooks";
+import { useRouter } from "next/navigation";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
 
 type Props = {
     dataProfile: TResAction<TUser | null>;
 };
 
 export default function Profile({ dataProfile }: Props) {
-    console.log({ dataProfile });
     const bodyRef = useRef<HTMLDivElement>(null); // khung scroll
     const tabsAnchorRef = useRef<HTMLDivElement>(null); // neo ở chỗ TabsList
+    const info = useAppSelector((state) => state.user.info);
+    const router = useRouter();
 
     return (
         <div className="h-[calc(100vh-var(--header-height))] flex flex-col">
@@ -28,14 +32,26 @@ export default function Profile({ dataProfile }: Props) {
                     <div className="flex items-center justify-between">
                         <p className="text-lg font-semibold">Profile</p>
 
-                        <div className="flex items-center gap-2">
+                        {/* {info?.id === dataProfile.data?.id && (
+                            <Button
+                                onClick={() => {
+                                    router.push(ROUTER_CLIENT.SETTING_PROFILE);
+                                }}
+                                variant="outline"
+                                className="size-8"
+                            >
+                                <Pencil />
+                            </Button>
+                        )} */}
+
+                        {/* <div className="flex items-center gap-2">
                             <Button variant="outline" size="sm">
                                 <Share /> Share
                             </Button>
                             <Button variant="outline" size="sm">
                                 <MoreHorizontal className="w-4 h-4" />
                             </Button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

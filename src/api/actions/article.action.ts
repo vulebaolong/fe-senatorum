@@ -2,7 +2,14 @@
 
 import { ENDPOINT } from "@/constant/endpoint.constant";
 import { TRes, TResAction, TResPagination } from "@/types/app.type";
-import { TArticle, TCreateArticleReq, TPublishArticleReq, TUpsertArticleDarftReq, TUpsertArticleEditReq } from "@/types/article.type";
+import {
+    TArticle,
+    TCreateArticleReq,
+    TDeleteArticleReq,
+    TPublishArticleReq,
+    TUpsertArticleDarftReq,
+    TUpsertArticleEditReq,
+} from "@/types/article.type";
 import api from "../core.api";
 
 export async function getAllArticleAction(query: string): Promise<TResAction<TResPagination<TArticle> | null>> {
@@ -36,13 +43,13 @@ export async function getMyBookmarkedArticleAction(query: string): Promise<TResA
 }
 
 export async function getMyArticleAction(query: string): Promise<TResAction<TResPagination<TArticle> | null>> {
-   try {
-      const result = await api.get<TRes<TResPagination<TArticle>>>(`${ENDPOINT.ARTICLE.ARTICLE_MY}?${query}`);
-      const { data } = result;
-      return { status: "success", message: result.message, data: data };
-   } catch (error: any) {
-      return { status: "error", message: error?.message, data: null };
-   }
+    try {
+        const result = await api.get<TRes<TResPagination<TArticle>>>(`${ENDPOINT.ARTICLE.ARTICLE_MY}?${query}`);
+        const { data } = result;
+        return { status: "success", message: result.message, data: data };
+    } catch (error: any) {
+        return { status: "error", message: error?.message, data: null };
+    }
 }
 
 export async function getOtherArticleAction(query: string): Promise<TResAction<TResPagination<TArticle> | null>> {
@@ -109,6 +116,16 @@ export async function upsertArticleDraftAction(payload: TUpsertArticleDarftReq):
 export async function upsertArticleEditAction(payload: TUpsertArticleEditReq): Promise<TResAction<TArticle | null>> {
     try {
         const result = await api.post<TRes<TArticle>>(ENDPOINT.ARTICLE.ARTICLE_UPSERT_EDIT, payload);
+        const { data } = result;
+        return { status: "success", message: result.message, data: data };
+    } catch (error: any) {
+        return { status: "error", message: error?.message, data: null };
+    }
+}
+
+export async function deleteArticleAction(payload: TDeleteArticleReq): Promise<TResAction<Boolean | null>> {
+    try {
+        const result = await api.delete<TRes<Boolean>>(`${ENDPOINT.ARTICLE.ARTICLE_DELETE}/${payload.id}`);
         const { data } = result;
         return { status: "success", message: result.message, data: data };
     } catch (error: any) {

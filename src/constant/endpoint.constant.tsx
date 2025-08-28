@@ -37,6 +37,7 @@ export const ENDPOINT = {
         ARTICLE_GET_DRAFT: "/article/draft",
         ARTICLE_UPSERT_THUMBNAIL: "/article/upsert-thumbnail",
         ARTICLE_PUBLISH: "/article/publish",
+        ARTICLE_DELETE: "/article/delete",
     },
     ARTICLE_BOOKMARK: {
         ARTICLE_BOOKMARK_ALL: "/article-bookmark",

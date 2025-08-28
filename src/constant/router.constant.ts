@@ -15,6 +15,7 @@ export const ROUTER_CLIENT = {
         POLICY: `/policy`,
         TERM: `/term-of-service`,
     },
+    SETTING_PROFILE: `/setting/profile`,
 };
 
 export const ROUTER_ADMIN = {

@@ -4,6 +4,11 @@ import { Eye, MessageCircle, Share2 } from "lucide-react";
 import ArticleBookmark from "../article-bookmark/article-bookmark";
 import ButtonIcon from "@/components/custom/button-custom/button-icon";
 import { formatCompactIntl } from "@/helpers/function.helper";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import FacebookIcon from "../article-detail/icon-social/facebook-icon";
+import XIcon from "../article-detail/icon-social/x-icon";
+import InstagramIcon from "../article-detail/icon-social/instagram-icon";
+import RedditIcon from "../article-detail/icon-social/reddit-icon";
 
 type TProps = {
     article: TArticle;
@@ -33,9 +38,19 @@ export default function ArticleFooter({ article }: TProps) {
 
             <ArticleBookmark articleId={article.id} initial={article.ArticleBookmarks.length > 0} />
 
-            <ButtonIcon variant="ghost" size="icon" className="size-6">
-                <Share2 style={{ width: `15px`, height: `15px` }} />
-            </ButtonIcon>
+            <Popover>
+                <PopoverTrigger>
+                    <ButtonIcon variant="ghost" size="icon" className="size-6">
+                        <Share2 style={{ width: `15px`, height: `15px` }} />
+                    </ButtonIcon>
+                </PopoverTrigger>
+                <PopoverContent data-side="right" className="flex gap-2 h-[50px] w-fit p-1">
+                    <FacebookIcon />
+                    <XIcon />
+                    <InstagramIcon />
+                    <RedditIcon />
+                </PopoverContent>
+            </Popover>
         </div>
     );
 }

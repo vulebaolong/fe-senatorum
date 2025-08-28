@@ -4,25 +4,25 @@ import CommentInput from "@/components/comment/comment-input/comment-input";
 import CommentList from "@/components/comment/comment-list";
 import ImageCustom from "@/components/custom/image-custom/ImageCustom";
 import Editor from "@/components/lexical/editor";
+import ProfileFollow from "@/components/profile/profile-follow/profile-follow";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
+import { useAutoArticleView } from "@/hooks/use-article-view";
 import { useAppSelector } from "@/redux/hooks";
 import { TResAction } from "@/types/app.type";
 import { TArticle } from "@/types/article.type";
 import { TListComment } from "@/types/comment.type";
-import { CircleX, Pencil } from "lucide-react";
+import { CircleX } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ArticleFooter from "../article-footer/article-footer";
+import ArticleDetailAction from "./article-detail-action";
 import FacebookIcon from "./icon-social/facebook-icon";
 import InstagramIcon from "./icon-social/instagram-icon";
 import RedditIcon from "./icon-social/reddit-icon";
 import XIcon from "./icon-social/x-icon";
-import { useAutoArticleView } from "@/hooks/use-article-view";
-import { useRouter } from "next/navigation";
-import ProfileFollow from "@/components/profile/profile-follow/profile-follow";
 
 type TProps = {
     dataDetailArticle: TResAction<TArticle | null>;
@@ -48,13 +48,17 @@ export default function ArticleDetail({ dataDetailArticle }: TProps) {
     };
 
     return (
-        <div className="p-5 h-[calc(100vh-var(--header-height))] overflow-y-scroll">
+        <div className="h-[calc(100vh-var(--header-height))] overflow-y-scroll">
             {detailArticle ? (
-                <article className="relative h-full flex flex-col">
-                    <div className="overflow-y-auto space-y-2">
-                        <Badge variant="secondary">{detailArticle.Types.name}</Badge>
+                <article className="relative flex flex-col p-5">
+                    <div className="flex-1 grid gap-10 [grid-template-columns:0.75fr_0.25fr]">
+                        <div>
+                            <div className="mb-2 flex w-full items-center justify-between">
+                                <Badge variant="secondary">{detailArticle.Types.name}</Badge>
 
-                        <div className="flex-1 grid gap-10 [grid-template-columns:0.75fr_0.25fr]">
+                                {info?.id === detailArticle.Users.id && <ArticleDetailAction detailArticle={detailArticle} />}
+                            </div>
+
                             <div className="flex flex-col gap-10">
                                 <div className=" grid gap-5 [grid-template-columns:0.45fr_0.55fr]">
                                     <div className="w-full h-full border-sidebar-border border shadow-sm aspect-video overflow-hidden rounded-xl">
@@ -92,29 +96,14 @@ export default function ArticleDetail({ dataDetailArticle }: TProps) {
                                                             e.stopPropagation();
                                                             router.push(`/${detailArticle.Users.username}`);
                                                         }}
-                                                        className="truncate font-medium hover:underline cursor-pointer"
+                                                        className="truncate font-medium hover:underline cursor-pointer w-fit"
                                                     >
                                                         {detailArticle.Users.name}
                                                     </span>
                                                     <span className="truncate text-xs text-muted-foreground">{detailArticle.Users.email}</span>
                                                 </div>
                                             </div>
-                                            {info?.id && (
-                                                <>
-                                                    {info?.id === detailArticle.Users.id ? (
-                                                        <Button
-                                                            onClick={() => router.push(`/article/${detailArticle.slug}/edit`)}
-                                                            variant={"outline"}
-                                                            size="icon"
-                                                            className="size-8"
-                                                        >
-                                                            <Pencil />
-                                                        </Button>
-                                                    ) : (
-                                                        <ProfileFollow user={detailArticle.Users} />
-                                                    )}
-                                                </>
-                                            )}
+                                            <>{info?.id !== detailArticle.Users.id && <ProfileFollow user={detailArticle.Users} />}</>
                                         </div>
 
                                         <ArticleFooter article={detailArticle} />
@@ -122,6 +111,14 @@ export default function ArticleDetail({ dataDetailArticle }: TProps) {
                                 </div>
 
                                 <div className="">
+                                    <Editor isViewOnly initialContentJSON={detailArticle.content} />
+                                    <div className="py-5 px-2">
+                                        <CommentInput article={detailArticle} setListComment={setListComment} commentParent={null} />
+                                    </div>
+                                    <CommentList article={detailArticle} listComment={listComment} setListComment={setListComment} />
+                                </div>
+
+                                {/* <div className="">
                                     <div className="grid gap-0 [grid-template-columns:50px_1fr]">
                                         <div className="sticky top-0 self-start p-2 flex flex-col items-center justify-center border rounded-xl">
                                             <FacebookIcon />
@@ -137,10 +134,11 @@ export default function ArticleDetail({ dataDetailArticle }: TProps) {
                                             <CommentList article={detailArticle} listComment={listComment} setListComment={setListComment} />
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
-                            <div className="sticky top-0 self-start h-fit"></div>
                         </div>
+
+                        <div className="sticky top-0 self-start h-fit"></div>
                     </div>
                     {/* JSON-LD Article */}
                     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
