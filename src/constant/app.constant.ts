@@ -18,6 +18,8 @@ export const TITLE = `Senatorum`;
 export const LOGO = `/base-1024.png`;
 export const FALLBACK_IMAGE = "/images/fallback-image.png";
 
+export const VERSION = "1.0.1";
+
 console.log({
     NEXT_PUBLIC_BASE_DOMAIN_BE,
     NEXT_PUBLIC_BASE_DOMAIN_BE_API,

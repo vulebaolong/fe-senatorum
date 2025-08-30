@@ -1,18 +1,18 @@
 "use client";
 
+import { ROUTER_CLIENT } from "@/constant/router.constant";
+import { useAppSelector } from "@/redux/hooks";
 import { TResAction } from "@/types/app.type";
 import { TUser } from "@/types/user.type";
-import { MoreHorizontal, Pencil, Share, Shield, User } from "lucide-react";
+import { Pencil, Shield, User } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useRef } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import AvatartImageCustom from "../custom/avatar-custom/avatart-custom";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import ProfileCount from "./profile-count/profile-count";
 import ProfileFollow from "./profile-follow/profile-follow";
 import ProfileTabs from "./profile-tabs/profile-tabs";
-import { useAppSelector } from "@/redux/hooks";
-import { useRouter } from "next/navigation";
-import { ROUTER_CLIENT } from "@/constant/router.constant";
 
 type Props = {
     dataProfile: TResAction<TUser | null>;
@@ -31,18 +31,6 @@ export default function Profile({ dataProfile }: Props) {
                 <div className="max-w-6xl mx-auto px-6">
                     <div className="flex items-center justify-between">
                         <p className="text-lg font-semibold">Profile</p>
-
-                        {/* {info?.id === dataProfile.data?.id && (
-                            <Button
-                                onClick={() => {
-                                    router.push(ROUTER_CLIENT.SETTING_PROFILE);
-                                }}
-                                variant="outline"
-                                className="size-8"
-                            >
-                                <Pencil />
-                            </Button>
-                        )} */}
 
                         {/* <div className="flex items-center gap-2">
                             <Button variant="outline" size="sm">
@@ -72,10 +60,7 @@ export default function Profile({ dataProfile }: Props) {
                                 <div className="flex flex-col sm:flex-row items-start sm:items-end gap-4 -mt-16 relative z-10">
                                     {/* Avatar */}
                                     {dataProfile.data?.avatar ? (
-                                        <Avatar className="w-32 h-32 rounded-full">
-                                            <AvatarImage src={dataProfile.data?.avatar} alt={dataProfile.data?.name} />
-                                            <AvatarFallback className="rounded-lg">{dataProfile.data?.name.slice(0, 2).toUpperCase()}</AvatarFallback>
-                                        </Avatar>
+                                        <AvatartImageCustom name={dataProfile.data?.name} src={dataProfile.data?.avatar} />
                                     ) : (
                                         <div className="w-32 h-32 bg-white rounded-full border-4 border-white shadow-lg flex items-center justify-center">
                                             <User className="w-16 h-16 text-slate-400" />
@@ -89,6 +74,17 @@ export default function Profile({ dataProfile }: Props) {
                                         {/* <Button variant="outline" size="sm">
                                             <Settings className="w-4 h-4" />
                                         </Button> */}
+                                        {info?.id === dataProfile.data?.id && (
+                                            <Button
+                                                onClick={() => {
+                                                    router.push(ROUTER_CLIENT.SETTING_PROFILE);
+                                                }}
+                                                variant="outline"
+                                                className="size-8"
+                                            >
+                                                <Pencil />
+                                            </Button>
+                                        )}
                                     </div>
                                 </div>
 
@@ -96,13 +92,10 @@ export default function Profile({ dataProfile }: Props) {
                                 <div className="mt-4">
                                     <div className="flex items-center gap-2">
                                         <h1 className="text-2xl font-bold">{dataProfile.data?.name}</h1>
-                                        <Shield className="w-5 h-5 text-blue-500" />
+                                        {/* <Shield className="w-5 h-5 text-blue-500" /> */}
                                     </div>
                                     <p className="text-sm text-muted-foreground mt-1">@{dataProfile.data?.username}</p>
-                                    <p className="text-shadow-muted mt-3 max-w-2xl">
-                                        Full-stack developer passionate about creating amazing user experiences. Building the future one line of code
-                                        at a time.
-                                    </p>
+                                    <p className="text-shadow-muted mt-3 max-w-2xl">{dataProfile.data?.bio}</p>
 
                                     {/* Meta Info */}
                                     {/* <div className="flex flex-wrap gap-4 mt-4 text-sm text-slate-600">

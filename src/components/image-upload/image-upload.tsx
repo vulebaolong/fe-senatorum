@@ -23,7 +23,9 @@ export type ThumbnailUploadProps = {
     disabled?: boolean; // khoá hoàn toàn component
     accept?: string; // mặc định image/*
     className?: string;
-    heightClassName?: string; // mặc định h-[300px]
+    variant?: "square" | "round";
+    title?: string;
+    description?: string;
 };
 
 export default function ImageUpload({
@@ -37,7 +39,9 @@ export default function ImageUpload({
     disabled,
     accept = "image/*",
     className,
-    heightClassName = "h-[300px]",
+    title,
+    description,
+    variant = "square",
 }: ThumbnailUploadProps) {
     const [dragActive, setDragActive] = useState(false);
     const [tempUrl, setTempUrl] = useState<string | null>(null); // blob preview
@@ -142,23 +146,25 @@ export default function ImageUpload({
             tabIndex={0}
             onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && inputRef.current?.click()}
             className={cn(
-                "flex items-center justify-center rounded-2xl relative select-none border",
-                heightClassName,
+                "flex items-center justify-center  relative select-none border",
                 locked ? "cursor-not-allowed" : "cursor-pointer",
                 !displayUrl && "border-dashed",
                 dragActive ? "border-primary bg-primary/5" : "border-ring",
+                variant === "round" ? "rounded-full overflow-hidden" : "rounded-2xl",
                 className
             )}
         >
             <input ref={inputRef} type="file" accept={accept} className="hidden" onChange={(e) => handleFiles(e.target.files)} />
 
             {displayUrl ? (
-                <div className="w-full h-full p-1">
+                <div className={
+                    cn(`w-full h-full`, variant === "round" ? "p-0" : "p-1")
+                }>
                     <div className="relative w-full h-full group">
                         <Image src={displayUrl} alt="Preview" fill className="object-cover rounded-xl" sizes="(max-width: 768px) 100vw, 50vw" />
                         {pending ? (
                             <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-xl">
-                                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                                <Loader2 className="h-4 w-4 animate-spin text-[white]" />
                             </div>
                         ) : (
                             <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
@@ -171,9 +177,9 @@ export default function ImageUpload({
                 </div>
             ) : (
                 <div className="flex flex-col items-center justify-center gap-2 p-5 text-center">
-                    <ImageIcon size={50} className="text-muted-foreground" />
-                    <p className="text-lg font-semibold text-muted-foreground">Add a featured image</p>
-                    <p className="text-sm text-muted-foreground">Drag and drop an image, or click to browse</p>
+                    <ImageIcon className="text-muted-foreground size-10" />
+                    {title && <p className="text-lg font-semibold text-muted-foreground">{title}</p>}
+                    {description && <p className="text-sm text-muted-foreground">{description}</p>}
                 </div>
             )}
         </div>

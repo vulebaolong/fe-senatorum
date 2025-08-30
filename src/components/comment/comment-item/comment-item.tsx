@@ -1,15 +1,15 @@
 import { useMutationCommentByParent } from "@/api/tantask/comment.tanstack";
+import AvatartImageCustom from "@/components/custom/avatar-custom/avatart-custom";
 import { formatLocalTime } from "@/helpers/function.helper";
+import { typingText } from "@/helpers/motion.helper";
+import { cn } from "@/lib/utils";
 import { TArticle } from "@/types/article.type";
 import { TComment, TListComment } from "@/types/comment.type";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { typingText } from "@/helpers/motion.helper";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import CommentInput from "../comment-input/comment-input";
-import LineStraight from "../line/line-straight";
 import LineCurve from "../line/line-curve";
+import LineStraight from "../line/line-straight";
 
 type CommentItemProps = {
     comment: TListComment;
@@ -19,13 +19,13 @@ type CommentItemProps = {
 };
 
 export default function CommentItem({ comment, article, level = 0, isLast }: CommentItemProps) {
-    console.log({ level });
-    const [replyingCommentId, setReplyingCommentId] = useState< TComment["id"] | null>(null);
+    const router = useRouter();
+    const [replyingCommentId, setReplyingCommentId] = useState<TComment["id"] | null>(null);
     const [listComment, setListComment] = useState<TListComment[]>([]);
 
     const mutationCommentByParent = useMutationCommentByParent();
 
-    const handleReplyComment = (commentId:  TComment["id"]) => {
+    const handleReplyComment = (commentId: TComment["id"]) => {
         setReplyingCommentId(commentId);
     };
 
@@ -54,10 +54,15 @@ export default function CommentItem({ comment, article, level = 0, isLast }: Com
             <div className={`flex items-start gap-2 ${level > 0 ? "pl-2" : ""}`}>
                 {/* Avatar */}
                 <div className="relative z-10 bg-white dark:bg-[#252728] h-9 w-9 rounded-full flex items-center justify-center">
-                    <Avatar className="h-8 w-8">
-                        <AvatarImage src={comment.Users.avatar ?? undefined} alt={`name`} />
-                        <AvatarFallback className="rounded-lg">{comment.Users?.name.slice(0, 2).toUpperCase()}</AvatarFallback>
-                    </Avatar>
+                    <AvatartImageCustom
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`/${comment.Users?.username}`);
+                        }}
+                        className="h-8 w-8 rounded-full cursor-pointer"
+                        name={comment.Users?.name}
+                        src={comment.Users.avatar}
+                    />
                 </div>
 
                 {/* Right column */}
@@ -102,8 +107,12 @@ export default function CommentItem({ comment, article, level = 0, isLast }: Com
                     {replyingCommentId === comment.id && (
                         <div className={`relative pl-2 pb-2`}>
                             <LineCurve className={`absolute top-0 -left-[27px] h-[16px] w-[28px]`} />
-                            {comment.replyCount > 0 && !mutationCommentByParent?.data && <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />}
-                            {mutationCommentByParent?.data && mutationCommentByParent.data.items.length > 0 && <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />}
+                            {comment.replyCount > 0 && !mutationCommentByParent?.data && (
+                                <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />
+                            )}
+                            {mutationCommentByParent?.data && mutationCommentByParent.data.items.length > 0 && (
+                                <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />
+                            )}
                             {listComment.length > 0 && <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />}
                             <CommentInput article={article} commentParent={comment} setListComment={setListComment} />
                         </div>

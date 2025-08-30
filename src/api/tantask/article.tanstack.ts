@@ -11,6 +11,7 @@ import {
     upsertArticleDraftAction,
     upsertArticleEditAction,
 } from "@/api/actions/article.action";
+import { wait } from "@/helpers/function.helper";
 import { TCreateArticleReq, TDeleteArticleReq, TPublishArticleReq, TUpsertArticleDarftReq, TUpsertArticleEditReq } from "@/types/article.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -26,6 +27,7 @@ export const useGetAllArticle = (payload: any) => {
             if (status === "error" || data === null) throw new Error(message);
 
             // await wait(5000);
+
             console.log({ useGetAllArticle: data });
             return data;
         },

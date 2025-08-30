@@ -2,11 +2,11 @@
 
 import CommentInput from "@/components/comment/comment-input/comment-input";
 import CommentList from "@/components/comment/comment-list";
+import AvatartImageCustom from "@/components/custom/avatar-custom/avatart-custom";
 import ImageCustom from "@/components/custom/image-custom/ImageCustom";
 import Editor from "@/components/lexical/editor";
 import ProfileFollow from "@/components/profile/profile-follow/profile-follow";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
 import { useAutoArticleView } from "@/hooks/use-article-view";
@@ -19,10 +19,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ArticleFooter from "../article-footer/article-footer";
 import ArticleDetailAction from "./article-detail-action";
-import FacebookIcon from "./icon-social/facebook-icon";
-import InstagramIcon from "./icon-social/instagram-icon";
-import RedditIcon from "./icon-social/reddit-icon";
-import XIcon from "./icon-social/x-icon";
 
 type TProps = {
     dataDetailArticle: TResAction<TArticle | null>;
@@ -78,18 +74,16 @@ export default function ArticleDetail({ dataDetailArticle }: TProps) {
                                         <div className="text-3xl font-bold line-clamp-3 h-[110px]">{detailArticle.title}</div>
                                         <div className="flex items-center gap-2">
                                             <div className="flex flex-1 items-center gap-2 py-1.5 text-left text-sm">
-                                                <Avatar
+                                                <AvatartImageCustom
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         router.push(`/${detailArticle.Users.username}`);
                                                     }}
                                                     className="h-8 w-8 rounded-full cursor-pointer"
-                                                >
-                                                    <AvatarImage src={detailArticle.Users.avatar} alt={detailArticle.Users.name} />
-                                                    <AvatarFallback className="rounded-lg">
-                                                        {detailArticle.Users.name.slice(0, 2).toUpperCase()}
-                                                    </AvatarFallback>
-                                                </Avatar>
+                                                    name={detailArticle.Users.name}
+                                                    src={detailArticle.Users.avatar}
+                                                />
+
                                                 <div className="grid flex-1 text-left text-sm leading-tight">
                                                     <span
                                                         onClick={(e) => {

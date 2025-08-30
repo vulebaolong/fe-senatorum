@@ -8,6 +8,10 @@ export type TUser = {
    name: string;
    username: string;
    avatar?: string;
+   avatarDraft?: string;
+   banner?: string;
+   bannerDraft?: string;
+   bio?: string;
    roleId: string;
    Roles: TRole;
    isTotp: boolean;
@@ -21,6 +25,7 @@ export type TUploadAvatarLocalRes = {
 };
 
 export type TEditProfileReq = {
-   id: string;
    name: string;
+   username: string;
+   bio: string;
 };

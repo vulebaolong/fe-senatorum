@@ -62,7 +62,11 @@ export const ENDPOINT = {
     },
     USER: {
         USER: "/user",
+        USER_EDIT_PROFILE: "/user/edit-profile",
         UPLOAD_AVATAR: "/user/upload-avatar",
+        DELETE_AVATAR: "/user/delete-avatar",
+        UPLOAD_AVATAR_DRAFT: "/user/upload-avatar-draft",
+        DELETE_AVATAR_DRAFT: "/user/delete-avatar-draft",
     },
     CHAT_GROUP: {
         CHAT_GROUP: "/chat-group",
@@ -99,4 +103,7 @@ export const ENDPOINT = {
         COUNT_UNREAD_NOTIFICATION: "/notification/count-unread",
         READ_NOTIFICATION: "/notification/read",
     },
+    SETTING_SYSTEM: {
+        SETTING_SYSTEM: "/setting-system",
+    }
 };

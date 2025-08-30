@@ -177,8 +177,7 @@ export default function ChapterCreate({ dataChapterDaft }: TProps) {
                                                     // await api.delete(publicId)
                                                 }}
                                                 // tuỳ chọn giao diện
-                                                heightClassName="h-[300px]"
-                                                className="w-full"
+                                                className="w-full h-[300px]"
                                             />
                                         </FormControl>
 

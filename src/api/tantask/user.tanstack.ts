@@ -1,20 +1,74 @@
 import {
+    deleteAvatarAction,
+    deleteAvatarDraftAction,
     editProfileAction,
     findAllUserAction,
     getDetailUserAction,
     searchNameUserAction,
-    uploadAvatarCloudAction,
+    uploadAvatarAction,
+    uploadAvatarDraftAction,
 } from "@/api/actions/user.action";
+import { wait } from "@/helpers/function.helper";
 import { TEditProfileReq } from "@/types/user.type";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const useUploadAvatarCloud = () => {
+export const useUploadAvatar = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async () => {
+            const { data, status, message } = await uploadAvatarAction();
+            if (status === "error" || data === null) throw new Error(message);
+            console.log({ useUploadAvatar: data });
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["query-info"] });
+        },
+    });
+};
+
+export const useDeleteAvatar = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async () => {
+            const { data, status, message } = await deleteAvatarAction();
+            if (status === "error" || data === null) throw new Error(message);
+            console.log({ useDeleteAvatarDraft: data });
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["query-info"] });
+        },
+    });
+};
+
+export const useUploadAvatarDraft = () => {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (payload: FormData) => {
-            const { data, status, message } = await uploadAvatarCloudAction(payload);
+            const { data, status, message } = await uploadAvatarDraftAction(payload);
             if (status === "error" || data === null) throw new Error(message);
-            console.log({ useUploadAvatarCloud: data });
+            console.log({ useUploadAvatarDraft: data });
+            await wait(10000);
             return data;
+        },
+        onSuccess() {
+            queryClient.invalidateQueries({ queryKey: ["query-info"] });
+        },
+    });
+};
+
+export const useDeleteAvatarDraft = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async () => {
+            const { data, status, message } = await deleteAvatarDraftAction();
+            if (status === "error" || data === null) throw new Error(message);
+            console.log({ useDeleteAvatarDraft: data });
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["query-info"] });
         },
     });
 };
@@ -56,11 +110,13 @@ export const useDetailUser = (id: string) => {
 };
 
 export const useEditProfile = () => {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (payload: TEditProfileReq) => {
             const { data, status, message } = await editProfileAction(payload);
             if (status === "error" || data === null) throw new Error(message);
             console.log({ useEditProfile: data });
+            await queryClient.invalidateQueries({ queryKey: ["query-info"] });
             return data;
         },
     });

@@ -266,8 +266,9 @@ export default function ArticleCreate({ type, dataArticle, dataListTypeArticle, 
                                                             // await api.delete(publicId)
                                                         }}
                                                         // tuỳ chọn giao diện
-                                                        heightClassName="h-[300px]"
-                                                        className="w-full"
+                                                        className="w-full h-[300px]"
+                                                        title={`Add a featured image`}
+                                                        description={`Drag and drop an image, or click to browse`}
                                                     />
                                                 </FormControl>
                                                 <FormDescription className="text-xs italic">
@@ -301,11 +302,7 @@ export default function ArticleCreate({ type, dataArticle, dataListTypeArticle, 
 
                                     <div>
                                         {type === "create" && (
-                                            <ButtonLoading
-                                                loading={publishArticle.isPending}
-                                                type="submit"
-                                                className="w-[200px]"
-                                            >
+                                            <ButtonLoading loading={publishArticle.isPending} type="submit" className="w-[200px]">
                                                 Publish
                                             </ButtonLoading>
                                         )}

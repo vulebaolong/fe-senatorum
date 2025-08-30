@@ -1,6 +1,6 @@
+import AvatartImageCustom from "@/components/custom/avatar-custom/avatart-custom";
 import ImageCustom from "@/components/custom/image-custom/ImageCustom";
 import { OverflowBadges } from "@/components/overflow-badges/OverflowBadges";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { FALLBACK_IMAGE, NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
@@ -26,16 +26,15 @@ export default function ArticleItem({ article }: TProps) {
             {/* header */}
             <div className=" h-[40px] flex items-center justify-between px-5 ">
                 <div className="flex basis-[60%] items-center gap-1 min-w-0">
-                    <Avatar
-                        onClick={(e) => {
+                    <AvatartImageCustom
+                         onClick={(e) => {
                             e.stopPropagation();
                             router.push(`/${article.Users.username}`);
                         }}
                         className="h-8 w-8 rounded-full cursor-pointer"
-                    >
-                        <AvatarImage src={article.Users.avatar} alt={article.Users.name} />
-                        <AvatarFallback className="rounded-full text-sm">{article.Users.name.slice(0, 2).toUpperCase()}</AvatarFallback>
-                    </Avatar>
+                        name={article.Users.name}
+                        src={article.Users.avatar}
+                    />
                     <div className="flex flex-col min-w-0">
                         <p
                             onClick={(e) => {

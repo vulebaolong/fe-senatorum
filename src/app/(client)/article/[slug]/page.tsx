@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: TProps): Promise<Metadata> {
 
     if (!article) return {};
 
-    const url = `${NEXT_PUBLIC_BASE_DOMAIN_FE}/articles/${article.slug}`;
+    const url = `${NEXT_PUBLIC_BASE_DOMAIN_FE}/article/${article.slug}`;
     const title = article.title;
     const desc = article.title;
     const ogImage = article.thumbnail ? `${NEXT_PUBLIC_BASE_DOMAIN_FE}/${article.thumbnail}` : `${NEXT_PUBLIC_BASE_DOMAIN_FE}/og-default.jpg`;

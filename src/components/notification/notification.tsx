@@ -1,18 +1,19 @@
 import { useGetAllNotification, useReadNotification } from "@/api/tantask/notification.tanstack";
 import { formatLocalTime } from "@/helpers/function.helper";
 import { useFillSkeletons } from "@/hooks/fill-skeleton-article";
+import { cn } from "@/lib/utils";
 import { NotificationType } from "@/types/enum/notification.enum";
 import { TNotification } from "@/types/notification.type";
 import { useQueryClient } from "@tanstack/react-query";
 import { motion, Variants } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import AvatartImageCustom from "../custom/avatar-custom/avatart-custom";
 import { AppendLoading } from "../data-state/append-state/AppendState";
 import NodataOverlay from "../no-data/NodataOverlay";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 import { Tabs } from "../ui/tabs";
-import { cn } from "@/lib/utils";
 
 const rowV = { rest: {}, hover: {} };
 
@@ -43,6 +44,7 @@ const btnV: Variants = {
 };
 
 export default function Notification() {
+    const router = useRouter();
     const [page, setPage] = useState(1);
     const [notifications, setNotifications] = useState<TNotification[]>([]);
     const pageSize = 3;
@@ -132,7 +134,10 @@ export default function Notification() {
                                 return (
                                     <motion.div
                                         key={notification.id}
-                                        className={cn("group relative flex items-start gap-3 p-3", notification.isRead ? "bg-transparent" : "bg-muted")}
+                                        className={cn(
+                                            "group relative flex items-start gap-3 p-3",
+                                            notification.isRead ? "bg-transparent" : "bg-muted"
+                                        )}
                                         variants={rowV}
                                         initial="rest"
                                         animate="rest"
@@ -141,10 +146,15 @@ export default function Notification() {
                                         onFocus={(e) => ((e.currentTarget as any).dataset.fm = "hover")}
                                         onBlur={(e) => ((e.currentTarget as any).dataset.fm = "rest")}
                                     >
-                                        <Avatar className="h-8 w-8 rounded-full">
-                                            <AvatarImage src={notification.Users_Notifications_actorIdToUsers.avatar} alt="avatar" />
-                                            <AvatarFallback className="rounded-lg">{"vulebaolong".slice(0, 2).toUpperCase()}</AvatarFallback>
-                                        </Avatar>
+                                        <AvatartImageCustom
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                router.push(`/${notification.Users_Notifications_actorIdToUsers.username}`);
+                                            }}
+                                            className="h-8 w-8 rounded-full cursor-pointer"
+                                            name={notification.Users_Notifications_actorIdToUsers.name}
+                                            src={notification.Users_Notifications_actorIdToUsers.avatar}
+                                        />
                                         <div className="grid flex-1 text-left text-sm leading-tight">
                                             <span className="truncate text-md font-bold">
                                                 {notification.type === NotificationType.FOLLOW ? "New follower" : "New Article"}
