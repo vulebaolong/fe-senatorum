@@ -1,5 +1,5 @@
 import { VERSION } from "@/constant/app.constant";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/store";
 import { SET_OPEN_VERSION_UPDATE_DIALOG } from "@/redux/slices/setting.slice";
 import { useQuery } from "@tanstack/react-query";
 import { getVersion } from "../actions/setting-system.action";

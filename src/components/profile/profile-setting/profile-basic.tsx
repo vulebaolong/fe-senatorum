@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { resError } from "@/helpers/function.helper";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2Icon, Save, User } from "lucide-react";

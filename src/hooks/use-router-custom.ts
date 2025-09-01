@@ -1,4 +1,4 @@
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/store";
 import { SET_LOADING_PAGE } from "@/redux/slices/setting.slice";
 import { PrefetchOptions } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { usePathname, useRouter as useRouterNext } from "next/navigation";

@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/store";
 import AvatartImageCustom from "../custom/avatar-custom/avatart-custom";
 
 export default function NavUserInfo() {

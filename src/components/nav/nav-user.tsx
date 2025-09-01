@@ -13,7 +13,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import NavUserInfo from "./nav-user-info";
 

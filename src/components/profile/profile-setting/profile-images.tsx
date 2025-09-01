@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { checkPathImage, toUrl } from "@/helpers/function.helper";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/store";
 import { Camera, Loader2Icon, Save, Trash } from "lucide-react";
 import React from "react";
 

@@ -5,7 +5,7 @@ import { AppSidebar } from "@/components/nav/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { VERSION } from "@/constant/app.constant";
 import { useSocket } from "@/hooks/socket.hook";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/store";
 import { SET_OPEN_VERSION_UPDATE_DIALOG } from "@/redux/slices/setting.slice";
 import { TSocketRes } from "@/types/base.type";
 import { useEffect } from "react";

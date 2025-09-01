@@ -10,7 +10,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
 import { useAutoArticleView } from "@/hooks/use-article-view";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/store";
 import { TResAction } from "@/types/app.type";
 import { TArticle } from "@/types/article.type";
 import { TListComment } from "@/types/comment.type";

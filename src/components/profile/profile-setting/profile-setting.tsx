@@ -3,7 +3,7 @@
 import { useGetInfoQuery } from "@/api/tantask/auth.tanstack";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/store";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ProfileBasic from "./profile-basic";

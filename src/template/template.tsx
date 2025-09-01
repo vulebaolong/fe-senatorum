@@ -4,7 +4,7 @@ import { logout } from "@/api/core.api";
 import { useGetInfoMutation } from "@/api/tantask/auth.tanstack";
 import { useGetVersion } from "@/api/tantask/setting-system.tanstack";
 import { VersionUpdateDialog } from "@/components/version-update-dialog/version-update-dialog";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { SET_INFO } from "@/redux/slices/user.slice";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";

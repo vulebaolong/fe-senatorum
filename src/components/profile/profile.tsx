@@ -1,7 +1,7 @@
 "use client";
 
 import { ROUTER_CLIENT } from "@/constant/router.constant";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/store";
 import { TResAction } from "@/types/app.type";
 import { TUser } from "@/types/user.type";
 import { Pencil, Shield, User } from "lucide-react";

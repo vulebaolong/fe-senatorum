@@ -4,7 +4,7 @@ import { RefObject, useCallback } from "react";
 import Articlelist from "@/components/article/article-list/article-list";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/store";
 import { useHashScrollWithin } from "@/hooks/use-hash-scroll-within";
 import { useRouter } from "next/navigation";
 import { TUser } from "@/types/user.type";

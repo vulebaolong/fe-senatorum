@@ -3,7 +3,7 @@ import AvatartImageCustom from "@/components/custom/avatar-custom/avatart-custom
 import { Textarea } from "@/components/textarea/textarea";
 import { Button } from "@/components/ui/button";
 import { resError } from "@/helpers/function.helper";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/store";
 import { TArticle } from "@/types/article.type";
 import { TCreateCommentReq, TListComment } from "@/types/comment.type";
 import { ECommentStatus } from "@/types/enum/comment-status.enum";

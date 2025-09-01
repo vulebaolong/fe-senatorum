@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     output: `standalone`,
     reactStrictMode: false,
     images: {
-        domains: ["be-node.vulebaolong.com", "res.cloudinary.com"],
+        domains: ["be.senatorum.com", "res.cloudinary.com"],
         remotePatterns: [
             {
                 protocol: "http",
@@ -29,7 +29,7 @@ const nextConfig: NextConfig = {
             },
             {
                 protocol: "https",
-                hostname: "be-node.vulebaolong.com",
+                hostname: "be.senatorum.com",
                 pathname: "**",
             },
         ],

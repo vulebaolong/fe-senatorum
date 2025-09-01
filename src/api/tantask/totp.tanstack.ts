@@ -2,7 +2,7 @@ import { totpDisableAction, totpGenerateAction, totpSaveAction } from "@/api/act
 import { waitForCheckGA } from "@/components/provider/check-ga/CheckGAProvider";
 import { CLOSE_MODAL_CHECK_GA } from "@/constant/ga.constant";
 import { resError } from "@/helpers/function.helper";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/store";
 import { TPayloadTotpSave } from "@/types/totp.type";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";

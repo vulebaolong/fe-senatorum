@@ -9,7 +9,7 @@ import {
     verifyMagicLinkAction,
 } from "@/api/actions/auth.action";
 import { resError } from "@/helpers/function.helper";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/store";
 import { SET_INFO } from "@/redux/slices/user.slice";
 import {
     TLoginFormReq,

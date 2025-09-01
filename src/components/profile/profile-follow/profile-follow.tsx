@@ -1,6 +1,6 @@
 import { useFollow, useUnfollow } from "@/api/tantask/follow.action";
 import { Button } from "@/components/ui/button";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/store";
 import { TUser } from "@/types/user.type";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { AnimatePresence, motion } from "framer-motion";

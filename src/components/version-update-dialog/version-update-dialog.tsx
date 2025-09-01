@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { VERSION } from "@/constant/app.constant";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { SET_OPEN_VERSION_UPDATE_DIALOG } from "@/redux/slices/setting.slice";
 import { RotateCw } from "lucide-react";
 import * as React from "react";

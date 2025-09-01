@@ -1,6 +1,6 @@
 "use client";
 import { setAccessToken, setRefreshToken } from "@/helpers/cookies.helper";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/store";
 import { SET_EMAIL } from "@/redux/slices/ga.slice";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
