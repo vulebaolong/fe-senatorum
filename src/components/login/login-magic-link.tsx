@@ -26,11 +26,6 @@ const FormSchema = z.object({
 export function LoginMagicLink({ className, ...props }: React.ComponentProps<"div">) {
     const loginMagicLink = useLoginMagicLink();
     const router = useRouter();
-    const { setTheme } = useTheme();
-
-    useEffect(() => {
-        setTheme(`dark`);
-    }, []);
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -60,70 +55,79 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
 
     return (
         <>
-            <div className={cn("flex flex-col gap-6", className)} {...props}>
-                <div className="flex flex-col gap-6">
-                    <div className="flex flex-col items-center gap-5">
-                        <a href="#" className="flex flex-col items-center gap-5 font-medium">
-                            <Logo className="w-[60px] h-[60px]" />
-                            <span className="sr-only">Senatorum</span>
-                        </a>
-                        <h1 className="text-xl font-bold">Welcome to {TITLE}.</h1>
-                    </div>
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)}>
-                            <div className="grid gap-2">
-                                <FormField
-                                    control={form.control}
-                                    name="email"
-                                    render={({ field }) => (
-                                        <FormItem className="h-[75px] content-start gap-1">
-                                            <FormLabel className="mb-[3px]">Email</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="Email" {...field} />
-                                            </FormControl>
-                                            <FormMessage className="leading-none text-xs" />
-                                        </FormItem>
-                                    )}
-                                />
+            {/* Container hòa hợp với hình nền */}
+            <div className="relative z-10 w-full max-w-sm">
+                <div className="relative p-6 rounded-3xl bg-black/10 border border-white/20 shadow-lg">
+                    {/* Lớp gradient nhẹ để tăng độ tương phản cho text */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-black/10 rounded-xl pointer-events-none" />
 
-                                <ButtonLoading loading={loginMagicLink.isPending} type="submit" className="w-full">
-                                    Send Link
-                                </ButtonLoading>
+                    <div className={cn("relative flex flex-col gap-6", className)} {...props}>
+                        <div className="flex flex-col gap-6">
+                            <div className="flex flex-col items-center gap-5">
+                                <a href="#" className="flex flex-col items-center gap-5 font-medium">
+                                    <Logo className="w-[60px] h-[60px]" />
+                                    <span className="sr-only">Senatorum</span>
+                                </a>
+                                <h1 className="text-xl font-bold text-white ">Welcome to {TITLE}.</h1>
                             </div>
-                        </form>
-                    </Form>
-                    <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-                        <span className="relative z-10 px-2">Or</span>
-                    </div>
-                    <div className="grid gap-4 sm:grid-cols-1">
-                        {/* <LoginAppleButton /> */}
-                        <LoginGoogleButton />
-                    </div>
+                            <Form {...form}>
+                                <form onSubmit={form.handleSubmit(onSubmit)}>
+                                    <div className="grid gap-2">
+                                        <FormField
+                                            control={form.control}
+                                            name="email"
+                                            render={({ field }) => (
+                                                <FormItem className="dark h-[75px] content-start gap-1">
+                                                    <FormLabel className="text-white mb-[3px]">Email</FormLabel>
+                                                    <FormControl>
+                                                        <Input className="dark text-white" placeholder="Email" {...field} />
+                                                    </FormControl>
+                                                    <FormMessage className="leading-none text-xs" />
+                                                </FormItem>
+                                            )}
+                                        />
 
-                    {/* <div className="flex items-center justify-center">
+                                        <ButtonLoading loading={loginMagicLink.isPending} type="submit" className="dark">
+                                            Send Link
+                                        </ButtonLoading>
+                                    </div>
+                                </form>
+                            </Form>
+                            <div className="dark flex items-center opacity-70">
+                                <div className="bg-white h-[0.5px] flex-1 "></div>
+                                <span className="relative z-10 px-2 text-white">Or</span>
+                                <div className="bg-white h-[0.5px] flex-1 "></div>
+                            </div>
+                            <div className="dark">
+                                <LoginGoogleButton className="dark text-white/60" />
+                            </div>
+
+                            {/* <div className="flex items-center justify-center">
                         <ThemeToggleV2 />
                     </div> */}
-                </div>
-                <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-                    By clicking continue, you agree to our{" "}
-                    <p
-                        className="inline-block hover:underline cursor-pointer"
-                        onClick={() => {
-                            router.push(ROUTER_CLIENT.POLYCY.POLICY);
-                        }}
-                    >
-                        Terms of Service
-                    </p>{" "}
-                    and{" "}
-                    <p
-                        className="inline-block hover:underline cursor-pointer"
-                        onClick={() => {
-                            router.push(ROUTER_CLIENT.POLYCY.TERM);
-                        }}
-                    >
-                        Privacy Policy
-                    </p>
-                    .
+                        </div>
+                        <div className="text-white/60 *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+                            By clicking continue, you agree to our{" "}
+                            <p
+                                className="inline-block hover:underline cursor-pointer"
+                                onClick={() => {
+                                    router.push(ROUTER_CLIENT.POLYCY.POLICY);
+                                }}
+                            >
+                                Terms of Service
+                            </p>{" "}
+                            and{" "}
+                            <p
+                                className="inline-block hover:underline cursor-pointer"
+                                onClick={() => {
+                                    router.push(ROUTER_CLIENT.POLYCY.TERM);
+                                }}
+                            >
+                                Privacy Policy
+                            </p>
+                            .
+                        </div>
+                    </div>
                 </div>
             </div>
             <LoginGoogleOneTap />

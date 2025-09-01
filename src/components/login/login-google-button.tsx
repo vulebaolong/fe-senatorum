@@ -1,8 +1,13 @@
 import { NEXT_PUBLIC_BASE_DOMAIN_BE_API } from "@/constant/app.constant";
 import { useState } from "react";
 import { ButtonLoading } from "../ui/button-loading";
+import { cn } from "@/lib/utils";
 
-export default function LoginGoogleButton() {
+type TProps = {
+    className?: string;
+};
+
+export default function LoginGoogleButton({ className }: TProps) {
     const [loading, setLoading] = useState(false);
 
     return (
@@ -14,7 +19,7 @@ export default function LoginGoogleButton() {
             }}
             variant="outline"
             type="button"
-            className="w-full"
+            className={cn("w-full", className)}
         >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path
