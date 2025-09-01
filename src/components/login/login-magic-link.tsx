@@ -93,7 +93,7 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
                         </form>
                     </Form>
                     <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-                        <span className="text-muted-foreground relative z-10 px-2">Or</span>
+                        <span className="relative z-10 px-2">Or</span>
                     </div>
                     <div className="grid gap-4 sm:grid-cols-1">
                         {/* <LoginAppleButton /> */}
