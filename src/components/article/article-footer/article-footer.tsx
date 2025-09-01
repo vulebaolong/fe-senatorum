@@ -67,12 +67,12 @@ export default function ArticleFooter({ article }: TProps) {
             />
 
             <div className="flex  items-center gap-1 justify-center">
-                <Eye className="text-muted-foreground" size={12} />
+                <Eye className="text-muted-foreground" size={16} />
                 <p className="text-xs font-semibold text-muted-foreground">{formatCompactIntl(article.ArticleCounters?.viewCount || 0)}</p>
             </div>
 
             <div className="flex  items-center gap-1 justify-center">
-                <MessageCircle className="text-muted-foreground" size={12} />
+                <MessageCircle className="text-muted-foreground" size={16} />
                 <p className="text-xs font-semibold text-muted-foreground">{formatCompactIntl(article.ArticleCounters?.commentCount || 0)}</p>
             </div>
 

@@ -1,24 +1,23 @@
 "use client";
 
-import { GalleryVerticalEnd } from "lucide-react";
-
 import { useLoginMagicLink } from "@/api/tantask/auth.tanstack";
 import { Input } from "@/components/ui/input";
+import { TITLE } from "@/constant/app.constant";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { Logo } from "../logo/Logo";
 import ThemeToggleV2 from "../theme-toggle/theme-toggle-v2";
 import { ButtonLoading } from "../ui/button-loading";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import LoginAppleButton from "./login-apple-button";
 import LoginGoogleButton from "./login-google-button";
 import LoginGoogleOneTap from "./login-google-one-tap";
-import { TITLE } from "@/constant/app.constant";
-import { Logo } from "../logo/Logo";
-import { useRouter } from "next/navigation";
-import { ROUTER_CLIENT } from "@/constant/router.constant";
+import { useEffect } from "react";
+import { useTheme } from "next-themes";
 
 const FormSchema = z.object({
     email: z.email({ message: "Email không hợp lệ" }),
@@ -27,6 +26,11 @@ const FormSchema = z.object({
 export function LoginMagicLink({ className, ...props }: React.ComponentProps<"div">) {
     const loginMagicLink = useLoginMagicLink();
     const router = useRouter();
+    const { setTheme } = useTheme();
+
+    useEffect(() => {
+        setTheme(`dark`);
+    }, []);
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -59,11 +63,8 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
             <div className={cn("flex flex-col gap-6", className)} {...props}>
                 <div className="flex flex-col gap-6">
                     <div className="flex flex-col items-center gap-5">
-                        <a href="#" className="flex flex-col items-center gap-2 font-medium">
-                            <div className="flex size-8 items-center justify-center rounded-md">
-                                {/* <GalleryVerticalEnd className="size-6" /> */}
-                                <Logo className="w-[80px] h-[80px]" />
-                            </div>
+                        <a href="#" className="flex flex-col items-center gap-5 font-medium">
+                            <Logo className="w-[60px] h-[60px]" />
                             <span className="sr-only">Senatorum</span>
                         </a>
                         <h1 className="text-xl font-bold">Welcome to {TITLE}.</h1>
@@ -99,9 +100,9 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
                         <LoginGoogleButton />
                     </div>
 
-                    <div className="flex items-center justify-center">
+                    {/* <div className="flex items-center justify-center">
                         <ThemeToggleV2 />
-                    </div>
+                    </div> */}
                 </div>
                 <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
                     By clicking continue, you agree to our{" "}

@@ -51,6 +51,12 @@ export default function ArticleDetail({ dataDetailArticle }: TProps) {
                         <div>
                             <div className="mb-2 flex w-full items-center justify-between">
                                 <Badge variant="secondary">{detailArticle.Types.name}</Badge>
+                                {/* <div className="flex items-center gap-2 py-1 px-2 text-sm font-semibold bg-[#F4A261] rounded-full">
+                                    <div className="size-4">
+                                        <ImageCustom src="/images/types/analysis.png" alt="tag" />
+                                    </div>
+                                    <p className="text-black leading-1">{detailArticle.Types.name}</p>
+                                </div> */}
 
                                 {info?.id === detailArticle.Users.id && <ArticleDetailAction detailArticle={detailArticle} />}
                             </div>
