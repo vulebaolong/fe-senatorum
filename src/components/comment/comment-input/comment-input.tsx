@@ -52,9 +52,10 @@ export default function CommentInput({ article, setListComment, commentParent = 
             return [fakeData, ...prev];
         });
 
+        setValue("");
+
         createComment.mutate(payload, {
             onSuccess: (data) => {
-                setValue("");
                 setListComment((prev) => {
                     prev[0] = data;
                     return [...prev];
@@ -78,7 +79,7 @@ export default function CommentInput({ article, setListComment, commentParent = 
                         router.push(`/${info?.username}`);
                     }}
                     className="h-8 w-8 rounded-full cursor-pointer"
-                    name={article.Users.name}
+                    name={info?.name}
                     src={info?.avatar}
                 />
             </div>

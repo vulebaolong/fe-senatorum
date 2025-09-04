@@ -27,6 +27,7 @@ export const useGetCommentByArticle = (payload: any) => {
             console.log({ useGetCommentByArticle: data });
             return data;
         },
+        placeholderData: (prev) => prev, // giữ dữ liệu cũ trong lúc refetch
     });
 };
 

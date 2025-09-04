@@ -10,7 +10,7 @@ export type TComment = {
     content: string;
     level: number;
     replyCount: number;
-    parentId:  TComment["id"] | null;
+    parentId: TComment["id"] | null;
     articleId: TArticle["id"];
     userId: TUser["id"];
     Users: TUser;
@@ -48,4 +48,14 @@ export type TListComment = {
         isDeleted?: boolean;
     };
     children?: TListComment[];
+};
+
+export type TJoinRoomCommentReq = {
+    articleId: TArticle["id"];
+};
+
+export type TRoomCommentRes = {
+    authorIdComment: TUser["id"];
+    parentId: TComment["id"] | null;
+    level: number;
 };

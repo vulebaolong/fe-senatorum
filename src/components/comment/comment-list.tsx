@@ -1,11 +1,16 @@
 import { useGetCommentByArticle } from "@/api/tantask/comment.tanstack";
 import { TArticle } from "@/types/article.type";
-import { TListComment } from "@/types/comment.type";
+import { TComment, TJoinRoomCommentReq, TListComment, TRoomCommentRes } from "@/types/comment.type";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { AppendLoading } from "../data-state/append-state/AppendState";
 import NodataOverlay from "../no-data/NodataOverlay";
 import { Skeleton } from "../ui/skeleton";
 import CommentItem from "./comment-item/comment-item";
+import { TJoinRoomReq, TJoinRoomRes } from "@/types/chat.type";
+import { TSocketRes } from "@/types/base.type";
+import { useSocket } from "@/hooks/socket.hook";
+import { SOCKET_COMMENT } from "@/constant/comment.constant";
+import { useAppSelector } from "@/redux/store";
 
 type TProps = {
     article: TArticle;
@@ -16,6 +21,9 @@ type TProps = {
 export default function CommentList({ article, listComment, setListComment }: TProps) {
     const containerRef = useRef(null);
     const bottomTriggerRef = useRef(null);
+    const { socket } = useSocket();
+    const info = useAppSelector((state) => state.user.info);
+    // const [refreshCommentByParentId, setRefreshCommentByParentId] = useState<TComment["id"] | null>(null)
 
     const [pagination] = useState({ pageIndex: 0, pageSize: 10 });
     const [filtersValue] = useState({
@@ -34,6 +42,28 @@ export default function CommentList({ article, listComment, setListComment }: TP
             setListComment(getCommentByArticle.data?.items);
         }
     }, [getCommentByArticle.data?.items]);
+
+    useEffect(() => {
+        if (!socket || !info) return;
+        const payload: TJoinRoomCommentReq = { articleId: article.id };
+        socket?.emit(SOCKET_COMMENT.JOIN_ROOM_COMMENT, payload);
+
+        const handleNewComment = ({ data }: TSocketRes<TRoomCommentRes>) => {
+            console.log(data);
+            if(data.authorIdComment === info.id) return
+            if (data.parentId === null || data.level === 0) {
+                // Cách 1: refetch ngay, KHÔNG bật isLoading (chỉ isFetching = true)
+                getCommentByArticle.refetch();
+            } else {
+                // setRefreshCommentByParentId(data.parentId);
+            }
+        };
+        socket?.on(SOCKET_COMMENT.NEW_COMMENT, handleNewComment);
+
+        return () => {
+            socket?.off(SOCKET_COMMENT.NEW_COMMENT, handleNewComment);
+        };
+    }, [socket, info]);
 
     const handleEndReached = () => {
         // if (getAllArticle.isFetching || getAllArticle.isLoading || page >= totalPageRef.current) return;
@@ -59,7 +89,13 @@ export default function CommentList({ article, listComment, setListComment }: TP
                 >
                     {listComment.map((comment: TListComment, index) => {
                         return (
-                            <CommentItem key={comment.id} comment={comment} article={article} level={0} isLast={index === listComment.length - 1} />
+                            <CommentItem
+                                key={comment.id}
+                                comment={comment}
+                                article={article}
+                                level={comment.level ?? 0}
+                                isLast={index === listComment.length - 1}
+                            />
                         );
                     })}
                 </AppendLoading>
