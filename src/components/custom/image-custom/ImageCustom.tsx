@@ -59,11 +59,12 @@ export default function ImageCustom({
             {...props}
             alt={alt}
             src={src}
-            fill // dùng fill thay vì width=0 height=0
+            width={0}
+            height={0}
             sizes="100vw"
             priority={priority}
-            className={className + " object-cover"}
-            style={{ objectFit, display: "block", ...style }}
+            className={className}
+            style={{ width: "100%", height: "100%", objectFit, display: "block", ...style }}
             // Nếu hình lỗi -> dùng fallback
             onError={() => {
                 if (src !== fallbackSrc) setSrc(fallbackSrc);
