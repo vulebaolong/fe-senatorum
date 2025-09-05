@@ -19,7 +19,7 @@ export function Logo({ className, src = LOGO, ...props }: TProps) {
     };
 
     return (
-        <div onClick={handleClickLogo} className={cn("cursor-pointer w-[40px] h-[40px] aspect-[1/1]", className)} {...props}>
+        <div onClick={handleClickLogo} className={cn("cursor-pointer size-8 aspect-[1/1]", className)} {...props}>
             <Image
                 src={src}
                 width={0}

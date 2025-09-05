@@ -58,7 +58,7 @@ export default function ArticleDetail({ dataDetailArticle }: TProps) {
                             </div>
 
                             <div className="flex flex-col gap-10">
-                                <div className=" grid gap-5 [grid-template-columns:0.45fr_0.55fr]">
+                                <div className=" grid gap-5 [grid-template-columns:0.60fr_0.40fr]">
                                     <div className="w-full h-full border-sidebar-border border shadow-sm aspect-video overflow-hidden rounded-xl">
                                         <ImageCustom
                                             src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${detailArticle.thumbnail}`}
@@ -72,7 +72,7 @@ export default function ArticleDetail({ dataDetailArticle }: TProps) {
                                             items={detailArticle.ArticleCategories.map((it) => `#${it.Categories.name}`)}
                                             // moreLabel={(n) => `+${n}`}                // có thể tuỳ biến
                                         />
-                                        <div className="text-3xl font-bold line-clamp-3 h-[110px]">{detailArticle.title}</div>
+                                        <div className="text-2xl font-bold line-clamp-4">{detailArticle.title}</div>
                                         <div className="flex items-center gap-2">
                                             <div className="flex flex-1 items-center gap-2 py-1.5 text-left text-sm">
                                                 <AvatartImageCustom

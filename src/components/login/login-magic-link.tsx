@@ -6,18 +6,16 @@ import { TITLE } from "@/constant/app.constant";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Coffee, Link, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Logo } from "../logo/Logo";
-import ThemeToggleV2 from "../theme-toggle/theme-toggle-v2";
 import { ButtonLoading } from "../ui/button-loading";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import LoginGoogleButton from "./login-google-button";
 import LoginGoogleOneTap from "./login-google-one-tap";
-import { useEffect } from "react";
-import { useTheme } from "next-themes";
 
 const FormSchema = z.object({
     email: z.email({ message: "Email không hợp lệ" }),
@@ -68,7 +66,14 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
                                     <Logo className="w-[60px] h-[60px]" />
                                     <span className="sr-only">Senatorum</span>
                                 </a>
-                                <h1 className="text-xl font-bold text-white ">Welcome to {TITLE}.</h1>
+                                <div className="text-center space-y-1">
+                                    <h1 className="text-[42px] leading-none font-light tracking-wide text-white">
+                                        <span className="font-bold">{TITLE}</span>
+                                    </h1>
+                                    <p className="text-white/90 flex items-center justify-center gap-2 text-lg tracking-wider font-medium">
+                                        <Coffee className="size-4" />A place to gather!
+                                    </p>
+                                </div>
                             </div>
                             <Form {...form}>
                                 <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -78,9 +83,12 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
                                             name="email"
                                             render={({ field }) => (
                                                 <FormItem className="dark h-[75px] content-start gap-1">
-                                                    <FormLabel className="text-white mb-[3px]">Email</FormLabel>
+                                                    <FormLabel className="text-white mb-[3px] gap-1">
+                                                        <Mail className="size-3.5" />
+                                                        Email
+                                                    </FormLabel>
                                                     <FormControl>
-                                                        <Input className="dark text-white" placeholder="Email" {...field} />
+                                                        <Input className="dark text-white placeholder:text-white/80" placeholder="Email" {...field} />
                                                     </FormControl>
                                                     <FormMessage className="leading-none text-xs" />
                                                 </FormItem>
@@ -88,6 +96,7 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
                                         />
 
                                         <ButtonLoading loading={loginMagicLink.isPending} type="submit" className="dark">
+                                            <Link className="size-3.5" />
                                             Send Link
                                         </ButtonLoading>
                                     </div>
@@ -98,20 +107,16 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
                                 <span className="relative z-10 px-2 text-white">Or</span>
                                 <div className="bg-white h-[0.5px] flex-1 "></div>
                             </div>
-                            <div className="dark">
-                                <LoginGoogleButton className="dark text-white/60" />
+                            <div className="light">
+                                <LoginGoogleButton className="light text-black/60 !bg-white/90 hover:!bg-white/80 hover:!text-black/80" />
                             </div>
-
-                            {/* <div className="flex items-center justify-center">
-                        <ThemeToggleV2 />
-                    </div> */}
                         </div>
-                        <div className="text-white/60 *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+                        <div className="text-white/80 *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
                             By clicking continue, you agree to our{" "}
                             <p
                                 className="inline-block hover:underline cursor-pointer"
                                 onClick={() => {
-                                    router.push(ROUTER_CLIENT.POLYCY.POLICY);
+                                    router.push(ROUTER_CLIENT.POLYCY.TERM);
                                 }}
                             >
                                 Terms of Service
@@ -120,7 +125,7 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
                             <p
                                 className="inline-block hover:underline cursor-pointer"
                                 onClick={() => {
-                                    router.push(ROUTER_CLIENT.POLYCY.TERM);
+                                    router.push(ROUTER_CLIENT.POLYCY.POLICY);
                                 }}
                             >
                                 Privacy Policy
