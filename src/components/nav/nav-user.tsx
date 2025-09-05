@@ -53,7 +53,7 @@ export function NavUser() {
                         <DropdownMenuGroup>
                             <DropdownMenuItem
                                 onClick={() => {
-                                    if (info?.name) {
+                                    if (info?.username) {
                                         router.push(`/${info?.username}`);
                                     } else {
                                         console.log("info?.name is null");

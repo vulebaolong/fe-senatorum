@@ -20,6 +20,7 @@ import { useState } from "react";
 import ArticleFooter from "../article-footer/article-footer";
 import ArticleDetailAction from "./article-detail-action";
 import ArticleType from "../article-type/article-type";
+import { OverflowBadges } from "@/components/overflow-badges/OverflowBadges";
 
 type TProps = {
     dataDetailArticle: TResAction<TArticle | null>;
@@ -65,13 +66,12 @@ export default function ArticleDetail({ dataDetailArticle }: TProps) {
                                         />
                                     </div>
                                     <div className="w-full h-full flex flex-col gap-2 justify-between">
-                                        <div className="flex items-center gap-2">
-                                            {detailArticle.ArticleCategories.map((item, i) => (
-                                                <Badge variant="outline" key={i}>
-                                                    {item.Categories.name}
-                                                </Badge>
-                                            ))}
-                                        </div>
+                                        <OverflowBadges
+                                            className="h-[22px]" // giữ chiều cao 1 dòng nếu muốn
+                                            gapPx={4} // khớp với gap-1
+                                            items={detailArticle.ArticleCategories.map((it) => `#${it.Categories.name}`)}
+                                            // moreLabel={(n) => `+${n}`}                // có thể tuỳ biến
+                                        />
                                         <div className="text-3xl font-bold line-clamp-3 h-[110px]">{detailArticle.title}</div>
                                         <div className="flex items-center gap-2">
                                             <div className="flex flex-1 items-center gap-2 py-1.5 text-left text-sm">
