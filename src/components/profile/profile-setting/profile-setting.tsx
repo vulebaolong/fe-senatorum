@@ -7,7 +7,9 @@ import { useAppSelector } from "@/redux/store";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ProfileBasic from "./profile-basic";
-import ProfileImages from "./profile-images";
+import ProfileImages from "./profile-avatar";
+import ProfileAvatar from "./profile-avatar";
+import ProfileBanner from "./profile-banner";
 
 export default function ProfileSetting() {
     useGetInfoQuery();
@@ -39,8 +41,11 @@ export default function ProfileSetting() {
 
             {/* body */}
             <div className="flex flex-col gap-10 flex-1 p-5 overflow-y-auto">
+                {/*  Profile Banner */}
+                <ProfileBanner />
+
                 {/*  Profile Images */}
-                <ProfileImages />
+                <ProfileAvatar />
 
                 {/* Basic Information */}
                 <ProfileBasic />

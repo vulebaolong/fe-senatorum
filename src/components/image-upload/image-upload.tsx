@@ -10,12 +10,15 @@ type UploadFn = (file: File) => Promise<string>;
 
 export type ThumbnailUploadProps = {
     value?: string | null; // publicId hiện tại
-    onChange: (publicId: string) => void; // ghi vào form (vd: setValue)
-    toUrl: (publicId: string) => string; // convert publicId -> URL ảnh
-
-    // ==== tách upload ra ngoài ====
-    onUpload: UploadFn; // bạn truyền mutationAsync vào đây
     isUploading?: boolean; // (optional) điều khiển pending từ ngoài
+
+    // up lên server rồi mới show
+    onUploadToServer?: UploadFn; // mutationAsync vào đây
+    onSuccessToServer?: (publicId: string) => void; // ghi vào form (vd: setValue)
+
+    // chỉ show không up server
+    onUploadToLocal?: (file: File | null) => void; // chỉ show hình
+
     onUploadError?: (err: unknown) => void;
 
     // ==== optional ====
@@ -30,9 +33,9 @@ export type ThumbnailUploadProps = {
 
 export default function ImageUpload({
     value,
-    onChange,
-    toUrl,
-    onUpload,
+    onSuccessToServer,
+    onUploadToServer,
+    onUploadToLocal,
     isUploading,
     onUploadError,
     onDelete,
@@ -51,7 +54,7 @@ export default function ImageUpload({
     const pending = !!(isUploading ?? localPending);
     const locked = disabled || pending;
 
-    const displayUrl = tempUrl || (value ? toUrl(value) : null);
+    const displayUrl = tempUrl || value;
 
     // cleanup blob khi unmount / blob mới
     useEffect(() => {
@@ -62,7 +65,7 @@ export default function ImageUpload({
 
     useEffect(() => {
         // khi value rỗng -> clear blob preview
-        if (!value) {
+        if (!value && onUploadToServer) {
             if (tempUrl?.startsWith("blob:")) URL.revokeObjectURL(tempUrl);
             setTempUrl(null);
         }
@@ -77,6 +80,7 @@ export default function ImageUpload({
 
             // Tạo preview trước
             const url = URL.createObjectURL(file);
+            console.log({ url });
             setTempUrl((old) => {
                 if (old?.startsWith("blob:")) URL.revokeObjectURL(old);
                 return url;
@@ -85,19 +89,28 @@ export default function ImageUpload({
             // Nếu không truyền isUploading, tự quản lý pending cục bộ
             if (isUploading === undefined) setLocalPending(true);
 
-            try {
-                const publicId = await onUpload(file);
-                onChange(publicId);
-            } catch (err) {
-                // rollback preview
-                if (url?.startsWith("blob:")) URL.revokeObjectURL(url);
-                setTempUrl(null);
-                onUploadError?.(err);
-            } finally {
+            // Gửi hình lên server
+            if (onUploadToServer && onSuccessToServer) {
+                try {
+                    const publicId = await onUploadToServer(file);
+                    onSuccessToServer(publicId);
+                } catch (err) {
+                    // rollback preview
+                    if (url?.startsWith("blob:")) URL.revokeObjectURL(url);
+                    setTempUrl(null);
+                    onUploadError?.(err);
+                } finally {
+                    if (isUploading === undefined) setLocalPending(false);
+                }
+            }
+
+            // Chỉ show hình không up lên server
+            if (onUploadToLocal) {
+                onUploadToLocal(file);
                 if (isUploading === undefined) setLocalPending(false);
             }
         },
-        [locked, isUploading, onUpload, onChange, onUploadError]
+        [locked, isUploading, onUploadToServer, onSuccessToServer, onUploadError]
     );
 
     const onDeleteClick = async (e: React.MouseEvent) => {
@@ -106,7 +119,7 @@ export default function ImageUpload({
 
         if (tempUrl?.startsWith("blob:")) URL.revokeObjectURL(tempUrl);
         setTempUrl(null);
-        onChange(""); // xoá publicId khỏi form
+        onSuccessToServer?.(""); // xoá publicId khỏi form
 
         try {
             await onDelete?.();
@@ -157,9 +170,7 @@ export default function ImageUpload({
             <input ref={inputRef} type="file" accept={accept} className="hidden" onChange={(e) => handleFiles(e.target.files)} />
 
             {displayUrl ? (
-                <div className={
-                    cn(`w-full h-full`, variant === "round" ? "p-0" : "p-1")
-                }>
+                <div className={cn(`w-full h-full`, variant === "round" ? "p-0" : "p-1")}>
                     <div className="relative w-full h-full group">
                         <Image src={displayUrl} alt="Preview" fill className="object-cover rounded-xl" sizes="(max-width: 768px) 100vw, 50vw" />
                         {pending ? (

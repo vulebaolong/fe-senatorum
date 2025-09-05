@@ -13,6 +13,8 @@ import { Card, CardContent } from "../ui/card";
 import ProfileCount from "./profile-count/profile-count";
 import ProfileFollow from "./profile-follow/profile-follow";
 import ProfileTabs from "./profile-tabs/profile-tabs";
+import ImageCustom from "../custom/image-custom/ImageCustom";
+import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 
 type Props = {
     dataProfile: TResAction<TUser | null>;
@@ -51,8 +53,11 @@ export default function Profile({ dataProfile }: Props) {
                     <Card className="py-0">
                         <CardContent className="p-0">
                             {/* Cover Image */}
-                            <div className="h-48 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-t-lg relative">
-                                <div className="absolute inset-0 bg-black/20 rounded-t-lg"></div>
+                            <div className="aspect-[3/1] bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-t-lg overflow-hidden relative">
+                                {/* <div className="absolute inset-0 bg-black/20 rounded-t-lg"></div> */}
+                                {dataProfile?.data?.banner && (
+                                    <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${dataProfile.data.banner}`} alt="Banner" />
+                                )}
                             </div>
 
                             {/* Profile Info */}

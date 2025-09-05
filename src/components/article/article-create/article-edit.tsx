@@ -1,7 +1,6 @@
 "use client";
 
-import { usePublishArticle, useUpsertArticleDarft, useUpsertArticleEdit } from "@/api/tantask/article.tanstack";
-import { useUpsertThumbnail } from "@/api/tantask/image.tanstack";
+import { useArticleEdit } from "@/api/tantask/article.tanstack";
 import ImageUpload from "@/components/image-upload/image-upload";
 import { Button } from "@/components/ui/button";
 import { ButtonLoading } from "@/components/ui/button-loading";
@@ -11,19 +10,18 @@ import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
-import { formatLocalTime, resError } from "@/helpers/function.helper";
+import { resError } from "@/helpers/function.helper";
 import { cn } from "@/lib/utils";
 import { TResAction } from "@/types/app.type";
-import { TArticle, TPublishArticleReq } from "@/types/article.type";
+import { TArticle } from "@/types/article.type";
 import { TCategory } from "@/types/category.type";
 import { TType } from "@/types/type.type";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useDebouncedCallback } from "@mantine/hooks";
-import { $createParagraphNode, $getRoot, LexicalEditor } from "lexical";
-import { ArrowLeft, Loader2, Settings, Tag } from "lucide-react";
+import { LexicalEditor } from "lexical";
+import { ArrowLeft, Settings, Tag } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import Editor from "../../lexical/editor";
@@ -54,29 +52,24 @@ const FormSchema = z.object({
             message: "Content must not be empty.",
         }
     ),
-    thumbnail: z.string(),
+    thumbnail: z.union([z.string(), z.file()]).optional(),
 });
 
 type TProps = {
-    type: "create" | "edit";
     dataArticle: TResAction<TArticle | null>;
     dataListTypeArticle: TResAction<TType[] | null>;
     dataListCategoryArticle: TResAction<TCategory[] | null>;
 };
 
-export default function ArticleCreate({ type, dataArticle, dataListTypeArticle, dataListCategoryArticle }: TProps) {
+export default function ArticleEdit({ dataArticle, dataListTypeArticle, dataListCategoryArticle }: TProps) {
     const { data: article } = dataArticle;
     const { data: listTypeArticle } = dataListTypeArticle;
     const { data: listCategoryArticle } = dataListCategoryArticle;
 
-    const upsertArticleDarft = useUpsertArticleDarft();
-    const upsertArticleEdit = useUpsertArticleEdit();
-    const publishArticle = usePublishArticle();
-    const upsertThumbnail = useUpsertThumbnail();
+    const articleEdit = useArticleEdit();
     const editorRef = useRef<LexicalEditor | null>(null);
     const router = useRouter();
     const [settingsOpen, setSettingsOpen] = useState(true);
-    const firstRunRef = useRef(true);
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -89,90 +82,46 @@ export default function ArticleCreate({ type, dataArticle, dataListTypeArticle, 
         },
     });
 
-    const values = useWatch({ control: form.control });
-    const handleUpsert = useDebouncedCallback(
-        async (query: any) => {
-            if (firstRunRef.current) return (firstRunRef.current = false);
-
-            switch (type) {
-                case "create":
-                    console.log({ Debounce: query });
-                    upsertArticleDarft.mutate({
-                        title: query.title,
-                        content: query.content,
-                        thumbnail: query.thumbnail,
-                        typeId: query.typeId || undefined,
-                        categoryIds: query.categoryIds,
-                    });
-                    break;
-
-                case "edit":
-                    if (!article) return;
-
-                    upsertArticleEdit.mutate({
-                        id: article.id,
-                        title: query.title,
-                        content: query.content,
-                        thumbnail: query.thumbnail,
-                        typeId: query.typeId || undefined,
-                        categoryIds: query.categoryIds,
-                    });
-                    break;
-
-                default:
-                    break;
-            }
-        },
-        {
-            delay: 1000,
-            leading: false,
-            flushOnUnmount: true,
-        }
-    );
-    useEffect(() => {
-        handleUpsert(values);
-    }, [values]);
-
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        if (upsertArticleDarft.isPending) return;
+        if (articleEdit.isPending || !article) return;
 
-        const payload: TPublishArticleReq = {
-            title: data.title.trim(),
+        const formData = new FormData();
+
+        const values = form.getValues();
+        const dirty = form.formState.dirtyFields as any;
+
+        const push = (key: string, value: any) => {
+            if (value === undefined || value === null || !value) return;
+            if (Array.isArray(value)) {
+                value.forEach((item) => formData.append(key, String(item))); // mảng -> lặp key (Nest nhận string[])
+            } else {
+                formData.append(key, value);
+            }
         };
 
-        console.log({ payload, data });
+        if (dirty.title) push("title", values.title.trim);
+        if (dirty.content) push("content", values.content);
+        if (dirty.typeId) push("typeId", values.typeId);
+        if (dirty.categoryIds) push("categoryIds", values.categoryIds);
+        // if (values.thumbnail instanceof File) push("thumbnail", values.thumbnail);
+        if (dirty.thumbnail) push("thumbnail", values.thumbnail);
 
-        publishArticle.mutate(payload, {
-            onSuccess: () => {
-                form.reset({
-                    title: "",
-                    content: "",
-                    thumbnail: "",
-                    typeId: "",
-                    categoryIds: [],
-                });
-                console.log(form.getValues());
+        // console.log({ formData });
+        // console.log(`title`, formData.getAll(`title`));
+        // console.log(`content`, formData.getAll(`content`));
+        // console.log(`typeId`, formData.getAll(`typeId`));
+        // console.log(`categoryIds`, formData.getAll(`categoryIds`));
+        // console.log(`thumbnail`, formData.getAll(`thumbnail`));
 
-                editorRef.current?.update(() => {
-                    const root = $getRoot();
-                    root.clear();
-                    root.append($createParagraphNode());
-                });
-
-                toast.success("Publish Article successfully.");
-            },
-            onError: (error) => {
-                toast.error(resError(error, `Publish Article failed`));
-            },
-        });
+        articleEdit.mutate(
+            { id: article.id, formData: formData },
+            {
+                onError: (error) => {
+                    toast.error(resError(error, `Article edit failed`));
+                },
+            }
+        );
     }
-
-    const onUpload = async (file: File) => {
-        const fd = new FormData();
-        fd.append("thumbnail", file);
-        // mutation phải trả về publicId (string)
-        return await upsertThumbnail.mutateAsync(fd);
-    };
 
     return (
         <Form {...form}>
@@ -194,7 +143,7 @@ export default function ArticleCreate({ type, dataArticle, dataListTypeArticle, 
                                 Back to Articles
                             </Button>
                             <Separator orientation="vertical" className="!h-[20px]" />
-                            <p className="text-lg font-semibold">{type === "create" ? "Create Article" : "Edit Article"}</p>
+                            <p className="text-lg font-semibold">{"Edit Article"}</p>
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -245,39 +194,41 @@ export default function ArticleCreate({ type, dataArticle, dataListTypeArticle, 
                                     <FormField
                                         control={form.control}
                                         name="thumbnail"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormControl>
-                                                    <ImageUpload
-                                                        value={!field.value ? "" : `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${field.value}`} // publicId hiện tại
-                                                        onSuccessToServer={(id) => {
-                                                            // ghi về form
-                                                            field.onChange(id);
-                                                            field.onBlur(); // mark as touched (hữu ích cho validate)
-                                                        }}
-                                                        onUploadToServer={onUpload} // gọi tanstack bên ngoài
-                                                        isUploading={upsertThumbnail.isPending}
-                                                        onUploadError={(e) => {
-                                                            // tuỳ bạn: toast.error(...)
-                                                            console.error(e);
-                                                        }}
-                                                        onDelete={async () => {
-                                                            // nếu cần gọi API xoá file trên server, làm ở đây
-                                                            // await api.delete(publicId)
-                                                        }}
-                                                        // tuỳ chọn giao diện
-                                                        className="w-full h-[300px]"
-                                                        title={`Add a featured image`}
-                                                        description={`Drag and drop an image, or click to browse`}
-                                                    />
-                                                </FormControl>
-                                                <FormDescription className="text-xs italic">
-                                                    This image represents your article in listings and previews. Choose one that is clear and
-                                                    relevant.
-                                                </FormDescription>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
+                                        render={({ field }) => {
+                                            const previewUrl =
+                                                typeof field.value === "string" && field.value
+                                                    ? `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${field.value}`
+                                                    : undefined;
+                                            return (
+                                                <FormItem>
+                                                    <FormControl>
+                                                        <ImageUpload
+                                                            value={previewUrl}
+                                                            onUploadToLocal={(file: File | null) => {
+                                                                field.onBlur();
+                                                                field.onChange(file ?? "");
+                                                            }}
+                                                            onUploadError={(e) => {
+                                                                console.error(e);
+                                                            }}
+                                                            onDelete={async () => {
+                                                                field.onBlur();
+                                                                field.onChange("");
+                                                            }}
+                                                            // tuỳ chọn giao diện
+                                                            className="w-full h-[300px]"
+                                                            title={`Add a featured image`}
+                                                            description={`Drag and drop an image, or click to browse`}
+                                                        />
+                                                    </FormControl>
+                                                    <FormDescription className="text-xs italic">
+                                                        This image represents your article in listings and previews. Choose one that is clear and
+                                                        relevant.
+                                                    </FormDescription>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            );
+                                        }}
                                     />
 
                                     {/* content */}
@@ -301,24 +252,14 @@ export default function ArticleCreate({ type, dataArticle, dataListTypeArticle, 
                                     <Separator />
 
                                     <div>
-                                        {type === "create" && (
-                                            <ButtonLoading loading={publishArticle.isPending} type="submit" className="w-[200px]">
-                                                Publish
-                                            </ButtonLoading>
-                                        )}
-                                        <div className="flex items-center gap-2">
-                                            <p className="text-xs text-muted-foreground italic">Last updated:</p>
-                                            {upsertArticleDarft.isPending || upsertArticleEdit.isPending ? (
-                                                <Loader2 className="animate-spin w-4 h-4 text-muted-foreground" />
-                                            ) : (
-                                                <p className="text-xs text-muted-foreground italic">
-                                                    {formatLocalTime(
-                                                        upsertArticleDarft.data?.updatedAt || upsertArticleEdit.data?.updatedAt || article?.updatedAt,
-                                                        "ago"
-                                                    )}
-                                                </p>
-                                            )}
-                                        </div>
+                                        <ButtonLoading
+                                            disabled={articleEdit.isPending || !form.formState.isDirty}
+                                            loading={articleEdit.isPending}
+                                            type="submit"
+                                            className="w-[200px]"
+                                        >
+                                            Update
+                                        </ButtonLoading>
                                     </div>
                                 </div>
                             </div>

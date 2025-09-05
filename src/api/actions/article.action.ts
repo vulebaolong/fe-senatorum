@@ -7,6 +7,7 @@ import {
     TCreateArticleReq,
     TDeleteArticleReq,
     TPublishArticleReq,
+    TUpdateArticleReq,
     TUpsertArticleDarftReq,
     TUpsertArticleEditReq,
 } from "@/types/article.type";
@@ -133,9 +134,9 @@ export async function deleteArticleAction(payload: TDeleteArticleReq): Promise<T
     }
 }
 
-export async function articleUpdateAction(payload: any): Promise<TResAction<boolean | null>> {
+export async function articleEditAction(payload: TUpdateArticleReq): Promise<TResAction<boolean | null>> {
     try {
-        const result = await api.patch<TRes<boolean>>(ENDPOINT.ARTICLE.ARTICLE_UPDATE, payload);
+        const result = await api.patch<TRes<boolean>>(`${ENDPOINT.ARTICLE.ARTICLE_EDIT}/${payload.id}`, payload.formData);
         const { data } = result;
         return { status: "success", message: result.message, data: data };
     } catch (error: any) {

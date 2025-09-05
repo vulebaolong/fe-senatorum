@@ -58,3 +58,8 @@ export type TUpsertArticleEditReq = {
 export type TDeleteArticleReq = {
     id: TArticle["id"];
 };
+
+export type TUpdateArticleReq = {
+    id: TArticle["id"];
+    formData: FormData;
+};

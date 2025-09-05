@@ -3,12 +3,13 @@ import ImageUpload from "@/components/image-upload/image-upload";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 import { checkPathImage, toUrl } from "@/helpers/function.helper";
 import { useAppSelector } from "@/redux/store";
 import { Camera, Loader2Icon, Save, Trash } from "lucide-react";
 import React from "react";
 
-export default function ProfileImages() {
+export default function ProfileAvatar() {
     const info = useAppSelector((state) => state.user.info);
 
     const uploadAvatarDraft = useUploadAvatarDraft();
@@ -53,12 +54,11 @@ export default function ProfileImages() {
                             )}
                         </Avatar>
                         <ImageUpload
-                            value={info?.avatarDraft ?? ""} // publicId hiện tại
-                            onChange={(id) => {
+                            value={!info?.avatarDraft ? "" : `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${info.avatarDraft}`} // publicId hiện tại
+                            onSuccessToServer={(id) => {
                                 console.log({ onChange: id });
                             }}
-                            toUrl={toUrl}
-                            onUpload={onUpload} // gọi tanstack bên ngoài
+                            onUploadToServer={onUpload} // gọi tanstack bên ngoài
                             isUploading={uploadAvatarDraft.isPending || deleteAvatarDraft.isPending}
                             onUploadError={(e) => {
                                 console.error(e);
@@ -74,7 +74,14 @@ export default function ProfileImages() {
                         />
                     </div>
 
-                    <Button disabled={!!!info?.avatarDraft || uploadAvatar.isPending} type="button" onClick={onClickSave} variant="outline" size={"sm"} className="w-[80px]">
+                    <Button
+                        disabled={!!!info?.avatarDraft || uploadAvatar.isPending}
+                        type="button"
+                        onClick={onClickSave}
+                        variant="outline"
+                        size={"sm"}
+                        className="w-[80px]"
+                    >
                         {uploadAvatar.isPending ? <Loader2Icon className="animate-spin" /> : <Save />}
                         Save
                     </Button>

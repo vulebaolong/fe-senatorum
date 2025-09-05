@@ -1,7 +1,7 @@
 import { getDetailArticleAction } from "@/api/actions/article.action";
 import { getListCategoryArticleAction } from "@/api/actions/category.action";
 import { getListTypeArticleAction } from "@/api/actions/type.action";
-import ArticleCreate from "@/components/article/article-create/article-create";
+import ArticleEdit from "@/components/article/article-create/article-edit";
 
 type TProps = {
     params: Promise<{ slug: string }>;
@@ -17,8 +17,7 @@ export default async function Page({ params }: TProps) {
     ]);
 
     return (
-        <ArticleCreate
-            type="edit"
+        <ArticleEdit
             dataArticle={dataArticleDetail}
             dataListTypeArticle={dataListTypeArticle}
             dataListCategoryArticle={dataListCategoryArticle}

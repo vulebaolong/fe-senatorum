@@ -1,5 +1,5 @@
 import {
-    articleUpdateAction,
+    articleEditAction,
     createArticleAction,
     deleteArticleAction,
     getAllArticleAction,
@@ -12,7 +12,7 @@ import {
     upsertArticleDraftAction,
     upsertArticleEditAction
 } from "@/api/actions/article.action";
-import { TCreateArticleReq, TDeleteArticleReq, TPublishArticleReq, TUpsertArticleDarftReq, TUpsertArticleEditReq } from "@/types/article.type";
+import { TCreateArticleReq, TDeleteArticleReq, TPublishArticleReq, TUpdateArticleReq, TUpsertArticleDarftReq, TUpsertArticleEditReq } from "@/types/article.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useGetAllArticle = (payload: any) => {
@@ -189,10 +189,10 @@ export const useDeleteArticle = () => {
     });
 };
 
-export const useArticleUpdate = () => {
+export const useArticleEdit = () => {
     return useMutation({
-        mutationFn: async (payload: any) => {
-            const { data, status, message } = await articleUpdateAction(payload);
+        mutationFn: async (payload: TUpdateArticleReq) => {
+            const { data, status, message } = await articleEditAction(payload);
             if (status === "error" || data === null) throw new Error(message);
             console.log({ useUpsertArticleUpdate: data });
             return data;
