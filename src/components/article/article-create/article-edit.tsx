@@ -99,7 +99,7 @@ export default function ArticleEdit({ dataArticle, dataListTypeArticle, dataList
             }
         };
 
-        if (dirty.title) push("title", values.title.trim);
+        if (dirty.title) push("title", values.title.trim());
         if (dirty.content) push("content", values.content);
         if (dirty.typeId) push("typeId", values.typeId);
         if (dirty.categoryIds) push("categoryIds", values.categoryIds);

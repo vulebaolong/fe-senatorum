@@ -161,7 +161,7 @@ export const useUpsertArticleDarft = () => {
         mutationFn: async (payload: TUpsertArticleDarftReq) => {
             const { data, status, message } = await upsertArticleDraftAction(payload);
             if (status === "error" || data === null) throw new Error(message);
-            console.log({ useUpsertArticle: data });
+            console.log({ useUpsertArticleDarft: data });
             return data;
         },
     });
@@ -172,7 +172,7 @@ export const useUpsertArticleEdit = () => {
         mutationFn: async (payload: TUpsertArticleEditReq) => {
             const { data, status, message } = await upsertArticleEditAction(payload);
             if (status === "error" || data === null) throw new Error(message);
-            console.log({ useUpsertArticle: data });
+            console.log({ useUpsertArticleEdit: data });
             return data;
         },
     });
@@ -183,7 +183,7 @@ export const useDeleteArticle = () => {
         mutationFn: async (payload: TDeleteArticleReq) => {
             const { data, status, message } = await deleteArticleAction(payload);
             if (status === "error" || data === null) throw new Error(message);
-            console.log({ useCreateArticle: data });
+            console.log({ useDeleteArticle: data });
             return data;
         },
     });
@@ -194,7 +194,7 @@ export const useArticleEdit = () => {
         mutationFn: async (payload: TUpdateArticleReq) => {
             const { data, status, message } = await articleEditAction(payload);
             if (status === "error" || data === null) throw new Error(message);
-            console.log({ useUpsertArticleUpdate: data });
+            console.log({ useArticleEdit: data });
             return data;
         },
     });
