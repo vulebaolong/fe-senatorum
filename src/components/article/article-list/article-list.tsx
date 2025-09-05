@@ -77,10 +77,10 @@ export default function Articlelist({ filters, id, type }: TProps) {
                     onBottom={handleEndReached}
                     containerRef={containerRef}
                     footerLoadingComponent={Array.from({ length: skeletonCount }).map((_, i) => (
-                        <Skeleton key={i} className="h-[430px] w-full rounded-xl" />
+                        <Skeleton key={i} className="h-[443px] w-full rounded-xl" />
                     ))}
                     initialLoadingComponent={Array.from({ length: skeletonCount }).map((_, i) => (
-                        <Skeleton key={i} className="h-[430px] w-full rounded-xl" />
+                        <Skeleton key={i} className="h-[443px] w-full rounded-xl" />
                     ))}
                     noDataComponent={<NodataOverlay visible />}
                 >

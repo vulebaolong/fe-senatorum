@@ -8,7 +8,6 @@ import { formatLocalTime } from "@/helpers/function.helper";
 import { TArticle } from "@/types/article.type";
 import { useRouter } from "next/navigation";
 import ArticleFooter from "../article-footer/article-footer";
-import { cn } from "@/lib/utils";
 import ArticleType from "../article-type/article-type";
 
 type TProps = {
@@ -55,7 +54,7 @@ export default function ArticleItem({ article }: TProps) {
             </div>
 
             {/* title */}
-            <div className="leading-5 text-xl px-5 font-bold line-clamp-3 h-[60px]">{article.title}</div>
+            <div className="leading-6 text-xl px-5 font-bold line-clamp-3 h-[73px]">{article.title}</div>
 
             {/* category */}
             <div className="px-2">

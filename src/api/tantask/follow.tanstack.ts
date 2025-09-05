@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { followAction, getCountFollowAction, unfollowAction } from "../actions/follow.action";
+import { followAction, getCountFollowAction, getIsFollowingAction, unfollowAction } from "../actions/follow.action";
 import { TFollowReq } from "@/types/follow.type";
 import { TUser } from "@/types/user.type";
 
@@ -36,3 +36,17 @@ export const useGetCountFollow = (userId: TUser["id"]) => {
         },
     });
 };
+
+export const useGetIsFollowing = (followingId: TUser["id"]) => {
+    return useQuery({
+        queryKey: ["get-is-following", followingId],
+        queryFn: async () => {
+            const { data, status, message } = await getIsFollowingAction(followingId);
+            if (status === "error" || data === null) throw new Error(message);
+            console.log({ useGetCountFollow: data });
+            return data.following;
+        },
+    });
+};
+
+

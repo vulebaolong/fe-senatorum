@@ -1,4 +1,4 @@
-import { useGetCountFollow } from "@/api/tantask/follow.action";
+import { useGetCountFollow } from "@/api/tantask/follow.tanstack";
 import { TUser } from "@/types/user.type";
 
 type TProps = {

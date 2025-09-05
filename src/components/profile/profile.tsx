@@ -1,29 +1,30 @@
 "use client";
 
+import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
+import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
-import { TResAction } from "@/types/app.type";
 import { TUser } from "@/types/user.type";
-import { Pencil, Shield, User } from "lucide-react";
+import { Pencil, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
 import AvatartImageCustom from "../custom/avatar-custom/avatart-custom";
+import ImageCustom from "../custom/image-custom/ImageCustom";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import ProfileCount from "./profile-count/profile-count";
 import ProfileFollow from "./profile-follow/profile-follow";
 import ProfileTabs from "./profile-tabs/profile-tabs";
-import ImageCustom from "../custom/image-custom/ImageCustom";
-import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
-import { cn } from "@/lib/utils";
+import { checkPathImage } from "@/helpers/function.helper";
 
 type Props = {
-    dataProfile: TResAction<TUser | null>;
+    dataProfile: TUser;
+    isFollowing: boolean;
 };
 
-export default function Profile({ dataProfile }: Props) {
-    const bodyRef = useRef<HTMLDivElement>(null); // khung scroll
-    const tabsAnchorRef = useRef<HTMLDivElement>(null); // neo ở chỗ TabsList
+export default function Profile({ dataProfile, isFollowing }: Props) {
+    const bodyRef = useRef<HTMLDivElement>(null);
+    const tabsAnchorRef = useRef<HTMLDivElement>(null);
     const info = useAppSelector((state) => state.user.info);
     const router = useRouter();
 
@@ -57,23 +58,21 @@ export default function Profile({ dataProfile }: Props) {
                             <div
                                 className={cn(
                                     "aspect-[3/1]",
-                                    dataProfile?.data?.banner
+                                    dataProfile.banner
                                         ? ""
                                         : "bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-t-lg overflow-hidden relative"
                                 )}
                             >
                                 {/* <div className="absolute inset-0 bg-black/20 rounded-t-lg"></div> */}
-                                {dataProfile?.data?.banner && (
-                                    <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${dataProfile.data.banner}`} alt="Banner" />
-                                )}
+                                {dataProfile.banner && <ImageCustom src={checkPathImage(dataProfile.banner) || ""} alt="Banner" />}
                             </div>
 
                             {/* Profile Info */}
                             <div className="px-6 pb-6">
                                 <div className="flex flex-col sm:flex-row items-start sm:items-end gap-4 -mt-16 relative z-10">
                                     {/* Avatar */}
-                                    {dataProfile.data?.avatar ? (
-                                        <AvatartImageCustom name={dataProfile.data?.name} src={dataProfile.data?.avatar} />
+                                    {dataProfile.avatar ? (
+                                        <AvatartImageCustom name={dataProfile.name} src={dataProfile.avatar} />
                                     ) : (
                                         <div className="w-32 h-32 bg-white rounded-full border-4 border-white shadow-lg flex items-center justify-center">
                                             <User className="w-16 h-16 text-slate-400" />
@@ -82,12 +81,12 @@ export default function Profile({ dataProfile }: Props) {
 
                                     {/* Actions */}
                                     <div className="flex gap-2 sm:ml-auto">
-                                        <ProfileFollow user={dataProfile.data} />
+                                        <>{info?.id !== dataProfile.id && <ProfileFollow isFollowing={isFollowing} followingId={dataProfile.id} />}</>
 
                                         {/* <Button variant="outline" size="sm">
                                             <Settings className="w-4 h-4" />
                                         </Button> */}
-                                        {info?.id === dataProfile.data?.id && (
+                                        {info?.id === dataProfile.id && (
                                             <Button
                                                 onClick={() => {
                                                     router.push(ROUTER_CLIENT.SETTING_PROFILE);
@@ -104,11 +103,11 @@ export default function Profile({ dataProfile }: Props) {
                                 {/* User Details */}
                                 <div className="mt-4">
                                     <div className="flex items-center gap-2">
-                                        <h1 className="text-2xl font-bold">{dataProfile.data?.name}</h1>
+                                        <h1 className="text-2xl font-bold">{dataProfile.name}</h1>
                                         {/* <Shield className="w-5 h-5 text-blue-500" /> */}
                                     </div>
-                                    <p className="text-sm text-muted-foreground mt-1">@{dataProfile.data?.username}</p>
-                                    <p className="text-shadow-muted mt-3 max-w-2xl">{dataProfile.data?.bio}</p>
+                                    <p className="text-sm text-muted-foreground mt-1">@{dataProfile.username}</p>
+                                    <p className="text-shadow-muted mt-3 max-w-2xl">{dataProfile.bio}</p>
 
                                     {/* Meta Info */}
                                     {/* <div className="flex flex-wrap gap-4 mt-4 text-sm text-slate-600">
@@ -129,13 +128,13 @@ export default function Profile({ dataProfile }: Props) {
                                     </div> */}
 
                                     {/* Count */}
-                                    <ProfileCount profile={dataProfile.data} />
+                                    <ProfileCount profile={dataProfile} />
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
 
-                    <ProfileTabs bodyRef={bodyRef} profile={dataProfile.data} tabsAnchorRef={tabsAnchorRef} />
+                    <ProfileTabs bodyRef={bodyRef} profile={dataProfile} tabsAnchorRef={tabsAnchorRef} />
                 </div>
             </div>
         </div>

@@ -36,3 +36,14 @@ export async function getCountFollowAction(userId: TUser[`id`]): Promise<TResAct
         return { status: "error", message: error?.message, data: null };
     }
 }
+
+export async function getIsFollowingAction(followingId: TUser["id"]): Promise<TResAction<{following: boolean} | null>> {
+    try {
+        const result = await api.get<TRes<{following: boolean} | null>>(`${ENDPOINT.FOLLOW.GET_COUNT_FOLLOW}/${followingId}`);
+        const { data } = result;
+        console.log({ getIsFollowingAction: data });
+        return { status: "success", message: result.message, data: data };
+    } catch (error: any) {
+        return { status: "error", message: error?.message, data: null };
+    }
+}

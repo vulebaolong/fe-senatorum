@@ -5,146 +5,126 @@ import CommentList from "@/components/comment/comment-list";
 import AvatartImageCustom from "@/components/custom/avatar-custom/avatart-custom";
 import ImageCustom from "@/components/custom/image-custom/ImageCustom";
 import Editor from "@/components/lexical/editor";
+import { OverflowBadges } from "@/components/overflow-badges/OverflowBadges";
 import ProfileFollow from "@/components/profile/profile-follow/profile-follow";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
 import { useAutoArticleView } from "@/hooks/use-article-view";
 import { useAppSelector } from "@/redux/store";
-import { TResAction } from "@/types/app.type";
 import { TArticle } from "@/types/article.type";
 import { TListComment } from "@/types/comment.type";
-import { CircleX } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ArticleFooter from "../article-footer/article-footer";
-import ArticleDetailAction from "./article-detail-action";
 import ArticleType from "../article-type/article-type";
-import { OverflowBadges } from "@/components/overflow-badges/OverflowBadges";
+import ArticleDetailAction from "./article-detail-action";
+import RelatedSidebar from "@/components/related-sidebar/related-sidebar";
 
 type TProps = {
-    dataDetailArticle: TResAction<TArticle | null>;
+    article: TArticle;
+    isFollowing: boolean;
 };
 
-export default function ArticleDetail({ dataDetailArticle }: TProps) {
-    const { data: detailArticle } = dataDetailArticle;
+export default function ArticleDetail({ article, isFollowing }: TProps) {
     const info = useAppSelector((state) => state.user.info);
     const [listComment, setListComment] = useState<TListComment[]>([]);
     const router = useRouter();
-    dataDetailArticle.data?.id && useAutoArticleView(dataDetailArticle.data?.id, { delayMs: 3500 });
+    article.id && useAutoArticleView(article.id, { delayMs: 3500 });
 
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "Article",
-        headline: dataDetailArticle.data?.title,
-        image: dataDetailArticle.data?.thumbnail ? [`${NEXT_PUBLIC_BASE_DOMAIN_FE}/${dataDetailArticle.data?.thumbnail}`] : undefined,
-        datePublished: dataDetailArticle.data?.publishedAt,
-        dateModified: dataDetailArticle.data?.updatedAt,
-        author: dataDetailArticle.data?.Users?.username ? [{ "@type": "Person", name: dataDetailArticle.data?.Users.username }] : undefined,
-        mainEntityOfPage: `${NEXT_PUBLIC_BASE_DOMAIN_FE}/articles/${dataDetailArticle.data?.slug}`,
-        description: dataDetailArticle.data?.title,
+        headline: article.title,
+        image: article.thumbnail ? [`${NEXT_PUBLIC_BASE_DOMAIN_FE}/${article.thumbnail}`] : undefined,
+        datePublished: article.publishedAt,
+        dateModified: article.updatedAt,
+        author: article.Users?.username ? [{ "@type": "Person", name: article.Users.username }] : undefined,
+        mainEntityOfPage: `${NEXT_PUBLIC_BASE_DOMAIN_FE}/articles/${article.slug}`,
+        description: article.title,
     };
 
     return (
         <div className="h-[calc(100vh-var(--header-height))] overflow-y-scroll">
-            {detailArticle ? (
-                <article className="relative flex flex-col p-5">
-                    <div className="flex-1 grid gap-10 [grid-template-columns:0.75fr_0.25fr]">
-                        <div>
-                            <div className="mb-2 flex w-full items-center justify-between">
-                                <ArticleType type={detailArticle.Types} />
+            <article className="relative flex flex-col p-5">
+                <div className="flex-1 grid gap-5 [grid-template-columns:0.73fr_0.27fr]">
+                    <div className="min-w-0 w-full">
+                        <div className="mb-2 flex w-full items-center justify-between">
+                            <ArticleType type={article.Types} />
 
-                                {info?.id === detailArticle.Users.id && <ArticleDetailAction detailArticle={detailArticle} />}
-                            </div>
-
-                            <div className="flex flex-col gap-10">
-                                <div className=" grid gap-5 [grid-template-columns:0.60fr_0.40fr]">
-                                    <div className="w-full h-full border-sidebar-border border shadow-sm aspect-video overflow-hidden rounded-xl">
-                                        <ImageCustom
-                                            src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${detailArticle.thumbnail}`}
-                                            alt={detailArticle.slug}
-                                        />
-                                    </div>
-                                    <div className="w-full h-full flex flex-col gap-2 justify-between">
-                                        <OverflowBadges
-                                            className="h-[22px]" // giữ chiều cao 1 dòng nếu muốn
-                                            gapPx={4} // khớp với gap-1
-                                            items={detailArticle.ArticleCategories.map((it) => `#${it.Categories.name}`)}
-                                            // moreLabel={(n) => `+${n}`}                // có thể tuỳ biến
-                                        />
-                                        <div className="text-2xl font-bold line-clamp-4">{detailArticle.title}</div>
-                                        <div className="flex items-center gap-2">
-                                            <div className="flex flex-1 items-center gap-2 py-1.5 text-left text-sm">
-                                                <AvatartImageCustom
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        router.push(`/${detailArticle.Users.username}`);
-                                                    }}
-                                                    className="h-8 w-8 rounded-full cursor-pointer"
-                                                    name={detailArticle.Users.name}
-                                                    src={detailArticle.Users.avatar}
-                                                />
-
-                                                <div className="grid flex-1 text-left text-sm leading-tight">
-                                                    <span
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            router.push(`/${detailArticle.Users.username}`);
-                                                        }}
-                                                        className="truncate font-medium hover:underline cursor-pointer w-fit"
-                                                    >
-                                                        {detailArticle.Users.name}
-                                                    </span>
-                                                    <span className="truncate text-xs text-muted-foreground">{detailArticle.Users.email}</span>
-                                                </div>
-                                            </div>
-                                            <>{info?.id !== detailArticle.Users.id && <ProfileFollow user={detailArticle.Users} />}</>
-                                        </div>
-
-                                        <ArticleFooter article={detailArticle} />
-                                    </div>
-                                </div>
-
-                                <div className="">
-                                    <Editor isViewOnly initialContentJSON={detailArticle.content} />
-                                    <div className="py-5 px-2">
-                                        <CommentInput article={detailArticle} setListComment={setListComment} commentParent={null} />
-                                    </div>
-                                    <CommentList article={detailArticle} listComment={listComment} setListComment={setListComment} />
-                                </div>
-
-                                {/* <div className="">
-                                    <div className="grid gap-0 [grid-template-columns:50px_1fr]">
-                                        <div className="sticky top-0 self-start p-2 flex flex-col items-center justify-center border rounded-xl">
-                                            <FacebookIcon />
-                                            <XIcon />
-                                            <InstagramIcon />
-                                            <RedditIcon />
-                                        </div>
-                                        <div className="">
-                                            <Editor isViewOnly initialContentJSON={detailArticle.content} />
-                                            <div className="py-5 px-2">
-                                                <CommentInput article={detailArticle} setListComment={setListComment} commentParent={null} />
-                                            </div>
-                                            <CommentList article={detailArticle} listComment={listComment} setListComment={setListComment} />
-                                        </div>
-                                    </div>
-                                </div> */}
-                            </div>
+                            {info?.id === article.Users.id && <ArticleDetailAction detailArticle={article} />}
                         </div>
 
-                        <div className="sticky top-0 self-start h-fit"></div>
+                        <div className="flex flex-col gap-10">
+                            <div className="grid gap-5 [grid-template-columns:0.60fr_0.40fr]">
+                                <div className="min-w-0 w-full h-full border-sidebar-border border shadow-sm aspect-video overflow-hidden rounded-xl">
+                                    <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`} alt={article.slug} />
+                                </div>
+
+                                <div className="min-w-0 w-full h-full flex flex-col gap-2 justify-between">
+                                    <OverflowBadges
+                                        className="h-[22px]" // giữ chiều cao 1 dòng nếu muốn
+                                        gapPx={4} // khớp với gap-1
+                                        items={article.ArticleCategories.map((it) => `#${it.Categories.name}`)}
+                                        // moreLabel={(n) => `+${n}`}                // có thể tuỳ biến
+                                    />
+                                    <div className="text-2xl font-bold line-clamp-4 h-[128px]">{article.title}</div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="flex flex-1 items-center gap-2 py-1.5 text-left text-sm">
+                                            <AvatartImageCustom
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    router.push(`/${article.Users.username}`);
+                                                }}
+                                                className="h-8 w-8 rounded-full cursor-pointer"
+                                                name={article.Users.name}
+                                                src={article.Users.avatar}
+                                            />
+
+                                            <div className="grid flex-1 text-left text-sm leading-tight">
+                                                <span
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        router.push(`/${article.Users.username}`);
+                                                    }}
+                                                    className="truncate font-medium hover:underline cursor-pointer w-fit"
+                                                >
+                                                    {article.Users.name}
+                                                </span>
+                                                <span className="truncate text-xs text-muted-foreground">{article.Users.email}</span>
+                                            </div>
+                                        </div>
+                                        <>
+                                            {info?.id !== article.Users.id && (
+                                                <ProfileFollow isFollowing={isFollowing} followingId={article.Users.id} />
+                                            )}
+                                        </>
+                                    </div>
+
+                                    <ArticleFooter article={article} />
+                                </div>
+                            </div>
+
+                            <div className="">
+                                <Editor isViewOnly initialContentJSON={article.content} />
+                                <div className="py-5 px-2">
+                                    <CommentInput inputId="comment-input" article={article} setListComment={setListComment} commentParent={null} />
+                                </div>
+                                <CommentList article={article} listComment={listComment} setListComment={setListComment} />
+                            </div>
+                        </div>
                     </div>
-                    {/* JSON-LD Article */}
-                    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-                </article>
-            ) : (
-                <Alert variant="default">
-                    <CircleX color="red" />
-                    <AlertTitle>No article</AlertTitle>
-                    <AlertDescription>No article</AlertDescription>
-                </Alert>
-            )}
+
+                    <div className="min-w-0 w-full sticky top-0 self-start h-fit">
+                        {/* <RelatedSidebar
+                            currentId={article.id}
+                            header="Có thể bạn quan tâm"
+                            // loading={isLoadingSidebar} // khi bạn fetch thật
+                            // items={dataSidebar}        // dữ liệu thật
+                        /> */}
+                    </div>
+                </div>
+                {/* JSON-LD Article */}
+                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+            </article>
         </div>
     );
 }

@@ -5,6 +5,8 @@ import ButtonIcon from "@/components/custom/button-custom/button-icon";
 import IconArrowDown from "@/components/icon/icon-arrow-down";
 import IconArrowUp from "@/components/icon/icon-arrow-up";
 import AnimatedScore from "@/components/animated-score/AnimatedScore";
+import Counter from "@/components/counter/counter";
+import VoteCounter from "@/components/counter/vote-counter";
 
 type VoteValue = -1 | 0 | 1;
 
@@ -119,8 +121,14 @@ export default function ArticleVote({
                 <IconArrowUp className={cx("w-6 h-6 pointer-events-none", upActive && "text-emerald-600")} isUp={upActive} />
             </ButtonIcon>
 
-            {/* <p className="text-sm font-semibold min-w-[2ch] text-center tabular-nums">{score}</p> */}
-            <AnimatedScore value={score} className="text-sm font-semibold min-w-[2ch] text-center tabular-nums" />
+            <AnimatedScore
+                value={score}
+                className="text-sm font-semibold min-w-[2ch] text-center"
+                fontPx={14} // khớp text-sm
+                maxDigits={1} // khóa bề rộng 3 chữ số (000..999) trước khi compact
+                compact // hiển thị 1.2K, 3.4M...
+                compactDecimals={1}
+            />
 
             <ButtonIcon
                 variant="ghost"

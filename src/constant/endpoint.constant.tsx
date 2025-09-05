@@ -102,6 +102,7 @@ export const ENDPOINT = {
         FOLLOW: "/follow",
         UN_FOLLOW: "/follow",
         GET_COUNT_FOLLOW: "/follow/counts",
+        GET_IS_FOLLOW: "/follow/is-following",
     },
     NOTIFICATION: {
         NOTIFICATION: "/notification",

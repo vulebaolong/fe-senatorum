@@ -1,7 +1,7 @@
 import { useGetCommentByArticle } from "@/api/tantask/comment.tanstack";
 import { TArticle } from "@/types/article.type";
 import { TComment, TJoinRoomCommentReq, TListComment, TRoomCommentRes } from "@/types/comment.type";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from "react";
 import { AppendLoading } from "../data-state/append-state/AppendState";
 import NodataOverlay from "../no-data/NodataOverlay";
 import { Skeleton } from "../ui/skeleton";
@@ -11,6 +11,7 @@ import { TSocketRes } from "@/types/base.type";
 import { useSocket } from "@/hooks/socket.hook";
 import { SOCKET_COMMENT } from "@/constant/comment.constant";
 import { useAppSelector } from "@/redux/store";
+import NoCommentsOverlay from "../no-data/no-comments-overlay";
 
 type TProps = {
     article: TArticle;
@@ -23,7 +24,6 @@ export default function CommentList({ article, listComment, setListComment }: TP
     const bottomTriggerRef = useRef(null);
     const { socket } = useSocket();
     const info = useAppSelector((state) => state.user.info);
-    // const [refreshCommentByParentId, setRefreshCommentByParentId] = useState<TComment["id"] | null>(null)
 
     const [pagination] = useState({ pageIndex: 0, pageSize: 10 });
     const [filtersValue] = useState({
@@ -50,7 +50,7 @@ export default function CommentList({ article, listComment, setListComment }: TP
 
         const handleNewComment = ({ data }: TSocketRes<TRoomCommentRes>) => {
             console.log(data);
-            if(data.authorIdComment === info.id) return
+            if (data.authorIdComment === info.id) return;
             if (data.parentId === null || data.level === 0) {
                 // Cách 1: refetch ngay, KHÔNG bật isLoading (chỉ isFetching = true)
                 getCommentByArticle.refetch();
@@ -85,7 +85,15 @@ export default function CommentList({ article, listComment, setListComment }: TP
                     containerRef={containerRef}
                     footerLoadingComponent={<Skeleton className="min-h-[50px] h-full w-full rounded-xl" />}
                     initialLoadingComponent={<Skeleton className="h-[50px] w-full rounded-xl" />}
-                    noDataComponent={<NodataOverlay visible />}
+                    noDataComponent={
+                        <NoCommentsOverlay
+                            visible
+                            inputId={"comment-input"} // hoặc inputId="comment-input"
+                            title="Chưa có bình luận"
+                            subtitle="Hãy là người bình luận đầu tiên!"
+                            // onRequestFocus={() => { if (!isLoggedIn) openLoginModal(); }}
+                        />
+                    }
                 >
                     {listComment.map((comment: TListComment, index) => {
                         return (

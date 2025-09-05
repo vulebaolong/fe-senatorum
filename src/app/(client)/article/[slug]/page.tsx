@@ -1,6 +1,9 @@
 import { getDetailArticleAction } from "@/api/actions/article.action";
+import { getIsFollowingAction } from "@/api/actions/follow.action";
 import ArticleDetail from "@/components/article/article-detail/article-detail";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
+import { CircleX } from "lucide-react";
 
 import type { Metadata } from "next";
 
@@ -46,7 +49,23 @@ export async function generateMetadata({ params }: TProps): Promise<Metadata> {
 export default async function Page({ params }: TProps) {
     const { slug } = await params;
     const dataDetailArticle = await getDetailArticleAction(slug);
-    //   if (!article) return notFound();
+    let isFollowing: boolean | undefined = undefined;
+    if (dataDetailArticle.data?.Users?.id) {
+        const { data } = await getIsFollowingAction(dataDetailArticle.data.Users.id);
+        isFollowing = data?.following;
+    }
 
-    return <ArticleDetail dataDetailArticle={dataDetailArticle} />;
+    return (
+        <>
+            {dataDetailArticle.data && isFollowing !== undefined ? (
+                <ArticleDetail article={dataDetailArticle.data} isFollowing={isFollowing} />
+            ) : (
+                <Alert variant="default">
+                    <CircleX color="red" />
+                    <AlertTitle>No Article</AlertTitle>
+                    <AlertDescription>No Article</AlertDescription>
+                </Alert>
+            )}
+        </>
+    );
 }

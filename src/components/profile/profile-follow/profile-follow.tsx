@@ -1,6 +1,5 @@
-import { useFollow, useUnfollow } from "@/api/tantask/follow.action";
+import { useFollow, useUnfollow } from "@/api/tantask/follow.tanstack";
 import { Button } from "@/components/ui/button";
-import { useAppSelector } from "@/redux/store";
 import { TUser } from "@/types/user.type";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { AnimatePresence, motion } from "framer-motion";
@@ -8,33 +7,27 @@ import { UserCheck, UserPlus } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
 type TProps = {
-    user: TUser | null;
+    isFollowing: boolean;
+    followingId: TUser["id"];
     debounceMs?: number; // mặc định 300ms
 };
 
-export default function ProfileFollow({ user, debounceMs = 300 }: TProps) {
-    const info = useAppSelector((state) => state.user.info);
-
-    // initial theo data hiện có
-    const initial = (user?.Follows_Follows_followingIdToUsers || []).length > 0;
-
-    // UI state (optimistic)
-    const [isFollow, setIsFollow] = useState<boolean>(initial);
-
-    // Nếu User thay đổi (sang trang khác), sync lại initial & reset seq
+export default function ProfileFollow({ isFollowing, followingId, debounceMs = 300 }: TProps) {
     const seqRef = useRef(0);
+
+    // UI state (optimistic) — sync mỗi khi serverIsFollowing/target thay đổi
+    const [isFollow, setIsFollow] = useState<boolean>(!!isFollowing);
     useEffect(() => {
-        const nextInitial = (user?.Follows_Follows_followingIdToUsers || []).length > 0;
-        setIsFollow(nextInitial);
-        desiredRef.current = nextInitial;
-        seqRef.current = 0;
-    }, [user?.id]);
+        setIsFollow(!!isFollowing);
+        seqRef.current = 0; // reset chống race khi đổi profile
+        desiredRef.current = !!isFollowing;
+    }, [isFollowing]);
 
     const follow = useFollow();
     const unfollow = useUnfollow();
 
-    // Giữ "ý định cuối" của user (tránh stale khi debounce)
-    const desiredRef = useRef<boolean>(initial);
+    // giữ "ý định cuối" và chống race cho debounce
+    const desiredRef = useRef<boolean>(!!isFollowing);
     useEffect(() => {
         desiredRef.current = isFollow;
     }, [isFollow]);
@@ -42,22 +35,22 @@ export default function ProfileFollow({ user, debounceMs = 300 }: TProps) {
     // Debounce commit + chống race (chỉ chấp nhận kết quả mới nhất)
     const commit = useDebouncedCallback(
         async () => {
-            if (!user?.id) return;
-
             const desired = desiredRef.current;
             const seq = ++seqRef.current;
 
             try {
                 if (desired) {
-                    await follow.mutateAsync({ followingId: user.id });
+                    await follow.mutateAsync({ followingId });
                 } else {
-                    await unfollow.mutateAsync({ followingId: user.id });
+                    await unfollow.mutateAsync({ followingId });
                 }
 
                 // Nếu đã có commit mới hơn thì bỏ qua kết quả cũ
                 if (seq !== seqRef.current) return;
 
                 // (optional) toast.success(desired ? "Following" : "Unfollowed");
+                // đồng bộ cache để những nơi khác đọc được ngay
+                // queryClient.setQueryData<boolean>(["get-is-following", followingId], desired);
             } catch (e) {
                 // Nếu là commit cũ thì bỏ; còn mới nhất thì revert UI
                 if (seq !== seqRef.current) return;
@@ -77,8 +70,6 @@ export default function ProfileFollow({ user, debounceMs = 300 }: TProps) {
 
     const onClick = (e: React.MouseEvent) => {
         e.stopPropagation();
-        if (!user?.id || user.id === info?.id) return;
-
         // Toggle UI ngay (optimistic) + ghi ý định rồi để debounce commit
         setIsFollow((prev) => {
             const next = !prev;
@@ -91,12 +82,10 @@ export default function ProfileFollow({ user, debounceMs = 300 }: TProps) {
     // (optional) vô hiệu hóa khi có request đang bay
     const inFlight = follow.isPending || unfollow.isPending;
 
-    if (!user?.id || user.id === info?.id) return null;
-
     return (
         <Button
             onClick={onClick}
-            className="gap-2 w-[120px] transition-colors duration-200 ease-out relative overflow-hidden"
+            className="gap-2 w-[110px] transition-colors duration-200 ease-out relative overflow-hidden"
             size="sm"
             variant={isFollow ? "outline" : "default"}
             aria-pressed={isFollow}

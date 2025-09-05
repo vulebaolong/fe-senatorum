@@ -9,16 +9,17 @@ import { TCreateCommentReq, TListComment } from "@/types/comment.type";
 import { ECommentStatus } from "@/types/enum/comment-status.enum";
 import { SendHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, RefObject, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 
 type TProps = {
     article: TArticle;
     setListComment: Dispatch<SetStateAction<TListComment[]>>;
     commentParent?: TListComment | null;
+    inputId?: string;
 };
 
-export default function CommentInput({ article, setListComment, commentParent = null }: TProps) {
+export default function CommentInput({ inputId, article, setListComment, commentParent = null }: TProps) {
     const [value, setValue] = useState("");
     const info = useAppSelector((state) => state.user.info);
     const [isComposing, setIsComposing] = useState(false);
@@ -86,6 +87,7 @@ export default function CommentInput({ article, setListComment, commentParent = 
 
             {/* input */}
             <Textarea
+                id={inputId}
                 className="flex-1 rounded-2xl" // thay cho sx={{ flex: 1 }}
                 placeholder="Join the comments..."
                 minRows={1}
