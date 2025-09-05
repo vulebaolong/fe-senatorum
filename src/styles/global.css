@@ -164,3 +164,7 @@
         @apply bg-background text-foreground;
     }
 }
+
+body {
+  font-family: var(--font-quicksand), var(--font-geist-sans), system-ui, sans-serif;
+}

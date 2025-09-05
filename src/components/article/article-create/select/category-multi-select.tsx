@@ -29,14 +29,17 @@ export function CategoryMultiSelect({ value, onChange, listCategoryArticle }: Pr
 
     const selectedNames = (listCategoryArticle ?? [])
         .filter((c) => value.includes(c.id))
-        .map((c) => c.name)
+        .map((c) => `#${c.name}`)
         .join(", ");
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
-                <Button variant="outline" className="w-full justify-between font-normal">
-                    {value.length > 0 ? selectedNames : <p className="text-muted-foreground">Select up to 3 categories</p>}
+                <Button variant="outline" className="justify-between font-normal truncate">
+                    <span className="truncate">
+                        {value.length > 0 ? selectedNames : <p className="text-muted-foreground">Select up to 3 categories</p>}
+                    </span>
+
                     <ChevronDown className="size-4 opacity-50" />
                 </Button>
             </PopoverTrigger>
@@ -46,7 +49,7 @@ export function CategoryMultiSelect({ value, onChange, listCategoryArticle }: Pr
                     <CommandList className="relative min-h-10">
                         {listCategoryArticle?.map((item) => (
                             <CommandItem key={item.id} onSelect={() => toggleItem(item.id)} className="flex justify-between">
-                                <span>{item.name}</span>
+                                <span>#{item.name}</span>
                                 {isSelected(item.id) && <Check className="h-4 w-4" />}
                             </CommandItem>
                         ))}

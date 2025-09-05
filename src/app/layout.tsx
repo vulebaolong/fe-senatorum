@@ -3,13 +3,14 @@ import { NEXT_PUBLIC_BASE_DOMAIN_FE, TITLE } from "@/constant/app.constant";
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Comfortaa, Geist, Geist_Mono, Jura, Outfit, Petrona, Quicksand } from "next/font/google";
 import Script from "next/script";
 
 const DEFAULT_DESC = "Selected articles, tutorials and knowledge sharing.";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const quicksand = Quicksand({ variable: "--font-quicksand", subsets: ["vietnamese"] });
 
 export const metadata: Metadata = {
     metadataBase: new URL(NEXT_PUBLIC_BASE_DOMAIN_FE),
@@ -101,7 +102,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
     return (
         <html lang={locale} suppressHydrationWarning>
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}>
+            <body className={`${geistSans.variable} ${geistMono.variable} ${quicksand.variable} antialiased overflow-hidden`}>
                 <NextIntlClientProvider messages={messages}>
                     <Provider>{children}</Provider>
                 </NextIntlClientProvider>

@@ -13,7 +13,7 @@ export default function ArticleType({ type }: TProps) {
             <div className="size-3">
                 <ImageCustom src={`/images/article-type/${imageName}.webp`} alt={type.name} />
             </div>
-            <p className=" text-xs font-medium text-white truncate leading-none">{type.name}</p>
+            <p className=" text-xs text-back font-semibold truncate leading-none">{type.name}</p>
         </div>
     );
 }
