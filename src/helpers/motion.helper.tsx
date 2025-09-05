@@ -153,7 +153,7 @@ const waveVariants = {
 };
 
 export function TypingWaveText() {
-    const text = "Đang viết";
+    const text = "Writing...";
     return (
         <p className="text-muted-foreground px-2 inline-block">
             {text.split("").map((char, i) => (

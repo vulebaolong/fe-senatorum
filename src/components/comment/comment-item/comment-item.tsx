@@ -127,7 +127,7 @@ export default function CommentItem({ comment, article, level = 0, isLast }: Com
                                     {level < 2 && <ActionLink label="Trả lời" onClick={() => handleReplyComment(comment.id)} />}
                                 </div>
                             ) : (
-                                <div className="pl-2 text-xs italic text-muted-foreground">{typingText("Đang viết")}</div>
+                                <div className="pl-2 text-xs italic text-muted-foreground">{typingText("Writing")}</div>
                             )}
                         </div>
                     </div>

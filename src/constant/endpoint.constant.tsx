@@ -34,6 +34,7 @@ export const ENDPOINT = {
         ARTICLE_OTHER: "/article/other",
         ARTICLE_UPSERT_DRAFT: "/article/upsert-draft",
         ARTICLE_UPSERT_EDIT: "/article/upsert-edit",
+        ARTICLE_UPDATE: "/article/update",
         ARTICLE_GET_DRAFT: "/article/draft",
         ARTICLE_UPSERT_THUMBNAIL: "/article/upsert-thumbnail",
         ARTICLE_PUBLISH: "/article/publish",

@@ -8,6 +8,8 @@ import { formatLocalTime } from "@/helpers/function.helper";
 import { TArticle } from "@/types/article.type";
 import { useRouter } from "next/navigation";
 import ArticleFooter from "../article-footer/article-footer";
+import { cn } from "@/lib/utils";
+import ArticleType from "../article-type/article-type";
 
 type TProps = {
     article: TArticle;
@@ -27,7 +29,7 @@ export default function ArticleItem({ article }: TProps) {
             <div className=" h-[40px] flex items-center justify-between px-5 ">
                 <div className="flex basis-[60%] items-center gap-1 min-w-0">
                     <AvatartImageCustom
-                         onClick={(e) => {
+                        onClick={(e) => {
                             e.stopPropagation();
                             router.push(`/${article.Users.username}`);
                         }}
@@ -49,15 +51,7 @@ export default function ArticleItem({ article }: TProps) {
                     </div>
                 </div>
 
-                <div className="flex basis-[40%] items-center gap-1 h-full min-w-0 justify-end">
-                    <p className="rounded-md border px-2 py-0.5 text-xs font-medium focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90 block truncate">
-                        {article.Types.name}
-                    </p>
-
-                    {/* <Button variant="ghost" size="icon" className="size-6 ">
-                        <Ellipsis className="text-muted-foreground" style={{ width: `15px`, height: `15px` }} />
-                    </Button> */}
-                </div>
+               <ArticleType type={article.Types} />
             </div>
 
             {/* title */}

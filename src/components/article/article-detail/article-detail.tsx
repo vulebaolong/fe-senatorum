@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ArticleFooter from "../article-footer/article-footer";
 import ArticleDetailAction from "./article-detail-action";
+import ArticleType from "../article-type/article-type";
 
 type TProps = {
     dataDetailArticle: TResAction<TArticle | null>;
@@ -50,13 +51,7 @@ export default function ArticleDetail({ dataDetailArticle }: TProps) {
                     <div className="flex-1 grid gap-10 [grid-template-columns:0.75fr_0.25fr]">
                         <div>
                             <div className="mb-2 flex w-full items-center justify-between">
-                                <Badge variant="secondary">{detailArticle.Types.name}</Badge>
-                                {/* <div className="flex items-center gap-2 py-1 px-2 text-sm font-semibold bg-[#F4A261] rounded-full">
-                                    <div className="size-4">
-                                        <ImageCustom src="/images/types/analysis.png" alt="tag" />
-                                    </div>
-                                    <p className="text-black leading-1">{detailArticle.Types.name}</p>
-                                </div> */}
+                                <ArticleType type={detailArticle.Types} />
 
                                 {info?.id === detailArticle.Users.id && <ArticleDetailAction detailArticle={detailArticle} />}
                             </div>
