@@ -1,0 +1,7 @@
+.test-editor-banner {
+    background-color: rgb(238, 130, 238, 0.3);
+    margin: 8px 0;
+    padding: 8px;
+    border-left: 4px solid rgb(238, 130, 238, 1);
+    /* border-radius: 10px; */
+}

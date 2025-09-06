@@ -1,6 +1,7 @@
 "use client";
 import "../../styles/animation.css";
 import "../../styles/global.css";
+import "../../styles/editor.css";
 
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

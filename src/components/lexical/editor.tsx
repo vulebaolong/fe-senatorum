@@ -29,7 +29,7 @@ import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
 import { RefObject } from "react";
 import { ToolbarContext } from "./context/toolbar-context";
-import { ImageNode } from "./nodes/image-node";
+import { ImageNode } from "./nodes/ImageNode";
 import CodeHighlightPrismPlugin from "./plugin/code-highlight-prism-plugin";
 import EditorRefPlugin from "./plugin/editor-ref-plugin";
 import LoadEditorContentPlugin from "./plugin/load-editor-content-plugin";

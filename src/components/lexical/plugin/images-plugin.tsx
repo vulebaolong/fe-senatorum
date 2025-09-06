@@ -12,7 +12,7 @@ import { $createParagraphNode, $insertNodes, $isRootOrShadowRoot, COMMAND_PRIORI
 import { Image as LucideImage, Trash } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { $createImageNode, ImageNode, ImagePayload } from "../nodes/image-node";
+import { $createImageNode, ImageNode, ImagePayload } from "../nodes/ImageNode";
 
 export type InsertImagePayload = Readonly<ImagePayload>;
 
