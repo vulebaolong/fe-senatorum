@@ -18,6 +18,8 @@ import ArticleFooter from "../article-footer/article-footer";
 import ArticleType from "../article-type/article-type";
 import ArticleDetailAction from "./article-detail-action";
 import RelatedSidebar from "@/components/related-sidebar/related-sidebar";
+import { formatLocalTime } from "@/helpers/function.helper";
+import { Clock4 } from "lucide-react";
 
 type TProps = {
     article: TArticle;
@@ -60,13 +62,25 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                                 </div>
 
                                 <div className="min-w-0 w-full h-full flex flex-col gap-2 justify-between">
+                                    {/* categories */}
                                     <OverflowBadges
                                         className="h-[22px]" // giữ chiều cao 1 dòng nếu muốn
                                         gapPx={4} // khớp với gap-1
                                         items={article.ArticleCategories.map((it) => `#${it.Categories.name}`)}
                                         // moreLabel={(n) => `+${n}`}                // có thể tuỳ biến
                                     />
-                                    <div className="text-2xl font-bold line-clamp-4 h-[128px]">{article.title}</div>
+
+                                    {/* title */}
+                                    <div className="text-2xl font-bold line-clamp-4 h-[128px]">
+                                        {article.title}
+                                        <br />
+                                        <span className="flex items-center gap-1 text-muted-foreground text-xs font-medium">
+                                            <Clock4 size={12}/>
+                                            {formatLocalTime(article.createdAt)}
+                                        </span>
+                                    </div>
+
+                                    {/* author */}
                                     <div className="flex items-center gap-2">
                                         <div className="flex flex-1 items-center gap-2 py-1.5 text-left text-sm">
                                             <AvatartImageCustom
@@ -89,7 +103,7 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                                                 >
                                                     {article.Users.name}
                                                 </span>
-                                                <span className="truncate text-xs text-muted-foreground">{article.Users.username}</span>
+                                                <span className="truncate text-xs text-muted-foreground">@{article.Users.username}</span>
                                             </div>
                                         </div>
                                         <>
@@ -99,6 +113,7 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                                         </>
                                     </div>
 
+                                    {/* footer */}
                                     <ArticleFooter article={article} />
                                 </div>
                             </div>
