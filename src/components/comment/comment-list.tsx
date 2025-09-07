@@ -89,8 +89,8 @@ export default function CommentList({ article, listComment, setListComment }: TP
                         <NoCommentsOverlay
                             visible
                             inputId={"comment-input"} // hoặc inputId="comment-input"
-                            title="Chưa có bình luận"
-                            subtitle="Hãy là người bình luận đầu tiên!"
+                            title="No comments yet"
+                            subtitle="Be the first to comment!"
                             // onRequestFocus={() => { if (!isLoggedIn) openLoginModal(); }}
                         />
                     }

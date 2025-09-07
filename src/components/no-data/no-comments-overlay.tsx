@@ -24,8 +24,8 @@ export default function NoCommentsOverlay({
     inputRef,
     inputId,
     onRequestFocus,
-    title = "Chưa có bình luận",
-    subtitle = "Hãy là người bình luận đầu tiên!",
+    title = "No comments yet",
+    subtitle = "Be the first to comment!",
     className,
 }: NoCommentsOverlayProps) {
     const focusTarget = React.useCallback(() => {
@@ -92,7 +92,7 @@ export default function NoCommentsOverlay({
 
                             <div className="mt-4 flex items-center justify-center gap-2">
                                 <Button
-                                type="button"
+                                    type="button"
                                     size="sm"
                                     onClick={(e) => {
                                         e.preventDefault();
@@ -100,7 +100,7 @@ export default function NoCommentsOverlay({
                                         focusTarget();
                                     }}
                                 >
-                                    Viết bình luận đầu tiên
+                                    Write the first comment{" "}
                                 </Button>
                                 {/* <Button
                                     variant="ghost"

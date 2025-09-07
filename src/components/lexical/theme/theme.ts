@@ -16,13 +16,13 @@ export const theme: EditorThemeClasses = {
     },
     list: {
         nested: {
-            listitem: "editor-nested-listitem",
+            listitem: "editor-nested-list-item",
         },
         ol: "editor-list-ol",
         ul: "editor-list-ul",
-        listitem: "editor-listItem",
-        listitemChecked: "editor-listItemChecked",
-        listitemUnchecked: "editor-listItemUnchecked",
+        listitem: "editor-list-item",
+        listitemChecked: "editor-list-item-checked",
+        listitemUnchecked: "editor-list-item-unchecked",
     },
     hashtag: "editor-hashtag",
     image: "editor-image",

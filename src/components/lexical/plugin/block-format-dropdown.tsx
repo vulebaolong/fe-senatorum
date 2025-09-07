@@ -4,15 +4,13 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuShortcut,
-    DropdownMenuTrigger,
+    DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { $isCodeNode } from "@lexical/code";
 import { $isListNode } from "@lexical/list";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isHeadingNode } from "@lexical/rich-text";
 import { $getSelection, $isNodeSelection, $isRangeSelection } from "lexical";
-import { AudioLines } from "lucide-react";
 import { JSX, useEffect } from "react";
 import { blockTypeToBlockName, useToolbarState } from "../context/toolbar-context";
 import { $findTopLevelElement } from "./toolbar-plugin/toolbar-plugin";
@@ -95,47 +93,29 @@ export default function BlockFormatDropDown(): JSX.Element {
             <DropdownMenuContent className="w-56" align="start">
                 <DropdownMenuLabel>Formatting</DropdownMenuLabel>
 
-                <DropdownMenuItem onClick={() => formatParagraph(editor)}>
-                    Normal
-                    <DropdownMenuShortcut>{SHORTCUTS.NORMAL}</DropdownMenuShortcut>
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => formatParagraph(editor)}>Normal</DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => formatHeading(editor, toolbarState.blockType, "h1")}>
-                    Heading 1<DropdownMenuShortcut>{SHORTCUTS.HEADING1}</DropdownMenuShortcut>
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => formatHeading(editor, toolbarState.blockType, "h1")}>Heading 1</DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => formatHeading(editor, toolbarState.blockType, "h2")}>
-                    Heading 2<DropdownMenuShortcut>{SHORTCUTS.HEADING2}</DropdownMenuShortcut>
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => formatHeading(editor, toolbarState.blockType, "h2")}>Heading 2</DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => formatHeading(editor, toolbarState.blockType, "h3")}>
-                    Heading 3<DropdownMenuShortcut>{SHORTCUTS.HEADING3}</DropdownMenuShortcut>
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => formatHeading(editor, toolbarState.blockType, "h3")}>Heading 3</DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => formatNumberedList(editor, toolbarState.blockType)}>
-                    Numbered List
-                    <DropdownMenuShortcut>{SHORTCUTS.NUMBERED_LIST}</DropdownMenuShortcut>
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => formatHeading(editor, toolbarState.blockType, "h4")}>Heading 4</DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => formatBulletList(editor, toolbarState.blockType)}>
-                    Bullet List
-                    <DropdownMenuShortcut>{SHORTCUTS.BULLET_LIST}</DropdownMenuShortcut>
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => formatHeading(editor, toolbarState.blockType, "h5")}>Heading 5</DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => formatCheckList(editor, toolbarState.blockType)}>
-                    Check List
-                    <DropdownMenuShortcut>{SHORTCUTS.CHECK_LIST}</DropdownMenuShortcut>
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => formatHeading(editor, toolbarState.blockType, "h6")}>Heading 6</DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => formatQuote(editor, toolbarState.blockType)}>
-                    Quote
-                    <DropdownMenuShortcut>{SHORTCUTS.QUOTE}</DropdownMenuShortcut>
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => formatNumberedList(editor, toolbarState.blockType)}>Numbered List</DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => formatCode(editor, toolbarState.blockType)}>
-                    Code Block
-                    <DropdownMenuShortcut>{SHORTCUTS.CODE_BLOCK}</DropdownMenuShortcut>
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => formatBulletList(editor, toolbarState.blockType)}>Bullet List</DropdownMenuItem>
+
+                <DropdownMenuItem onClick={() => formatCheckList(editor, toolbarState.blockType)}>Check List</DropdownMenuItem>
+
+                <DropdownMenuItem onClick={() => formatQuote(editor, toolbarState.blockType)}>Quote</DropdownMenuItem>
+
+                <DropdownMenuItem onClick={() => formatCode(editor, toolbarState.blockType)}>Code Block</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );

@@ -36,6 +36,8 @@ import LoadEditorContentPlugin from "./plugin/load-editor-content-plugin";
 import ToolbarPlugin from "./plugin/toolbar-plugin/toolbar-plugin";
 import { parseAllowedColor, parseAllowedFontSize } from "./style-config";
 import { theme } from "./theme/theme";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
 
 const placeholder = "Enter some rich text...";
 
@@ -186,6 +188,8 @@ export default function Editor({ onChange, initialContentJSON, editorRef, isView
                         <OnChangePlugin onChange={onChangeEditor} />
                         <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
                         <CodeHighlightPrismPlugin />
+                        <ListPlugin hasStrictIndent={false} />
+                        <CheckListPlugin />
                     </div>
                 </div>
             </ToolbarContext>

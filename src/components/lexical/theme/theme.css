@@ -20,6 +20,9 @@
 }
 
 .editor-input {
+    --list-gutter: 1.5rem; /* cột nội dung list (áp dụng cho OL/UL) */
+    --check-size: 1.1rem; /* kích thước ô checkbox */
+
     min-height: 200px;
     resize: none;
     font-size: 15px;
@@ -166,7 +169,7 @@
 
 .editor-paragraph {
     margin: 0;
-    margin-bottom: 8px;
+    margin-bottom: 2px;
     position: relative;
 }
 
@@ -174,22 +177,71 @@
     margin-bottom: 0;
 }
 
+/* H1 */
 .editor-heading-h1 {
-    font-size: 24px;
-    font-weight: 400;
-    margin: 0;
-    margin-bottom: 12px;
+    font-size: 2rem; /* ~32px */
+    line-height: 1.2;
+    font-weight: 700;
+    margin: 1.2em 0 0.6em;
+    padding: 0;
+    letter-spacing: -0.01em;
+}
+
+/* H2 */
+.editor-heading-h2 {
+    font-size: 1.5rem; /* ~24px */
+    line-height: 1.25;
+    font-weight: 700;
+    margin: 1.2em 0 0.6em;
+    padding: 0;
+    letter-spacing: -0.005em;
+}
+
+/* H3 */
+.editor-heading-h3 {
+    font-size: 1.25rem; /* ~20px */
+    line-height: 1.3;
+    font-weight: 600;
+    margin: 1.2em 0 0.6em;
     padding: 0;
 }
 
-.editor-heading-h2 {
-    font-size: 15px;
-    color: rgb(101, 103, 107);
-    font-weight: 700;
-    margin: 0;
-    margin-top: 10px;
+/* H4 */
+.editor-heading-h4 {
+    font-size: 1.125rem; /* ~18px */
+    line-height: 1.35;
+    font-weight: 600;
+    margin: 1.2em 0 0.6em;
     padding: 0;
-    text-transform: uppercase;
+}
+
+/* H5 */
+.editor-heading-h5 {
+    font-size: 1rem; /* 16px */
+    line-height: 1.4;
+    font-weight: 600;
+    margin: 1.2em 0 0.6em;
+    padding: 0;
+}
+
+/* H6 */
+.editor-heading-h6 {
+    font-size: 0.875rem; /* ~14px */
+    line-height: 1.45;
+    font-weight: 600;
+    margin: 1.2em 0 0.6em;
+    padding: 0;
+    letter-spacing: 0.02em; /* h6 nhỏ → tăng tracking một chút */
+}
+
+/* Bỏ margin-top ở heading đầu tài liệu/khối editor để gọn hơn */
+.editor-input > .editor-heading-h1:first-child,
+.editor-input > .editor-heading-h2:first-child,
+.editor-input > .editor-heading-h3:first-child,
+.editor-input > .editor-heading-h4:first-child,
+.editor-input > .editor-heading-h5:first-child,
+.editor-input > .editor-heading-h6:first-child {
+    margin-top: 0;
 }
 
 .editor-quote {
@@ -203,24 +255,127 @@
     padding-left: 16px;
 }
 
+/* ==== BASE LISTS (áp dụng cho theme.list.ol/ul/listitem) ==== */
+/* OL (Numbered) */
 .editor-list-ol {
-    padding: 0;
-    margin: 0;
-    margin-left: 16px;
+    list-style: decimal;
+    padding-left: var(--list-gutter);
+    margin: 0.5em 0;
+    list-style-position: outside;
 }
-
+/* UL (Bulleted) */
 .editor-list-ul {
-    padding: 0;
-    margin: 0;
-    margin-left: 16px;
+    list-style: disc;
+    padding-left: var(--list-gutter);
+    margin: 0.5em 0;
+    list-style-position: outside;
+}
+/* Item chung cho cả OL/UL */
+.editor-list-item {
+    margin: 0.25em 0;
 }
 
-.editor-listitem {
-    margin: 8px 32px 8px 32px;
+/* ==== NESTED LEVELS (đổi loại marker & thụt đầu dòng đẹp hơn) ==== */
+/* Bulleted: disc → circle → square */
+.editor-list-ul .editor-list-ul {
+    list-style: circle;
+    margin: 0.25em 0;
+    padding-left: 1.25rem;
 }
-
-.editor-nested-listitem {
+.editor-list-ul .editor-list-ul .editor-list-ul {
+    list-style: square;
+}
+/* Numbered: decimal → lower-alpha → lower-roman */
+.editor-list-ol .editor-list-ol {
+    list-style: lower-alpha;
+    margin: 0.25em 0;
+    padding-left: 1.25rem;
+}
+.editor-list-ol .editor-list-ol .editor-list-ol {
+    list-style: lower-roman;
+}
+/* Tắt marker mặc định khi Lexical render nested list-item "ảo" */
+.editor-nested-list-item {
     list-style-type: none;
+}
+
+/* ==== CHECKLIST (đúng theo DOM: li[role="checkbox"]) ==== */
+.editor-input .editor-list-ul li[role="checkbox"] {
+    list-style-type: none; /* Ẩn bullet mặc định */
+    position: relative;
+    margin: 0.25em 0;
+    line-height: 1.6;
+}
+
+/* LTR: chừa chỗ trái cho ô */
+.editor-input .editor-list-ul li[role="checkbox"].ltr {
+    margin-left: calc(-1 * var(--list-gutter)); /* triệt tiêu UL padding */
+    padding-left: var(--list-gutter); /* cột chữ = như OL/UL */
+}
+.editor-input .editor-list-ul li[role="checkbox"].ltr::before {
+    left: 4px;
+}
+
+/* RTL: chừa chỗ phải cho ô */
+.editor-input .editor-list-ul li[role="checkbox"].rtl {
+    margin-left: calc(-1 * var(--list-gutter)); /* triệt tiêu UL padding */
+    padding-left: var(--list-gutter); /* cột chữ = như OL/UL */
+}
+.editor-input .editor-list-ul li[role="checkbox"].rtl::before {
+    right: 4px;
+}
+
+/* Ô checkbox */
+.editor-input .editor-list-ul li[role="checkbox"]::before {
+    content: "";
+    position: absolute;
+    top: 0.25em;
+    width: 1.1rem;
+    height: 1.1rem;
+    box-sizing: border-box;
+    border: 2px solid var(--check-border, #c7c9cf);
+    border-radius: 0.25rem;
+    background: var(--check-bg, #fff);
+}
+
+/* Trạng thái: UNCHECKED / CHECKED (theo theme listitemUnchecked/Checked) */
+.editor-list-item-unchecked {
+    color: inherit;
+    text-decoration: none;
+}
+
+.editor-list-item-checked {
+    color: var(--check-fg-checked, #6b7280);
+    /* text-decoration: line-through; */
+}
+
+.editor-input .editor-list-ul li[role="checkbox"].editor-list-item-checked::before {
+    background: var(--check-checked-bg, #2563eb);
+    border-color: var(--check-checked-bg, #2563eb);
+}
+
+/* Dấu tick */
+.editor-input .editor-list-ul li[role="checkbox"].editor-list-item-checked::after {
+    content: "";
+    position: absolute;
+    top: 0.60rem;
+    /* canh theo LTR/RTL */
+    left: 0.54rem;
+    width: 0.52rem;
+    height: 0.28rem;
+    border: 2px solid #fff;
+    border-top: 0;
+    border-right: 0;
+    transform: rotate(-45deg);
+}
+
+/* Checklist lồng nhau */
+.editor-input .editor-list-ul li[role="checkbox"] > .editor-list-ul {
+    margin: 0.25em 0 0.25em 1.25rem; /* LTR */
+    padding-left: 0; /* vì đã có padding ở li */
+}
+.editor-input .editor-list-ul li[role="checkbox"].rtl > .editor-list-ul {
+    margin: 0.25em 1.25rem 0.25em 0; /* RTL */
 }
 
 pre::-webkit-scrollbar {
@@ -498,264 +653,264 @@ i.justify-align {
 }
 
 span.editor-image {
-  cursor: default;
-  display: inline-block;
-  position: relative;
-  user-select: none;
+    cursor: default;
+    display: inline-block;
+    position: relative;
+    user-select: none;
 }
 
 .editor-image img {
-  max-width: 100%;
-  cursor: default;
+    max-width: 100%;
+    cursor: default;
 }
 
 .editor-image img.focused {
-  outline: 2px solid rgb(60, 132, 244);
-  user-select: none;
+    outline: 2px solid rgb(60, 132, 244);
+    user-select: none;
 }
 
 .editor-image img.focused.draggable {
-  cursor: grab;
+    cursor: grab;
 }
 
 .editor-image img.focused.draggable:active {
-  cursor: grabbing;
+    cursor: grabbing;
 }
 
 .editor-image .image-caption-container .tree-view-output {
-  margin: 0;
-  border-radius: 0;
+    margin: 0;
+    border-radius: 0;
 }
 
 .editor-image .image-caption-container {
-  display: block;
-  position: absolute;
-  bottom: 4px;
-  left: 0;
-  right: 0;
-  padding: 0;
-  margin: 0;
-  border-top: 1px solid #fff;
-  background-color: rgba(255, 255, 255, 0.9);
-  min-width: 100px;
-  color: #000;
-  overflow: hidden;
+    display: block;
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid #fff;
+    background-color: rgba(255, 255, 255, 0.9);
+    min-width: 100px;
+    color: #000;
+    overflow: hidden;
 }
 
 .editor-image .image-caption-button {
-  display: block;
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  right: 0;
-  width: 30%;
-  padding: 10px;
-  margin: 0 auto;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 5px;
-  background-color: rgba(0, 0, 0, 0.5);
-  min-width: 100px;
-  color: #fff;
-  cursor: pointer;
-  user-select: none;
+    display: block;
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    width: 30%;
+    padding: 10px;
+    margin: 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    min-width: 100px;
+    color: #fff;
+    cursor: pointer;
+    user-select: none;
 }
 
 .editor-image .image-caption-button:hover {
-  background-color: rgba(60, 132, 244, 0.5);
+    background-color: rgba(60, 132, 244, 0.5);
 }
 
 .editor-image .image-edit-button {
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-  background-image: url(/src/images/icons/pencil-fill.svg);
-  background-size: 16px;
-  background-position: center;
-  background-repeat: no-repeat;
-  width: 35px;
-  height: 35px;
-  vertical-align: -0.25em;
-  position: absolute;
-  right: 4px;
-  top: 4px;
-  cursor: pointer;
-  user-select: none;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    background-image: url(/src/images/icons/pencil-fill.svg);
+    background-size: 16px;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 35px;
+    height: 35px;
+    vertical-align: -0.25em;
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    cursor: pointer;
+    user-select: none;
 }
 
 .editor-image .image-edit-button:hover {
-  background-color: rgba(60, 132, 244, 0.1);
+    background-color: rgba(60, 132, 244, 0.1);
 }
 
 .editor-image .image-resizer {
-  display: block;
-  width: 7px;
-  height: 7px;
-  position: absolute;
-  background-color: rgb(60, 132, 244);
-  border: 1px solid #fff;
+    display: block;
+    width: 7px;
+    height: 7px;
+    position: absolute;
+    background-color: rgb(60, 132, 244);
+    border: 1px solid #fff;
 }
 
 .editor-image .image-resizer.image-resizer-n {
-  top: -6px;
-  left: 48%;
-  cursor: n-resize;
+    top: -6px;
+    left: 48%;
+    cursor: n-resize;
 }
 
 .editor-image .image-resizer.image-resizer-ne {
-  top: -6px;
-  right: -6px;
-  cursor: ne-resize;
+    top: -6px;
+    right: -6px;
+    cursor: ne-resize;
 }
 
 .editor-image .image-resizer.image-resizer-e {
-  bottom: 48%;
-  right: -6px;
-  cursor: e-resize;
+    bottom: 48%;
+    right: -6px;
+    cursor: e-resize;
 }
 
 .editor-image .image-resizer.image-resizer-se {
-  bottom: -2px;
-  right: -6px;
-  cursor: nwse-resize;
+    bottom: -2px;
+    right: -6px;
+    cursor: nwse-resize;
 }
 
 .editor-image .image-resizer.image-resizer-s {
-  bottom: -2px;
-  left: 48%;
-  cursor: s-resize;
+    bottom: -2px;
+    left: 48%;
+    cursor: s-resize;
 }
 
 .editor-image .image-resizer.image-resizer-sw {
-  bottom: -2px;
-  left: -6px;
-  cursor: sw-resize;
+    bottom: -2px;
+    left: -6px;
+    cursor: sw-resize;
 }
 
 .editor-image .image-resizer.image-resizer-w {
-  bottom: 48%;
-  left: -6px;
-  cursor: w-resize;
+    bottom: 48%;
+    left: -6px;
+    cursor: w-resize;
 }
 
 .editor-image .image-resizer.image-resizer-nw {
-  top: -6px;
-  left: -6px;
-  cursor: nw-resize;
+    top: -6px;
+    left: -6px;
+    cursor: nw-resize;
 }
 
 span.inline-editor-image {
-  cursor: default;
-  display: inline-block;
-  position: relative;
-  z-index: 1;
+    cursor: default;
+    display: inline-block;
+    position: relative;
+    z-index: 1;
 }
 
 .inline-editor-image img {
-  max-width: 100%;
-  cursor: default;
+    max-width: 100%;
+    cursor: default;
 }
 
 .inline-editor-image img.focused {
-  outline: 2px solid rgb(60, 132, 244);
+    outline: 2px solid rgb(60, 132, 244);
 }
 
 .inline-editor-image img.focused.draggable {
-  cursor: grab;
+    cursor: grab;
 }
 
 .inline-editor-image img.focused.draggable:active {
-  cursor: grabbing;
+    cursor: grabbing;
 }
 
 .inline-editor-image .image-caption-container .tree-view-output {
-  margin: 0;
-  border-radius: 0;
+    margin: 0;
+    border-radius: 0;
 }
 
 .inline-editor-image.position-full {
-  margin: 1em 0 1em 0;
+    margin: 1em 0 1em 0;
 }
 
 .inline-editor-image.position-left {
-  float: left;
-  width: 50%;
-  margin: 1em 1em 0 0;
+    float: left;
+    width: 50%;
+    margin: 1em 1em 0 0;
 }
 
 .inline-editor-image.position-right {
-  float: right;
-  width: 50%;
-  margin: 1em 0 0 1em;
+    float: right;
+    width: 50%;
+    margin: 1em 0 0 1em;
 }
 
 .inline-editor-image .image-edit-button {
-  display: block;
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  padding: 6px 8px;
-  margin: 0 auto;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 5px;
-  background-color: rgba(0, 0, 0, 0.5);
-  min-width: 60px;
-  color: #fff;
-  cursor: pointer;
-  user-select: none;
+    display: block;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 6px 8px;
+    margin: 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    min-width: 60px;
+    color: #fff;
+    cursor: pointer;
+    user-select: none;
 }
 
 .inline-editor-image .image-edit-button:hover {
-  background-color: rgba(60, 132, 244, 0.5);
+    background-color: rgba(60, 132, 244, 0.5);
 }
 
 .inline-editor-image .image-caption-container {
-  display: block;
-  background-color: #f4f4f4;
-  min-width: 100%;
-  color: #000;
-  overflow: hidden;
+    display: block;
+    background-color: #f4f4f4;
+    min-width: 100%;
+    color: #000;
+    overflow: hidden;
 }
 
 .emoji {
-  color: transparent;
-  caret-color: rgb(5, 5, 5);
-  background-size: 16px 16px;
-  background-position: center;
-  background-repeat: no-repeat;
-  vertical-align: middle;
-  margin: 0 -1px;
+    color: transparent;
+    caret-color: rgb(5, 5, 5);
+    background-size: 16px 16px;
+    background-position: center;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    margin: 0 -1px;
 }
 
 .emoji-inner {
-  padding: 0 0.15em;
+    padding: 0 0.15em;
 }
 
 .emoji-inner::selection {
-  color: transparent;
-  background-color: rgba(150, 150, 150, 0.4);
+    color: transparent;
+    background-color: rgba(150, 150, 150, 0.4);
 }
 
 .emoji-inner::moz-selection {
-  color: transparent;
-  background-color: rgba(150, 150, 150, 0.4);
+    color: transparent;
+    background-color: rgba(150, 150, 150, 0.4);
 }
 
 .emoji.happysmile {
-  background-image: url(../images/emoji/1F600.png);
+    background-image: url(../images/emoji/1F600.png);
 }
 
 .emoji.veryhappysmile {
-  background-image: url(../images/emoji/1F641.png);
+    background-image: url(../images/emoji/1F641.png);
 }
 
 .emoji.unhappysmile {
-  background-image: url(../images/emoji/1F642.png);
+    background-image: url(../images/emoji/1F642.png);
 }
 
 .emoji.heart {
-  background-image: url(../images/emoji/2764.png);
+    background-image: url(../images/emoji/2764.png);
 }
 
 .keyword {
-  color: rgb(241, 118, 94);
-  font-weight: bold;
+    color: rgb(241, 118, 94);
+    font-weight: bold;
 }

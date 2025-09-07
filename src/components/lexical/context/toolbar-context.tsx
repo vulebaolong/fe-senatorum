@@ -8,8 +8,8 @@ export const MAX_ALLOWED_FONT_SIZE = 72;
 export const DEFAULT_FONT_SIZE = 15;
 
 type rootTypeToRootName = {
-    root: "Root",
-    table: "Table",
+    root: "Root";
+    table: "Table";
 };
 
 export const blockTypeToBlockName = {
@@ -58,6 +58,7 @@ const INITIAL_TOOLBAR_STATE = {
     isCapitalize: false,
     rootType: "root" as keyof rootTypeToRootName,
     listStartNumber: null as number | null,
+    canFormat: true,
 };
 
 type ToolbarState = typeof INITIAL_TOOLBAR_STATE;
