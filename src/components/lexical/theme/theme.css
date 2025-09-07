@@ -305,6 +305,9 @@
     position: relative;
     margin: 0.25em 0;
     line-height: 1.6;
+
+    margin-left: calc(-1 * var(--list-gutter)); /* triệt tiêu UL padding */
+    padding-left: var(--list-gutter); /* cột chữ = như OL/UL */
 }
 
 /* LTR: chừa chỗ trái cho ô */
@@ -336,6 +339,7 @@
     border: 2px solid var(--check-border, #c7c9cf);
     border-radius: 0.25rem;
     background: var(--check-bg, #fff);
+    left: 4px;
 }
 
 /* Trạng thái: UNCHECKED / CHECKED (theo theme listitemUnchecked/Checked) */
@@ -358,7 +362,7 @@
 .editor-input .editor-list-ul li[role="checkbox"].editor-list-item-checked::after {
     content: "";
     position: absolute;
-    top: 0.60rem;
+    top: 0.6rem;
     /* canh theo LTR/RTL */
     left: 0.54rem;
     width: 0.52rem;

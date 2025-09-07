@@ -111,7 +111,7 @@ export default function BlockFormatDropDown(): JSX.Element {
 
                 <DropdownMenuItem onClick={() => formatBulletList(editor, toolbarState.blockType)}>Bullet List</DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => formatCheckList(editor, toolbarState.blockType)}>Check List</DropdownMenuItem>
+                {/* <DropdownMenuItem onClick={() => formatCheckList(editor, toolbarState.blockType)}>Check List</DropdownMenuItem> */}
 
                 <DropdownMenuItem onClick={() => formatQuote(editor, toolbarState.blockType)}>Quote</DropdownMenuItem>
 

@@ -89,7 +89,7 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                                                 >
                                                     {article.Users.name}
                                                 </span>
-                                                <span className="truncate text-xs text-muted-foreground">{article.Users.email}</span>
+                                                <span className="truncate text-xs text-muted-foreground">{article.Users.username}</span>
                                             </div>
                                         </div>
                                         <>

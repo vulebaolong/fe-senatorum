@@ -13,6 +13,7 @@ import NodataOverlay from "../no-data/NodataOverlay";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 import { cn } from "@/lib/utils";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
 
 const rowV = { rest: {}, hover: {} };
 
@@ -112,7 +113,10 @@ export default function NotiAll() {
                         return (
                             <motion.div
                                 key={notification.id}
-                                className={cn("group relative flex items-start gap-3 p-3", notification.isRead ? "bg-transparent" : "bg-muted")}
+                                className={cn(
+                                    "group relative flex items-start gap-3 p-3 cursor-pointer",
+                                    notification.isRead ? "bg-transparent" : "bg-muted"
+                                )}
                                 variants={rowV}
                                 initial="rest"
                                 animate="rest"
@@ -120,6 +124,16 @@ export default function NotiAll() {
                                 tabIndex={0}
                                 onFocus={(e) => ((e.currentTarget as any).dataset.fm = "hover")}
                                 onBlur={(e) => ((e.currentTarget as any).dataset.fm = "rest")}
+                                onClick={() => {
+                                    if (notification.type === NotificationType.FOLLOW && notification?.Users_Notifications_actorIdToUsers?.username) {
+                                        router.push(`/${notification?.Users_Notifications_actorIdToUsers?.username}`);
+                                        return;
+                                    }
+                                    if (notification.type === NotificationType.NEW_ARTICLE && notification?.Articles) {
+                                        router.push(`${ROUTER_CLIENT.ARTICLE}/${notification?.Articles?.slug}`);
+                                        return;
+                                    }
+                                }}
                             >
                                 <AvatartImageCustom
                                     onClick={(e) => {
@@ -135,7 +149,15 @@ export default function NotiAll() {
                                         {notification.type === NotificationType.FOLLOW ? "New follower" : "New Article"}
                                     </span>
                                     <span className="truncate text-sm font-medium">
-                                        {notification.Users_Notifications_actorIdToUsers.name}{" "}
+                                        <span
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                router.push(`/${notification.Users_Notifications_actorIdToUsers.username}`);
+                                            }}
+                                            className="text-muted-foreground hover:underline"
+                                        >
+                                            {notification.Users_Notifications_actorIdToUsers.name}
+                                        </span>{" "}
                                         {notification.type === NotificationType.FOLLOW ? "followed you" : "posted a new article"}
                                     </span>
                                     <span className="truncate text-xs text-muted-foreground">{formatLocalTime(notification.createdAt, "ago")}</span>

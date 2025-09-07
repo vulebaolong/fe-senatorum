@@ -13,4 +13,5 @@ export type TNotification = {
     isRead: boolean;
     readAt: string | null;
     Users_Notifications_actorIdToUsers: TUser;
+    Articles: TArticle | null;
 } & TBaseTimestamps;
