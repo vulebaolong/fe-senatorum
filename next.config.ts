@@ -1,3 +1,4 @@
+import { NEXT_PUBLIC_IS_PRODUCTION } from "@/constant/app.constant";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
@@ -5,6 +6,7 @@ const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
     output: `standalone`,
+    removeConsole: NEXT_PUBLIC_IS_PRODUCTION ? { exclude: ["error", "warn"] } : false,
     reactStrictMode: false,
     images: {
         domains: ["be.senatorum.com", "res.cloudinary.com"],

@@ -16,6 +16,9 @@ export type TUser = {
    Roles: TRole;
    isTotp: boolean;
    Follows_Follows_followingIdToUsers: TFollow[] | [];
+   maxCharacters: number;
+   maxImagesCount: number;
+   maxSizeImage: number;
 } & TBaseTimestamps;
 
 export type TUploadAvatarLocalRes = {

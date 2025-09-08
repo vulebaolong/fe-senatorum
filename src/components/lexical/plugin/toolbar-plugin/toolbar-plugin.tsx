@@ -6,7 +6,7 @@ import { useRef } from "react";
 import { blockTypeToBlockName, useToolbarState } from "../../context/toolbar-context";
 import BlockFormatDropDown from "../block-format-dropdown";
 import CodeHighlightPrismPlugin from "../code-highlight-prism-plugin";
-import ImagesPlugin from "../images-plugin";
+import ImagesPlugin from "../ImagesPlugin";
 import TextAlignPlugin from "../text-align-plungin";
 import TextFormatControls from "../text-format-plugin";
 import UndoRedoPlugin from "../undo-redo-plugin";
@@ -46,7 +46,7 @@ export default function ToolbarPlugin() {
         >
             <UndoRedoPlugin />
 
-            {toolbarState.blockType in blockTypeToBlockName &&  <BlockFormatDropDown />}
+            {toolbarState.blockType in blockTypeToBlockName && <BlockFormatDropDown />}
             <CodeHighlightPrismPlugin />
 
             <Separator orientation="vertical" className="h-[20px!important]" />
@@ -57,7 +57,7 @@ export default function ToolbarPlugin() {
 
             <TextAlignPlugin />
 
-            <ImagesPlugin />
+            {/* <ImagesPlugin /> */}
         </div>
     );
 }

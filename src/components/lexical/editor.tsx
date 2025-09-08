@@ -22,7 +22,9 @@ import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { ListItemNode, ListNode } from "@lexical/list";
 import { TRANSFORMERS } from "@lexical/markdown";
+import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
 import { HorizontalRuleNode } from "@lexical/react/LexicalHorizontalRuleNode";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
@@ -32,12 +34,11 @@ import { ToolbarContext } from "./context/toolbar-context";
 import { ImageNode } from "./nodes/ImageNode";
 import CodeHighlightPrismPlugin from "./plugin/code-highlight-prism-plugin";
 import EditorRefPlugin from "./plugin/editor-ref-plugin";
+import FooterMetaPlugin from "./plugin/footer-meta";
 import LoadEditorContentPlugin from "./plugin/load-editor-content-plugin";
 import ToolbarPlugin from "./plugin/toolbar-plugin/toolbar-plugin";
 import { parseAllowedColor, parseAllowedFontSize } from "./style-config";
 import { theme } from "./theme/theme";
-import { ListPlugin } from "@lexical/react/LexicalListPlugin";
-import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
 
 const placeholder = "Enter some rich text...";
 
@@ -181,6 +182,7 @@ export default function Editor({ onChange, initialContentJSON, editorRef, isView
                             }
                             ErrorBoundary={LexicalErrorBoundary}
                         />
+                        {!isViewOnly && <FooterMetaPlugin />}
                         <LoadEditorContentPlugin json={initialContentJSON} />
                         <HistoryPlugin />
                         <AutoFocusPlugin />
