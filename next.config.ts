@@ -6,7 +6,10 @@ const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
     output: `standalone`,
-    removeConsole: NEXT_PUBLIC_IS_PRODUCTION ? { exclude: ["error", "warn"] } : false,
+    compiler: {
+        // Xóa console.* ở production; giữ lại warn/error
+        removeConsole: NEXT_PUBLIC_IS_PRODUCTION ? { exclude: ["error", "warn"] } : false,
+    },
     reactStrictMode: false,
     images: {
         domains: ["be.senatorum.com", "res.cloudinary.com"],
