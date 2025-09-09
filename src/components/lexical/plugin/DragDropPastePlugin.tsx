@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
@@ -12,10 +14,10 @@ import { isMimeType, mediaFileReader } from "@lexical/utils";
 import { COMMAND_PRIORITY_LOW } from "lexical";
 import { useEffect } from "react";
 
+import { useAppSelector } from "@/redux/store";
 import { toast } from "sonner";
 import { useImageCount } from "../hooks/useImageCount";
 import { INSERT_IMAGE_COMMAND } from "./ImagesPlugin";
-import { useAppSelector } from "@/redux/store";
 
 export const ACCEPTABLE_IMAGE_TYPES = ["image/", "image/heic", "image/heif", "image/gif", "image/webp"];
 
@@ -61,6 +63,10 @@ export default function DragDropPaste(): null {
                         // chỗ này có thể gọi api up ảnh rồi gắn vào src
 
                         if (isMimeType(file, ACCEPTABLE_IMAGE_TYPES)) {
+                            console.log({
+                                altText: file.name,
+                                src: result,
+                            });
                             editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
                                 altText: file.name,
                                 src: result,

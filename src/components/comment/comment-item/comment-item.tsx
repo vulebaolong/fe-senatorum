@@ -90,7 +90,7 @@ export default function CommentItem({ comment, article, level = 0, isLast }: Com
                         }}
                         className="h-8 w-8 rounded-full cursor-pointer"
                         name={comment.Users?.name}
-                        src={comment.Users.avatar}
+                        src={comment.Users?.avatar}
                     />
                 </div>
 

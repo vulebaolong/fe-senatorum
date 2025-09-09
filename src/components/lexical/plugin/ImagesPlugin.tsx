@@ -79,7 +79,7 @@ export default function ImagesPlugin() {
 
     return (
         <>
-            <Dialog open={open} onOpenChange={setOpen}>
+            {/* <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
                     <Button type="button" aria-label="Image" variant="ghost" size="icon" className="size-8">
                         <LucideImage className="h-4 w-4" />
@@ -147,8 +147,8 @@ export default function ImagesPlugin() {
                         </ButtonLoading>
                     </DialogFooter>
                 </DialogContent>
-            </Dialog>
-            <input
+            </Dialog> */}
+            {/* <input
                 type="file"
                 ref={inputRef}
                 accept="image/*"
@@ -158,7 +158,7 @@ export default function ImagesPlugin() {
                     if (file) setFile(file);
                     e.target.value = "";
                 }}
-            />
+            /> */}
         </>
     );
 }

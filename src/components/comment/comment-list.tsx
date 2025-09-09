@@ -1,7 +1,7 @@
 import { useGetCommentByArticle } from "@/api/tantask/comment.tanstack";
 import { TArticle } from "@/types/article.type";
 import { TComment, TJoinRoomCommentReq, TListComment, TRoomCommentRes } from "@/types/comment.type";
-import { Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, Fragment, RefObject, SetStateAction, useEffect, useRef, useState } from "react";
 import { AppendLoading } from "../data-state/append-state/AppendState";
 import NodataOverlay from "../no-data/NodataOverlay";
 import { Skeleton } from "../ui/skeleton";
@@ -97,13 +97,15 @@ export default function CommentList({ article, listComment, setListComment }: TP
                 >
                     {listComment.map((comment: TListComment, index) => {
                         return (
-                            <CommentItem
-                                key={comment.id}
-                                comment={comment}
-                                article={article}
-                                level={comment.level ?? 0}
-                                isLast={index === listComment.length - 1}
-                            />
+                            <Fragment key={comment.id}>
+                                <CommentItem
+                                    key={comment.id}
+                                    comment={comment}
+                                    article={article}
+                                    level={comment.level ?? 0}
+                                    isLast={index === listComment.length - 1}
+                                />
+                            </Fragment>
                         );
                     })}
                 </AppendLoading>

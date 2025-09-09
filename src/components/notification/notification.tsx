@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { Tabs } from "../ui/tabs";
 import NotiAll from "./noti-all";
 import NotiUnread from "./noti-unread";
+import NotificationFeed from "./notification-feed";
 
 export default function Notification() {
     const [type, setType] = useState<"all" | "unread">("all");
@@ -13,7 +14,6 @@ export default function Notification() {
                 <div className="flex flex-col gap-5 bg-background rounded-t-xl shadow-xs border-b p-3">
                     <div className="flex items-baseline justify-between">
                         <h3 className="text-lg font-semibold leading-[1]">Notifications</h3>
-                        {/* <p className="text-sm text-muted-foreground leading-[1]">Mark all as read</p> */}
                     </div>
 
                     <div className="flex items-center justify-start gap-1">
@@ -26,7 +26,8 @@ export default function Notification() {
                     </div>
                 </div>
 
-                {type === "all" ? <NotiAll /> : <NotiUnread />}
+                {/* key=type để state trong feed reset đúng, cache query vẫn tách nhờ filters */}
+                <NotificationFeed key={type} mode={type} />
             </Tabs>
         </div>
     );

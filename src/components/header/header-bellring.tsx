@@ -22,7 +22,6 @@ export default function HeaderBellring() {
     const bellCtrls = useAnimationControls();
     const badgeCtrls = useAnimationControls();
 
-    // Rung chuông khi có sự kiện mới
     useEffect(() => {
         if (!socket) return;
 
@@ -30,33 +29,40 @@ export default function HeaderBellring() {
             // refresh số chưa đọc
             queryClient.invalidateQueries({ queryKey: ["count-unread-notification"] });
 
-            if (prefersReduced) return;
-            // rung chuông: keyframes xoay nhẹ
+            // tôn trọng reduced-motion nếu bạn muốn
+            if (!prefersReduced) {
+                void ringOnce(); // ← lần nào cũng có hiệu ứng
+            }
+        };
+
+        socket.on("new-noti", onIncoming);
+        return () => {
+            socket.off("new-noti", onIncoming);
+        };
+    }, [socket, queryClient, bellCtrls, badgeCtrls, prefersReduced]);
+
+    // helpers: rung chuông + pop badge mỗi lần gọi
+    const ringOnce = async () => {
+        // cắt animation đang chạy (nếu có) để lần sau luôn "ăn"
+        bellCtrls.stop();
+        badgeCtrls.stop();
+
+        // reset về giá trị gốc để keyframes luôn phát lại
+        bellCtrls.set({ rotate: 0 });
+        badgeCtrls.set({ scale: 1 });
+
+        // chạy song song
+        await Promise.all([
             bellCtrls.start({
                 rotate: [0, -15, 10, -6, 0],
                 transition: { duration: 0.8, ease: "easeInOut" },
-            });
-        };
-
-        socket.on("follow", onIncoming);
-        socket.on("new-article", onIncoming);
-        return () => {
-            // ❗ cleanup đúng: off, không phải on
-            socket.off("follow", onIncoming);
-            socket.off("new-article", onIncoming);
-        };
-    }, [socket, queryClient, bellCtrls, prefersReduced]);
-
-    // Pop badge khi số đổi
-    useEffect(() => {
-        if (prefersReduced) return;
-        if (unread > 0) {
+            }),
             badgeCtrls.start({
                 scale: [1, 1.5, 1],
                 transition: { duration: 0.5, times: [0, 0.45, 1], ease: ["easeOut", "easeIn"] },
-            });
-        }
-    }, [unread, badgeCtrls, prefersReduced]);
+            }),
+        ]);
+    };
 
     return (
         <Popover>

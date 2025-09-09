@@ -8,18 +8,17 @@ import Editor from "@/components/lexical/editor";
 import { OverflowBadges } from "@/components/overflow-badges/OverflowBadges";
 import ProfileFollow from "@/components/profile/profile-follow/profile-follow";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
+import { formatLocalTime } from "@/helpers/function.helper";
 import { useAutoArticleView } from "@/hooks/use-article-view";
 import { useAppSelector } from "@/redux/store";
 import { TArticle } from "@/types/article.type";
 import { TListComment } from "@/types/comment.type";
+import { Clock4 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ArticleFooter from "../article-footer/article-footer";
 import ArticleType from "../article-type/article-type";
 import ArticleDetailAction from "./article-detail-action";
-import RelatedSidebar from "@/components/related-sidebar/related-sidebar";
-import { formatLocalTime } from "@/helpers/function.helper";
-import { Clock4 } from "lucide-react";
 
 type TProps = {
     article: TArticle;
@@ -75,8 +74,8 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                                         {article.title}
                                         <br />
                                         <span className="flex items-center gap-1 text-muted-foreground text-xs font-medium">
-                                            <Clock4 size={12}/>
-                                            {formatLocalTime(article.createdAt)}
+                                            <Clock4 size={12} />
+                                            {formatLocalTime(article.publishedAt)}
                                         </span>
                                     </div>
 

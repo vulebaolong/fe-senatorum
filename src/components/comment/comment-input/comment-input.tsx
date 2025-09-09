@@ -34,6 +34,7 @@ export default function CommentInput({ inputId, article, setListComment, comment
             articleId: article.id,
             content: value,
             parentId: commentParent?.id || null,
+            authorArticleId: article.Users.id,
         };
 
         const fakeId = Date.now().toString();

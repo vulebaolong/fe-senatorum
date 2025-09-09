@@ -20,6 +20,7 @@ export type TCreateCommentReq = {
     articleId: TArticle["id"];
     content: string;
     parentId: TComment["id"] | null;
+    authorArticleId: TUser["id"];
 };
 
 export type TListComment = {

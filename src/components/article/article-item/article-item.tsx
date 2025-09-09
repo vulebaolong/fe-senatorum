@@ -46,7 +46,7 @@ export default function ArticleItem({ article }: TProps) {
                         >
                             {article.Users.name}
                         </p>
-                        <p className="text-xs text-muted-foreground">{formatLocalTime(article.createdAt, `ago`)}</p>
+                        <p className="text-xs text-muted-foreground">{formatLocalTime(article.publishedAt, `ago`)}</p>
                     </div>
                 </div>
 

@@ -77,7 +77,6 @@ export async function getDraftArticleAction(): Promise<TResAction<TArticle | nul
     try {
         const result = await api.get<TRes<TArticle | null>>(`${ENDPOINT.ARTICLE.ARTICLE_GET_DRAFT}`);
         const { data } = result;
-        console.log({ getDraftArticleAction: data });
         return { status: "success", message: result.message, data: data };
     } catch (error: any) {
         return { status: "error", message: error?.message, data: null };

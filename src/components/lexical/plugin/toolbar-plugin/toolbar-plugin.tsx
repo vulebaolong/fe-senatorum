@@ -57,7 +57,7 @@ export default function ToolbarPlugin() {
 
             <TextAlignPlugin />
 
-            {/* <ImagesPlugin /> */}
+            <ImagesPlugin />
         </div>
     );
 }
