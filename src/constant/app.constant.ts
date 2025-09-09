@@ -20,7 +20,7 @@ export const TITLE = `Senatorum`;
 export const LOGO = `/base-1024.png`;
 export const FALLBACK_IMAGE = "/images/fallback-image.png";
 
-export const VERSION = "1.0.3";
+export const VERSION = "1.0.4";
 
 console.log({
     NEXT_PUBLIC_IS_PRODUCTION,
