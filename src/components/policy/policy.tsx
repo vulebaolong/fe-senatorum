@@ -1,12 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { Card } from "../ui/card";
 import { Button } from "@/components/ui/button";
-import ThemeToggleV2 from "../theme-toggle/theme-toggle-v2";
-import { Logo } from "../logo/Logo";
+import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
 import {
     AlertTriangle,
@@ -21,13 +16,18 @@ import {
     Info,
     Lock,
     Mail,
+    Menu,
     Settings,
     Shield,
     UserCheck,
     Users,
-    Menu,
     X,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { Logo } from "../logo/Logo";
+import ThemeToggleV2 from "../theme-toggle/theme-toggle-v2";
+import { Card } from "../ui/card";
 
 type TocItem = { id: string; title: string; icon: LucideIcon };
 
@@ -131,17 +131,17 @@ export default function Policy() {
             {/* Mobile Sidebar Overlay */}
             {isSidebarOpen && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setIsSidebarOpen(false)} />}
 
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 h-[100vh] overflow-y-auto">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 overflow-y-auto h-[calc(100vh-var(--header-height))]">
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                     {/* Sidebar */}
                     <div
                         className={cn(
                             "lg:col-span-1",
-                            "fixed inset-y-0 left-0 z-40 w-80 transform transition-transform duration-300 ease-in-out lg:relative lg:transform-none lg:w-auto",
+                            "fixed lg:top-0 inset-y-2 left-2 z-50 w-80 transform transition-transform duration-300 ease-in-out lg:relative lg:transform-none lg:w-auto",
                             isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
                         )}
                     >
-                        <Card className="h-full lg:h-fit lg:sticky lg:top-20 rounded-lg border bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 overflow-y-auto">
+                        <Card className="h-full lg:h-fit lg:sticky lg:top-0 rounded-lg border bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 overflow-y-auto py-0">
                             <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                                 <h3 className="font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
                                     <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-foreground/70" />

@@ -44,36 +44,40 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
     };
 
     return (
+        // Mobile: để body scroll tự nhiên; từ md trở lên mới khóa chiều cao + scroll nội bộ
         <div className="h-[calc(100vh-var(--header-height))] overflow-y-scroll">
-            <article className="relative flex flex-col p-5">
-                <div className="flex-1 grid gap-5 [grid-template-columns:0.73fr_0.27fr]">
+            <article className="relative flex flex-col p-4 sm:p-5">
+                {/* Mặc định 1 cột; lên lg mới tách 0.73/0.27 */}
+                <div className="flex-1 grid gap-5 lg:[grid-template-columns:0.73fr_0.27fr]">
+                    {/* Main */}
                     <div className="min-w-0 w-full">
                         <div className="mb-2 flex w-full items-center justify-between">
                             <ArticleType type={article.Types} />
-
                             {info?.id === article.Users.id && <ArticleDetailAction detailArticle={article} />}
                         </div>
 
-                        <div className="flex flex-col gap-10">
-                            <div className="grid gap-5 [grid-template-columns:0.60fr_0.40fr]">
+                        <div className="flex flex-col gap-6 md:gap-8 lg:gap-10">
+                            {/* Thumb + meta: mobile 1 cột; lg split 60/40 */}
+                            <div className="grid gap-4 md:gap-5 lg:[grid-template-columns:0.60fr_0.40fr]">
+                                {/* Thumbnail */}
                                 <div className="min-w-0 w-full h-full border-sidebar-border border shadow-sm aspect-video overflow-hidden rounded-xl">
                                     <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`} alt={article.slug} />
                                 </div>
 
-                                <div className="min-w-0 w-full h-full flex flex-col gap-2 justify-between">
+                                {/* Meta */}
+                                <div className="min-w-0 w-full h-full flex flex-col gap-3 md:gap-4 lg:gap-2 justify-between">
                                     {/* categories */}
                                     <OverflowBadges
-                                        className="h-[22px]" // giữ chiều cao 1 dòng nếu muốn
-                                        gapPx={4} // khớp với gap-1
+                                        className="h-[22px]"
+                                        gapPx={4}
                                         items={article.ArticleCategories.map((it) => `#${it.Categories.name}`)}
-                                        // moreLabel={(n) => `+${n}`}                // có thể tuỳ biến
                                     />
 
-                                    {/* title */}
-                                    <div className="text-2xl font-bold line-clamp-4 h-[128px]">
+                                    {/* title + time */}
+                                    <div className="text-xl sm:text-2xl md:text-3xl font-bold leading-snug line-clamp-5 md:line-clamp-4 md:h-[96px] lg:h-[128px]">
                                         {article.title}
                                         <br />
-                                        <span className="flex items-center gap-1 text-muted-foreground text-xs font-medium">
+                                        <span className="mt-1 inline-flex items-center gap-1 text-muted-foreground text-[11px] sm:text-xs font-medium">
                                             <Clock4 size={12} />
                                             {formatLocalTime(article.publishedAt)}
                                         </span>
@@ -91,35 +95,37 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                                                 name={article.Users.name}
                                                 src={article.Users.avatar}
                                             />
-
-                                            <div className="grid flex-1 text-left text-sm leading-tight">
+                                            <div className="grid flex-1 text-left leading-tight">
                                                 <span
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         router.push(`/${article.Users.username}`);
                                                     }}
-                                                    className="truncate font-medium hover:underline cursor-pointer w-fit"
+                                                    className="truncate font-medium hover:underline cursor-pointer w-fit text-sm"
                                                 >
                                                     {article.Users.name}
                                                 </span>
                                                 <span className="truncate text-xs text-muted-foreground">@{article.Users.username}</span>
                                             </div>
                                         </div>
-                                        <>
-                                            {info?.id !== article.Users.id && (
+                                        {info?.id !== article.Users.id && (
+                                            <div className="shrink-0">
                                                 <ProfileFollow isFollowing={isFollowing} followingId={article.Users.id} />
-                                            )}
-                                        </>
+                                            </div>
+                                        )}
                                     </div>
 
                                     {/* footer */}
-                                    <ArticleFooter article={article} />
+                                    <div className="pt-1">
+                                        <ArticleFooter article={article} />
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="">
+                            {/* Content + comments */}
+                            <div>
                                 <Editor isViewOnly initialContentJSON={article.content} />
-                                <div className="py-5 px-2">
+                                <div className="py-4 md:py-5 px-1.5 md:px-2">
                                     <CommentInput inputId="comment-input" article={article} setListComment={setListComment} commentParent={null} />
                                 </div>
                                 <CommentList article={article} listComment={listComment} setListComment={setListComment} />
@@ -127,15 +133,10 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                         </div>
                     </div>
 
-                    <div className="min-w-0 w-full sticky top-0 self-start h-fit">
-                        {/* <RelatedSidebar
-                            currentId={article.id}
-                            header="Có thể bạn quan tâm"
-                            // loading={isLoadingSidebar} // khi bạn fetch thật
-                            // items={dataSidebar}        // dữ liệu thật
-                        /> */}
-                    </div>
+                    {/* Sidebar — chỉ sticky ở lg trở lên */}
+                    <div className="min-w-0 w-full lg:sticky lg:top-0 lg:self-start lg:h-fit">{/* <RelatedSidebar ... /> */}</div>
                 </div>
+
                 {/* JSON-LD Article */}
                 <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
             </article>

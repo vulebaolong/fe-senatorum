@@ -3,7 +3,7 @@ import { NEXT_PUBLIC_BASE_DOMAIN_FE, TITLE } from "@/constant/app.constant";
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
-import { Comfortaa, Geist, Geist_Mono, Jura, Outfit, Petrona, Quicksand } from "next/font/google";
+import { Geist, Geist_Mono, Quicksand } from "next/font/google";
 import Script from "next/script";
 
 const DEFAULT_DESC = "Selected articles, tutorials and knowledge sharing.";
