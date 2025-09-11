@@ -1,5 +1,6 @@
 import { useMutationCommentByParent } from "@/api/tantask/comment.tanstack";
 import AvatartImageCustom from "@/components/custom/avatar-custom/avatart-custom";
+import Name from "@/components/name/name";
 import { formatLocalTime } from "@/helpers/function.helper";
 import { typingText } from "@/helpers/motion.helper";
 import { cn } from "@/lib/utils";
@@ -8,7 +9,7 @@ import { TComment, TListComment } from "@/types/comment.type";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import CommentInput from "../comment-input/comment-input";
+import CommentInput, { CommentInputHandle } from "../comment-input/comment-input";
 import LineCurve from "../line/line-curve";
 import LineStraight from "../line/line-straight";
 
@@ -17,14 +18,14 @@ type CommentItemProps = {
     article: TArticle;
     level?: number;
     isLast: boolean;
-    handleReplyCommentParent?: (commentId: string) => void;
+    handleReplyCommentParent?: (commentId: string, username?: string | undefined) => void;
 };
 
 export default function CommentItem({ comment, article, level = 0, isLast, handleReplyCommentParent }: CommentItemProps) {
     const router = useRouter();
     const [replyingCommentId, setReplyingCommentId] = useState<TComment["id"] | null>(null);
     const [listComment, setListComment] = useState<TListComment[]>([]);
-    const inputRef = useRef<HTMLTextAreaElement>(null);
+    const inputRef = useRef<CommentInputHandle>(null);
 
     // meta phân trang cho replies của comment hiện tại
     const [meta, setMeta] = useState({
@@ -36,16 +37,15 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
 
     const mutationCommentByParent = useMutationCommentByParent();
 
-    const handleReplyComment = (commentId: TComment["id"]) => {
-        flushSync(() => setReplyingCommentId(commentId)); // DOM render ngay
-        inputRef.current?.focus();
-        if (inputRef.current) {
-            const len = inputRef.current.value.length;
-            try {
-                inputRef.current.setSelectionRange(len, len);
-            } catch {}
+    const handleReplyComment = (commentId: TComment["id"], username?: string) => {
+        flushSync(() => setReplyingCommentId(commentId)); // mount input ngay
+
+        // focus + chèn mention
+        if (username) {
+            inputRef.current?.focusAndInsertMention(username);
+        } else {
+            inputRef.current?.focus();
         }
-        setReplyingCommentId(commentId);
     };
 
     // Lấy thêm 1 "pageSize" replies và nối vào list
@@ -75,17 +75,6 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
         );
     };
 
-    if (comment.id === "019912a1-85d9-7494-9a0b-adb5083f3024" || comment.id === "019912c8-345d-71ab-835f-17f569afa7f9") {
-        console.log({
-            id: comment.id,
-            level,
-            meta: shouldShowLoadMore(meta, listComment),
-            isLast,
-            page: meta.page,
-            pageSize: meta.pageSize,
-        });
-    }
-
     return (
         <div className="flex flex-col relative">
             {level > 0 && !isLast && <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />}
@@ -114,13 +103,12 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
 
                         {/* comment */}
                         <div className={cn("rounded-xl p-2 w-fit max-w-full", "bg-[#F0F2F5] dark:bg-[#333334]")}>
-                            <div className="text-sm font-semibold leading-none">{comment.Users.name}</div>
+                            <Name name={comment.Users.name} username={comment.Users.username} />
                             <div className="text-sm break-words">{comment.content}</div>
                         </div>
 
                         {/* Meta actions */}
                         <div className={`pb-2`}>
-                            {/* <div className={`${comment.replyCount > 0 && !mutationCommentByParent?.data ? `` : `pb-2`}`}> */}
                             {comment.createdAt ? (
                                 <div className="flex items-center gap-3 pl-2">
                                     <span className="text-xs text-muted-foreground">{formatLocalTime(comment.createdAt, `ago`)}</span>
@@ -135,9 +123,9 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                                     <span
                                         onClick={() => {
                                             if (level === 2) {
-                                                handleReplyCommentParent?.(comment.id);
+                                                handleReplyCommentParent?.(comment.id, comment.Users?.username || comment.Users?.name);
                                             } else {
-                                                handleReplyComment(comment.id);
+                                                handleReplyComment(comment.id, comment.Users?.username || comment.Users?.name);
                                             }
                                         }}
                                         className={cn("text-xs text-muted-foreground transition-colors cursor-pointer hover:text-primary")}
@@ -173,7 +161,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                                     comment={c}
                                     article={article}
                                     level={c.level}
-                                    isLast={index === listComment.length - 1 && !shouldShowLoadMore(meta, listComment)}
+                                    isLast={index === listComment.length - 1 && (!shouldShowLoadMore(meta, listComment) || comment.replyCount === 0)}
                                     handleReplyCommentParent={handleReplyComment}
                                 />
                             </div>

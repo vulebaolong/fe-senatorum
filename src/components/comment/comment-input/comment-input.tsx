@@ -9,8 +9,14 @@ import { TCreateCommentReq, TListComment } from "@/types/comment.type";
 import { ECommentStatus } from "@/types/enum/comment-status.enum";
 import { SendHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Dispatch, forwardRef, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, forwardRef, SetStateAction, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { toast } from "sonner";
+
+export type CommentInputHandle = {
+    focus: () => void;
+    insertMention: (username: string) => void;
+    focusAndInsertMention: (username: string) => void;
+};
 
 type TProps = {
     article: TArticle;
@@ -19,14 +25,69 @@ type TProps = {
     inputId?: string;
 };
 
-const CommentInput = forwardRef<HTMLTextAreaElement, TProps>(({ inputId, article, setListComment, commentParent = null }, ref) => {
+const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article, setListComment, commentParent = null }, ref) => {
     const [value, setValue] = useState("");
     const info = useAppSelector((state) => state.user.info);
     const [isComposing, setIsComposing] = useState(false);
     const router = useRouter();
-
     const createComment = useCreateComment();
 
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    useImperativeHandle(ref, () => ({
+        focus: () => {
+            const el = textareaRef.current;
+            if (!el) return;
+            el.focus();
+            try {
+                const len = el.value.length;
+                el.setSelectionRange(len, len);
+            } catch {}
+        },
+        insertMention: (username: string) => {
+            const el = textareaRef.current;
+            const uname = (username || "").replace(/^@/, "");
+            const mention = `@${uname} `;
+            setValue((prev) => {
+                // nếu đã có mention ở đầu thì bỏ qua
+                if (prev.startsWith(mention)) return prev;
+
+                // nếu có caret, chèn tại caret; không thì prepend
+                if (el && typeof el.selectionStart === "number") {
+                    const s = el.selectionStart;
+                    const e = el.selectionEnd ?? s;
+                    const next = prev.slice(0, s) + mention + prev.slice(e);
+                    // đặt caret sau mention
+                    requestAnimationFrame(() => {
+                        const pos = s + mention.length;
+                        el.setSelectionRange(pos, pos);
+                    });
+                    return next;
+                }
+                return mention + prev;
+            });
+        },
+        focusAndInsertMention: (username: string) => {
+            const el = textareaRef.current;
+            if (!el) return;
+            el.focus();
+            try {
+                const len = el.value.length;
+                el.setSelectionRange(len, len);
+            } catch {}
+            // chèn sau khi focus để caret đúng vị trí
+            const uname = (username || "").replace(/^@/, "");
+            const mention = `@${uname} `;
+            setValue((prev) => (prev.startsWith(mention) ? prev : mention + prev));
+            requestAnimationFrame(() => {
+                const el2 = textareaRef.current;
+                if (el2) {
+                    const pos = mention.length;
+                    el2.setSelectionRange(pos, pos);
+                }
+            });
+        },
+    }));
 
     const handleCreateComment = () => {
         if (value.trim() === "" || !info) return;
@@ -90,7 +151,7 @@ const CommentInput = forwardRef<HTMLTextAreaElement, TProps>(({ inputId, article
             {/* input */}
             <Textarea
                 id={inputId}
-                ref={ref}
+                ref={textareaRef}
                 className="flex-1 rounded-2xl" // thay cho sx={{ flex: 1 }}
                 placeholder="Join the comments..."
                 minRows={1}

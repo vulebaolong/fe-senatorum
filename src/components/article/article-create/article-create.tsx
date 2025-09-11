@@ -151,15 +151,16 @@ export default function ArticleCreate({ type, dataArticle, dataListTypeArticle, 
                     typeId: "",
                     categoryIds: [],
                 });
+                
                 console.log(form.getValues());
 
                 editorRef.current?.update(() => {
                     const root = $getRoot();
                     root.clear();
-                    root.append($createParagraphNode());
+                    const p = $createParagraphNode();
+                    root.append(p);
+                    p.select(); // << đặt selection vào paragraph, tránh root
                 });
-
-                toast.success("Publish Article successfully.");
             },
             onError: (error) => {
                 toast.error(resError(error, `Publish Article failed`));
