@@ -12,6 +12,7 @@ import { useSocket } from "@/hooks/socket.hook";
 import { SOCKET_COMMENT } from "@/constant/comment.constant";
 import { useAppSelector } from "@/redux/store";
 import NoCommentsOverlay from "../no-data/no-comments-overlay";
+import { capLevel } from "@/helpers/function.helper";
 
 type TProps = {
     article: TArticle;
@@ -20,27 +21,35 @@ type TProps = {
 };
 
 export default function CommentList({ article, listComment, setListComment }: TProps) {
+    const [page, setPage] = useState(1);
+    const pageSize = 10;
+    const totalPageRef = useRef(0);
     const containerRef = useRef(null);
     const bottomTriggerRef = useRef(null);
+
     const { socket } = useSocket();
     const info = useAppSelector((state) => state.user.info);
 
-    const [pagination] = useState({ pageIndex: 0, pageSize: 10 });
     const [filtersValue] = useState({
         articleId: article.id,
         level: 0,
     });
 
     const getCommentByArticle = useGetCommentByArticle({
-        pagination: { pageIndex: pagination.pageIndex + 1, pageSize: pagination.pageSize },
+        pagination: { pageIndex: page, pageSize },
         filters: filtersValue,
         sort: { sortBy: `createdAt`, isDesc: true },
     });
 
     useEffect(() => {
-        if (getCommentByArticle.data?.items) {
-            setListComment(getCommentByArticle.data?.items);
-        }
+        if (!getCommentByArticle.data?.items) return;
+
+        const newComment = getCommentByArticle.data.items;
+
+        setListComment((prev) => {
+            if (page === 1) return newComment;
+            return [...prev, ...newComment];
+        });
     }, [getCommentByArticle.data?.items]);
 
     useEffect(() => {
@@ -65,16 +74,22 @@ export default function CommentList({ article, listComment, setListComment }: TP
         };
     }, [socket, info]);
 
+    useEffect(() => {
+        if (getCommentByArticle.data?.totalPage) totalPageRef.current = getCommentByArticle.data.totalPage;
+    }, [getCommentByArticle.data?.totalPage]);
+
     const handleEndReached = () => {
         // if (getAllArticle.isFetching || getAllArticle.isLoading || page >= totalPageRef.current) return;
-        console.log("handleEndReached");
         // setPage((prev) => prev + 1);
+        console.log("handleEndReached", getCommentByArticle.isFetching, getCommentByArticle.isLoading, page, totalPageRef.current);
+        if (getCommentByArticle.isFetching || getCommentByArticle.isLoading || page >= totalPageRef.current) return;
+        setPage((prev) => prev + 1);
     };
 
     return (
         <div
             ref={containerRef}
-            className={`p-2 h-[500px] flex flex-col overflow-y-scroll border-sidebar-border border shadow-sm rounded-2xl bg-white dark:bg-[#252728]`}
+            className={`p-2 pb-1 h-[500px] flex flex-col overflow-y-scroll border-sidebar-border border shadow-sm rounded-2xl bg-white dark:bg-[#252728]`}
         >
             <div className="relative flex-1">
                 <AppendLoading
@@ -99,7 +114,6 @@ export default function CommentList({ article, listComment, setListComment }: TP
                         return (
                             <Fragment key={comment.id}>
                                 <CommentItem
-                                    key={comment.id}
                                     comment={comment}
                                     article={article}
                                     level={comment.level ?? 0}
@@ -110,7 +124,7 @@ export default function CommentList({ article, listComment, setListComment }: TP
                     })}
                 </AppendLoading>
             </div>
-            <div ref={bottomTriggerRef} className="w-full h-1"></div>
+            <div ref={bottomTriggerRef} className="w-full h-1 shrink"></div>
         </div>
     );
 }

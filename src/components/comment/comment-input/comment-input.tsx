@@ -9,7 +9,7 @@ import { TCreateCommentReq, TListComment } from "@/types/comment.type";
 import { ECommentStatus } from "@/types/enum/comment-status.enum";
 import { SendHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Dispatch, RefObject, SetStateAction, useState } from "react";
+import { Dispatch, forwardRef, SetStateAction, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 type TProps = {
@@ -19,13 +19,14 @@ type TProps = {
     inputId?: string;
 };
 
-export default function CommentInput({ inputId, article, setListComment, commentParent = null }: TProps) {
+const CommentInput = forwardRef<HTMLTextAreaElement, TProps>(({ inputId, article, setListComment, commentParent = null }, ref) => {
     const [value, setValue] = useState("");
     const info = useAppSelector((state) => state.user.info);
     const [isComposing, setIsComposing] = useState(false);
     const router = useRouter();
 
     const createComment = useCreateComment();
+
 
     const handleCreateComment = () => {
         if (value.trim() === "" || !info) return;
@@ -74,7 +75,7 @@ export default function CommentInput({ inputId, article, setListComment, comment
     return (
         <div className="flex items-start gap-2">
             {/* avatar */}
-            <div className="relative z-10 bg-white dark:bg-[#252728] w-9 rounded-full flex items-center justify-center">
+            <div className="relative z-10 bg-white dark:bg-[#252728] rounded-full flex items-center justify-center">
                 <AvatartImageCustom
                     onClick={(e) => {
                         e.stopPropagation();
@@ -89,6 +90,7 @@ export default function CommentInput({ inputId, article, setListComment, comment
             {/* input */}
             <Textarea
                 id={inputId}
+                ref={ref}
                 className="flex-1 rounded-2xl" // thay cho sx={{ flex: 1 }}
                 placeholder="Join the comments..."
                 minRows={1}
@@ -112,4 +114,6 @@ export default function CommentInput({ inputId, article, setListComment, comment
             </Button>
         </div>
     );
-}
+});
+
+export default CommentInput;

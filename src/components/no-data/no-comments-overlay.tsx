@@ -59,7 +59,7 @@ export default function NoCommentsOverlay({
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
                     className={[
-                        "absolute inset-0 z-10 flex items-center justify-center",
+                        "absolute inset-0 z-10 flex items-center justify-center rounded-2xl",
                         "backdrop-blur-sm bg-background/50", // glass nhẹ
                         className ?? "",
                     ].join(" ")}

@@ -44,6 +44,7 @@ export default function Articlelist({ filters, id, type }: TProps) {
         if (!getAllArticle.data?.items) return;
 
         const newArticles = getAllArticle.data.items;
+        
         setArticles((prev) => {
             if (page === 1) return newArticles;
             return [...prev, ...newArticles];

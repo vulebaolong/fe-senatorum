@@ -260,3 +260,5 @@ export function emitToEvent(socket: any, eventName: string, payload: any, cb?: (
       .mes(payload, { color: "gray", fontSize: "12px" })
       .eln();
 }
+
+export const capLevel = (n: number) => Math.min(n, 2);

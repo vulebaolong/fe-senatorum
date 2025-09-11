@@ -6,8 +6,7 @@ import { cn } from "@/lib/utils";
 import { TArticle } from "@/types/article.type";
 import { TComment, TListComment } from "@/types/comment.type";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
-import { flushSync } from "react-dom";
+import { Fragment, useState } from "react";
 import CommentInput from "../comment-input/comment-input";
 import LineCurve from "../line/line-curve";
 import LineStraight from "../line/line-straight";
@@ -17,14 +16,12 @@ type CommentItemProps = {
     article: TArticle;
     level?: number;
     isLast: boolean;
-    handleReplyCommentParent?: (commentId: string) => void;
 };
 
-export default function CommentItem({ comment, article, level = 0, isLast, handleReplyCommentParent }: CommentItemProps) {
+export default function CommentItem({ comment, article, level = 0, isLast }: CommentItemProps) {
     const router = useRouter();
     const [replyingCommentId, setReplyingCommentId] = useState<TComment["id"] | null>(null);
     const [listComment, setListComment] = useState<TListComment[]>([]);
-    const inputRef = useRef<HTMLTextAreaElement>(null);
 
     // meta phân trang cho replies của comment hiện tại
     const [meta, setMeta] = useState({
@@ -37,14 +34,6 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
     const mutationCommentByParent = useMutationCommentByParent();
 
     const handleReplyComment = (commentId: TComment["id"]) => {
-        flushSync(() => setReplyingCommentId(commentId)); // DOM render ngay
-        inputRef.current?.focus();
-        if (inputRef.current) {
-            const len = inputRef.current.value.length;
-            try {
-                inputRef.current.setSelectionRange(len, len);
-            } catch {}
-        }
         setReplyingCommentId(commentId);
     };
 
@@ -88,11 +77,10 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
 
     return (
         <div className="flex flex-col relative">
-            {level > 0 && !isLast && <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />}
-            <div className={`relative flex items-start gap-2 ${level > 0 ? "pl-2" : ""}`}>
-                {level > 0 && <LineCurve className="absolute top-0 right-full h-[18px] w-[25px]" />}
+            {level > 0 && !isLast && <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />}
+            <div className={`flex items-start gap-2 ${level > 0 ? "pl-2" : ""}`}>
                 {/* Avatar */}
-                <div className="relative z-10 bg-white dark:bg-[#252728] h-10 w-8 rounded-full flex items-start justify-center">
+                <div className="relative z-10 bg-white dark:bg-[#252728] h-9 w-9 rounded-full flex items-center justify-center">
                     <AvatartImageCustom
                         onClick={(e) => {
                             e.stopPropagation();
@@ -106,11 +94,14 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
 
                 {/* Right column */}
                 <div className="relative flex-1 flex flex-col">
+                    {/* {replyingCommentId === comment.id && <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />} */}
+
                     {/* action */}
                     <div className="relative">
                         {/* line */}
-                        {comment.replyCount > 0 && <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />}
-                        {replyingCommentId && <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />}
+                        {level > 0 && <LineCurve className="absolute top-0 -left-[79px] h-[18px] w-[35px]" />}
+                        {comment.replyCount > 0 && <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />}
+                        {replyingCommentId && <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />}
 
                         {/* comment */}
                         <div className={cn("rounded-xl p-2 w-fit max-w-full", "bg-[#F0F2F5] dark:bg-[#333334]")}>
@@ -119,8 +110,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                         </div>
 
                         {/* Meta actions */}
-                        <div className={`pb-2`}>
-                            {/* <div className={`${comment.replyCount > 0 && !mutationCommentByParent?.data ? `` : `pb-2`}`}> */}
+                        <div className={`${comment.replyCount > 0 && !mutationCommentByParent?.data ? `` : `pb-2`}`}>
                             {comment.createdAt ? (
                                 <div className="flex items-center gap-3 pl-2">
                                     <span className="text-xs text-muted-foreground">{formatLocalTime(comment.createdAt, `ago`)}</span>
@@ -132,18 +122,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                                         }}
                                     /> */}
 
-                                    <span
-                                        onClick={() => {
-                                            if (level === 2) {
-                                                handleReplyCommentParent?.(comment.id);
-                                            } else {
-                                                handleReplyComment(comment.id);
-                                            }
-                                        }}
-                                        className={cn("text-xs text-muted-foreground transition-colors cursor-pointer hover:text-primary")}
-                                    >
-                                        reply
-                                    </span>
+                                    {level < 2 && <ActionLink label="Reply" onClick={() => handleReplyComment(comment.id)} />}
                                 </div>
                             ) : (
                                 <div className="pl-2 text-xs italic text-muted-foreground">{typingText("Writing")}</div>
@@ -152,17 +131,17 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                     </div>
 
                     {/* input comment */}
-                    {replyingCommentId && (
+                    {replyingCommentId === comment.id && (
                         <div className={`relative pl-2 pb-2`}>
-                            <LineCurve className={`absolute top-0 right-full h-[16px] w-[25px]`} />
+                            <LineCurve className={`absolute top-0 -left-[27px] h-[16px] w-[28px]`} />
                             {comment.replyCount > 0 && !mutationCommentByParent?.data && (
-                                <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />
+                                <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />
                             )}
                             {mutationCommentByParent?.data && mutationCommentByParent.data.items.length > 0 && (
-                                <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />
+                                <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />
                             )}
-                            {listComment.length > 0 && <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />}
-                            <CommentInput ref={inputRef} article={article} commentParent={comment} setListComment={setListComment} />
+                            {listComment.length > 0 && <LineStraight className="absolute bottom-[0] -left-[27px] h-[100%]" />}
+                            <CommentInput article={article} commentParent={comment} setListComment={setListComment} />
                         </div>
                     )}
 
@@ -174,7 +153,6 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                                     article={article}
                                     level={c.level}
                                     isLast={index === listComment.length - 1 && !shouldShowLoadMore(meta, listComment)}
-                                    handleReplyCommentParent={handleReplyComment}
                                 />
                             </div>
                         );
@@ -182,23 +160,50 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
 
                     {/* Nút xem tất cả phản hồi */}
                     {comment.replyCount > 0 && shouldShowLoadMore(meta, listComment) && (
-                        <div className="relative pb-2">
-                            <LineCurve className="absolute top-[0px] right-full h-[15px] w-[25px]" />
-
-                            <span
+                        <div className="relative py-2">
+                            <LineCurve className="absolute bottom-[12px] -left-[27px] h-[20px] w-[30px]" />
+                            <p
                                 onClick={() => handleGetCommentByParent(comment.id)}
-                                className={cn("pl-2 text-sm text-muted-foreground transition-colors cursor-pointer hover:text-primary leading-none")}
+                                className="pl-2 text-xs text-muted-foreground font-semibold hover:cursor-pointer leading-none"
                             >
-                                View all {comment.replyCount > meta.pageSize ? meta.pageSize : comment.replyCount} comments
-                            </span>
+                                Xem tất cả {comment.replyCount > meta.pageSize ? meta.pageSize : comment.replyCount} phản hồi
+                            </p>
                         </div>
                     )}
                 </div>
             </div>
+
+            {/* Đệ quy: render children nếu có */}
+            {comment.children && comment.children.length > 0 && (
+                <div className="flex flex-col gap-2 pl-12">
+                    {comment.children.map((child, index) => {
+                        const length = comment.children?.length;
+                        return (
+                            <Fragment key={child.id}>
+                                <CommentItem
+                                    comment={child}
+                                    article={article}
+                                    level={level + 1}
+                                    isLast={length ? index === length - 1 : true}
+                                />
+                            </Fragment>
+                        );
+                    })}
+                </div>
+            )}
         </div>
     );
 }
 /* ========= Helpers / Subcomponents ========= */
+
+function ActionLink({ label, onClick }: { label: string; onClick?: () => void }) {
+    return (
+        <button type="button" onClick={onClick} className={cn("relative text-xs text-muted-foreground transition-colors", "hover:text-primary")}>
+            {label}
+            <span className={cn("absolute left-0 -bottom-0.5 h-px w-0 bg-foreground transition-all", "hover:w-full")} />
+        </button>
+    );
+}
 
 // Nối thêm nhưng tránh trùng id
 function appendUnique(prev: TListComment[], next: TListComment[]) {
@@ -214,4 +219,10 @@ function shouldShowLoadMore(meta: { page: number; totalPage: number; totalItem: 
     if (meta.totalItem) return list.length < meta.totalItem;
     // fallback khi chưa có meta (chưa click lần đầu)
     return true;
+}
+
+// Còn bao nhiêu record chưa xem (để hiển thị số)
+function leftCount(meta: { totalItem: number }, list: TListComment[], fallbackCount?: number) {
+    const total = meta.totalItem || fallbackCount || 0;
+    return Math.max(0, total - list.length);
 }
