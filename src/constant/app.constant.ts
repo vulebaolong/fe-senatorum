@@ -16,7 +16,7 @@ export const NEXT_PUBLIC_GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIEN
 export const NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY = process.env.NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY;
 export const FOLDER_IMAGE_BE = `/public/images`;
 
-export const TITLE = `Senatorum`;
+export const TITLE = `Tabbicus`;
 export const LOGO = `/base-1024.png`;
 export const FALLBACK_IMAGE = "/images/fallback-image.png";
 
