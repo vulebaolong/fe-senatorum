@@ -8,6 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Logo } from "../logo/Logo";
 import ThemeToggleV2 from "../theme-toggle/theme-toggle-v2";
 import { Card } from "../ui/card";
+import { TITLE } from "@/constant/app.constant";
 
 type TocItem = { id: string; title: string; icon: LucideIcon };
 
@@ -93,7 +94,7 @@ export default function TermOfService() {
                             </Button>
                             <div className="flex items-center gap-1 sm:gap-2">
                                 <Logo />
-                                <span className="text-lg sm:text-xl font-bold">Senatorum</span>
+                                <span className="text-lg sm:text-xl font-bold">{TITLE}</span>
                             </div>
                         </div>
 
@@ -188,7 +189,7 @@ export default function TermOfService() {
                                     </h2>
                                     <div className="text-gray-700 dark:text-gray-300 leading-relaxed space-y-4">
                                         <p>
-                                            By accessing or using Senatorum (the "Service"), you agree to be bound by these Terms of Service
+                                            By accessing or using {TITLE} (the "Service"), you agree to be bound by these Terms of Service
                                             ("Terms"). If you do not agree to these Terms, do not use the Service.
                                         </p>
                                         <p>
@@ -206,7 +207,7 @@ export default function TermOfService() {
                                     </h2>
                                     <div className="text-gray-700 dark:text-gray-300 leading-relaxed">
                                         <p>
-                                            Senatorum is a social networking platform that provides users with tools to connect, communicate, and
+                                            {TITLE} is a social networking platform that provides users with tools to connect, communicate, and
                                             share content in a positive, constructive environment. Our Service includes messaging, content sharing,
                                             community features, and related functionalities.
                                         </p>
@@ -678,7 +679,7 @@ export default function TermOfService() {
                                             <Scale className="w-12 h-12 text-blue-600 dark:text-blue-400 mx-auto mb-4" />
                                             <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3">Agreement Acknowledgment</h3>
                                             <p className="text-gray-700 dark:text-gray-300 mb-4">
-                                                By using Senatorum, you acknowledge that you have read, understood, and agree to be bound by these
+                                                By using {TITLE}, you acknowledge that you have read, understood, and agree to be bound by these
                                                 Terms of Service.
                                             </p>
                                             <p className="text-sm text-gray-600 dark:text-gray-400">

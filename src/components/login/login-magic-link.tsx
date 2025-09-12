@@ -64,7 +64,7 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
                             <div className="flex flex-col items-center gap-5">
                                 <a href="#" className="flex flex-col items-center gap-5 font-medium">
                                     <Logo className="w-[60px] h-[60px]" />
-                                    <span className="sr-only">Senatorum</span>
+                                    <span className="sr-only">{TITLE}</span>
                                 </a>
                                 <div className="text-center space-y-1">
                                     <h1 className="text-[42px] leading-none font-light tracking-wide text-white">

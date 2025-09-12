@@ -9,7 +9,7 @@ import { Clock, Eye, Newspaper } from "lucide-react";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import ImageCustom from "../custom/image-custom/ImageCustom";
-import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
+import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, TITLE } from "@/constant/app.constant";
 // Nếu bạn có ImageCustom thì dùng cho đồng nhất:
 
 type RelatedItem = {
@@ -38,7 +38,7 @@ const MOCK: RelatedItem[] = [
         id: "a1",
         slug: "react-18-concurrency-explained",
         title: "Giải thích Concurrency của React 18: từ Suspense đến Transitions",
-        thumbnail: `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/Senatorum/articles/thumbnails/g2penimd5uwtjbtxwqhi`,
+        thumbnail: `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${TITLE}/articles/thumbnails/g2penimd5uwtjbtxwqhi`,
         category: "Frontend",
         type: "Kỹ thuật",
         publishedAt: "2025-08-20T10:00:00.000Z",
@@ -49,7 +49,7 @@ const MOCK: RelatedItem[] = [
         id: "a2",
         slug: "designing-rest-apis-that-scale",
         title: "Thiết kế REST API có thể mở rộng: thực hành & bẫy thường gặp",
-        thumbnail: `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/Senatorum/articles/thumbnails/g2penimd5uwtjbtxwqhi`,
+        thumbnail: `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${TITLE}/articles/thumbnails/g2penimd5uwtjbtxwqhi`,
         category: "Backend",
         type: "Best Practice",
         publishedAt: "2025-08-28T09:30:00.000Z",
@@ -60,7 +60,7 @@ const MOCK: RelatedItem[] = [
         id: "a3",
         slug: "nuxt-next-or-sveltekit",
         title: "Nuxt, Next hay SvelteKit cho dự án tiếp theo?",
-        thumbnail: `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/Senatorum/articles/thumbnails/g2penimd5uwtjbtxwqhi`,
+        thumbnail: `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${TITLE}/articles/thumbnails/g2penimd5uwtjbtxwqhi`,
         category: "Architecture",
         type: "So sánh",
         publishedAt: "2025-08-10T15:10:00.000Z",
@@ -71,7 +71,7 @@ const MOCK: RelatedItem[] = [
         id: "a4",
         slug: "database-indexing-cheatsheet",
         title: "Indexing cheat-sheet: từ B-Tree đến GIN/GiST và khi nào dùng",
-        thumbnail: `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/Senatorum/articles/thumbnails/g2penimd5uwtjbtxwqhi`,
+        thumbnail: `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${TITLE}/articles/thumbnails/g2penimd5uwtjbtxwqhi`,
         category: "Database",
         type: "Cheat-sheet",
         publishedAt: "2025-07-29T11:00:00.000Z",

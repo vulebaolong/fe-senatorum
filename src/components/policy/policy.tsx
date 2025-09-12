@@ -28,6 +28,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Logo } from "../logo/Logo";
 import ThemeToggleV2 from "../theme-toggle/theme-toggle-v2";
 import { Card } from "../ui/card";
+import { TITLE } from "@/constant/app.constant";
 
 type TocItem = { id: string; title: string; icon: LucideIcon };
 
@@ -113,7 +114,7 @@ export default function Policy() {
                             </Button>
                             <div className="flex items-center gap-1 sm:gap-2">
                                 <Logo />
-                                <span className="text-lg sm:text-xl font-bold">Senatorum</span>
+                                <span className="text-lg sm:text-xl font-bold">{TITLE}</span>
                             </div>
                         </div>
 
@@ -208,12 +209,12 @@ export default function Policy() {
                                     </h2>
                                     <div className="text-gray-700 dark:text-gray-300 leading-relaxed space-y-3 sm:space-y-4 text-sm sm:text-base">
                                         <p>
-                                            Welcome to Senatorum. This Privacy Policy explains how we collect, use, disclose, and safeguard your
+                                            Welcome to {TITLE}. This Privacy Policy explains how we collect, use, disclose, and safeguard your
                                             information when you use our social networking platform and related services (collectively, the
                                             “Service”).
                                         </p>
                                         <p>
-                                            By using Senatorum, you consent to the data practices described in this Privacy Policy. If you do not
+                                            By using {TITLE}, you consent to the data practices described in this Privacy Policy. If you do not
                                             agree with the practices described in this policy, please do not use our Service.
                                         </p>
                                     </div>
@@ -621,7 +622,7 @@ export default function Policy() {
                                                 </h4>
                                                 <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
                                                     <li>Log into your account and use the privacy settings</li>
-                                                    <li>Email our Data Protection Officer at privacy@senatorum.com</li>
+                                                    <li>Email our Data Protection Officer at privacy@${TITLE.toLowerCase()}.com</li>
                                                     <li>Use our online privacy request form</li>
                                                     <li>Contact customer support through the app</li>
                                                 </ul>
@@ -681,7 +682,7 @@ export default function Policy() {
                                                             Data Protection Officer:
                                                         </h4>
                                                         <p className="text-xs sm:text-sm text-blue-800 dark:text-blue-200">
-                                                            Email: privacy@senatorum.com
+                                                            Email: privacy@${TITLE.toLowerCase()}.com
                                                             <br />
                                                             Response time: Within 5 business days
                                                         </p>
@@ -692,9 +693,9 @@ export default function Policy() {
                                                             Regional Privacy Representatives:
                                                         </h4>
                                                         <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm text-blue-800 dark:text-blue-200">
-                                                            <li>EU Representative: eu-privacy@senatorum.com</li>
-                                                            <li>California Privacy Rights: ccpa@senatorum.com</li>
-                                                            <li>Vietnam Data Protection: vn-privacy@senatorum.com</li>
+                                                            <li>EU Representative: eu-privacy@{TITLE.toLowerCase()}.com</li>
+                                                            <li>California Privacy Rights: ccpa@{TITLE.toLowerCase()}.com</li>
+                                                            <li>Vietnam Data Protection: vn-privacy@{TITLE.toLowerCase()}.com</li>
                                                         </ul>
                                                     </div>
 

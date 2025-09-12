@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
     },
     reactStrictMode: false,
     images: {
-        domains: ["be.senatorum.com", "res.cloudinary.com"],
+        domains: ["be.tabbicus.com", "res.cloudinary.com"],
         remotePatterns: [
             {
                 protocol: "http",
@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
             },
             {
                 protocol: "https",
-                hostname: "be.senatorum.com",
+                hostname: "be.tabbicus.com",
                 pathname: "**",
             },
         ],

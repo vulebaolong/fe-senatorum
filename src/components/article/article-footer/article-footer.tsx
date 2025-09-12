@@ -23,7 +23,7 @@ type TProps = {
 
 export default function ArticleFooter({ article }: TProps) {
     const url = buildAbsoluteUrl(`/article/${article.slug}`);
-    // const url = `https://senatorum.com/article/airbus-h175m-helicopter-detailed-overview`
+    // const url = `https://tabbicus.com/article/airbus-h175m-helicopter-detailed-overview`
     const u = enc(url);
     const t = enc(article.title);
 
