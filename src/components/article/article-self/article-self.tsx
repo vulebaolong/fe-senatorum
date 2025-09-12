@@ -55,7 +55,7 @@ export default function ArticleSelf({ filters, id }: TProps) {
     };
 
     return (
-        <div ref={containerRef} className={`p-5 h-[calc(100vh-var(--header-height))] overflow-y-scroll`}>
+        <div ref={containerRef} className={`p-5 h-[calc(100dvh-var(--header-height))] overflow-y-scroll`}>
             <div
                 className={`relative grid gap-5 justify-center [grid-template-columns:repeat(auto-fill,minmax(${itemWidth}px,${itemWidth}px))] min-h-[calc(100%-4px)]`}
             >

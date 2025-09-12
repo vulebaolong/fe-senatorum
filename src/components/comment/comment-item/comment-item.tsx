@@ -12,6 +12,8 @@ import { flushSync } from "react-dom";
 import CommentInput, { CommentInputHandle } from "../comment-input/comment-input";
 import LineCurve from "../line/line-curve";
 import LineStraight from "../line/line-straight";
+import { Badge } from "@/components/ui/badge";
+import { Spotlight } from "lucide-react";
 
 type CommentItemProps = {
     comment: TListComment;
@@ -103,7 +105,15 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
 
                         {/* comment */}
                         <div className={cn("rounded-xl p-2 w-fit max-w-full", "bg-[#F0F2F5] dark:bg-[#333334]")}>
-                            <Name name={comment.Users.name} username={comment.Users.username} />
+                            <div className="flex items-center gap-1">
+                                <Name name={comment.Users.name} username={comment.Users.username} />
+                                {comment.Users.id === article.userId && (
+                                    <Badge className="h-4 w-fit !text-[10px] text-muted-foreground" variant="secondary">
+                                        <Spotlight className="!w-2.5 !h-2.5" />
+                                        Author
+                                    </Badge>
+                                )}
+                            </div>
                             <div className="text-sm break-words">{comment.content}</div>
                         </div>
 

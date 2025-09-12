@@ -45,7 +45,8 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
 
     return (
         // Mobile: để body scroll tự nhiên; từ md trở lên mới khóa chiều cao + scroll nội bộ
-        <div className="h-[calc(100vh-var(--header-height))] overflow-y-scroll">
+        <div className="h-[calc(100dvh-var(--header-height))] overflow-y-scroll">
+            {/* <ClickSpark sparkColor="#fff" sparkSize={10} sparkRadius={15} sparkCount={8} duration={400}> */}
             <article className="relative flex flex-col p-4 sm:p-5">
                 {/* Mặc định 1 cột; lên lg mới tách 0.73/0.27 */}
                 <div className="flex-1 grid gap-5 lg:[grid-template-columns:0.73fr_0.27fr]">
@@ -140,6 +141,7 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                 {/* JSON-LD Article */}
                 <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
             </article>
+            {/* </ClickSpark> */}
         </div>
     );
 }

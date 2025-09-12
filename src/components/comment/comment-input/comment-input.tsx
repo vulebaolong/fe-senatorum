@@ -153,7 +153,7 @@ const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article,
                 id={inputId}
                 ref={textareaRef}
                 className="flex-1 rounded-2xl" // thay cho sx={{ flex: 1 }}
-                placeholder="Join the comments..."
+                placeholder="Got a thought? We'd love to hear it 😸"
                 minRows={1}
                 maxRows={10}
                 value={value}

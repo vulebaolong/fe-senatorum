@@ -111,7 +111,7 @@ export default function TermOfService() {
             {/* Mobile Sidebar Overlay */}
             {isSidebarOpen && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setIsSidebarOpen(false)} />}
 
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 overflow-y-auto h-[calc(100vh-var(--header-height))]">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 overflow-y-auto h-[calc(100dvh-var(--header-height))]">
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                     {/* Sidebar */}
                     <div

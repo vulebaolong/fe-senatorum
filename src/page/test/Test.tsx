@@ -3,7 +3,7 @@ import Editor from "./lexical/editor";
 
 export default function Test() {
     return (
-        <div className="flex w-full h-[100vh] items-center justify-center">
+        <div className="flex w-full h-[100dvh] items-center justify-center">
             {/* <ThemeToggleV1 /> */}
             <div className="relative w-full h-full m-10">
                 <Editor />

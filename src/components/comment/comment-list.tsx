@@ -13,6 +13,7 @@ import { SOCKET_COMMENT } from "@/constant/comment.constant";
 import { useAppSelector } from "@/redux/store";
 import NoCommentsOverlay from "../no-data/no-comments-overlay";
 import { capLevel } from "@/helpers/function.helper";
+import ClickSpark from "../ClickSpark";
 
 type TProps = {
     article: TArticle;
@@ -104,8 +105,8 @@ export default function CommentList({ article, listComment, setListComment }: TP
                         <NoCommentsOverlay
                             visible
                             inputId={"comment-input"} // hoặc inputId="comment-input"
-                            title="No comments yet"
-                            subtitle="Be the first to comment!"
+                            // title="No comments yet"
+                            // subtitle="Be the first to comment!"
                             // onRequestFocus={() => { if (!isLoggedIn) openLoginModal(); }}
                         />
                     }

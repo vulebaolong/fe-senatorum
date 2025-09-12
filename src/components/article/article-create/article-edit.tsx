@@ -126,7 +126,7 @@ export default function ArticleEdit({ dataArticle, dataListTypeArticle, dataList
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="h-[calc(100vh-var(--header-height))] flex flex-col">
+                <div className="h-[calc(100dvh-var(--header-height))] flex flex-col">
                     {/* header */}
                     <div className="relative bg-background flex items-center justify-between w-full px-3 py-3 shadow-sm">
                         <div className="flex items-center gap-2">

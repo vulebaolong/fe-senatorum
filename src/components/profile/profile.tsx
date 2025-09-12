@@ -29,7 +29,7 @@ export default function Profile({ dataProfile, isFollowing }: Props) {
     const router = useRouter();
 
     return (
-        <div className="h-[calc(100vh-var(--header-height))] flex flex-col">
+        <div className="h-[calc(100dvh-var(--header-height))] flex flex-col">
             {/* header */}
             <div className="relative bg-background  w-full p-3 shadow-sm">
                 <div className="max-w-6xl mx-auto px-6">

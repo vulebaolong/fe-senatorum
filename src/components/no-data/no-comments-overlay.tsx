@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { MessageSquarePlus } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react"; // framer-motion v11 dùng import này
 import * as React from "react";
+import ImageCustom from "../custom/image-custom/ImageCustom";
 
 type NoCommentsOverlayProps = {
     visible?: boolean;
@@ -24,8 +25,8 @@ export default function NoCommentsOverlay({
     inputRef,
     inputId,
     onRequestFocus,
-    title = "No comments yet",
-    subtitle = "Be the first to comment!",
+    title = "No voices here yet 🌱",
+    subtitle = "Your words could spark the first chat ✨",
     className,
 }: NoCommentsOverlayProps) {
     const focusTarget = React.useCallback(() => {
@@ -84,8 +85,13 @@ export default function NoCommentsOverlay({
                         className="pointer-events-auto w-[min(560px,calc(100%-2rem))] px-4"
                     >
                         <div className="rounded-xl border bg-card/70 p-6 text-center shadow-lg backdrop-blur-md">
-                            <div className="mx-auto mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                            {/* <div className="mx-auto mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
                                 <MessageSquarePlus className="h-5 w-5 text-primary" />
+                            </div> */}
+                            <div className="flex justify-center">
+                                <div className="size-20">
+                                    <ImageCustom src={"/images/comment/conversation.png"} alt="no-comment" />
+                                </div>
                             </div>
                             <h3 className="text-base font-semibold">{title}</h3>
                             <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
@@ -100,19 +106,8 @@ export default function NoCommentsOverlay({
                                         focusTarget();
                                     }}
                                 >
-                                    Write the first comment{" "}
+                                    Start the conversation
                                 </Button>
-                                {/* <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        focusTarget();
-                                    }}
-                                >
-                                    Bắt đầu nhập…
-                                </Button> */}
                             </div>
                         </div>
                     </motion.div>

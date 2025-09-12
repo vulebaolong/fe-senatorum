@@ -1,8 +1,16 @@
+import { useAppSelector } from "@/redux/store";
 import { Logo } from "../logo/Logo";
+import { Button } from "../ui/button";
 import HeaderBellring from "./header-bellring";
 import Search from "./search";
+import { useRouter } from "next/navigation";
+import { Pen, Plus, SquarePen } from "lucide-react";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
+import { cn } from "@/lib/utils";
 
 export default function Header() {
+    const info = useAppSelector((state) => state.user.info);
+    const router = useRouter();
     return (
         <div>
             <header className="fixed w-full h-[var(--header-height)] flex items-center justify-between bg-sidebar border-sidebar-border border shadow-sm z-50">
@@ -18,8 +26,22 @@ export default function Header() {
                     </div>
 
                     {/* Bell/Notifications - always visible */}
-                    <div className="flex-shrink-0">
-                        <HeaderBellring />
+                    <div className="flex items-center gap-2">
+                        <Button
+                            className={cn("!text-xs", "h-8 w-8", "sm:h-6 sm:w-28")}
+                            onClick={() => {
+                                if (info?.name) {
+                                    router.push(ROUTER_CLIENT.ARTICLE_CREATE);
+                                } else {
+                                    console.log("info?.name is null");
+                                }
+                            }}
+                        >
+                            <SquarePen /> <span className={cn("hidden sm:inline")}>Start Writing</span>
+                        </Button>
+                        <div className="flex-shrink-0">
+                            <HeaderBellring />
+                        </div>
                     </div>
                 </div>
             </header>

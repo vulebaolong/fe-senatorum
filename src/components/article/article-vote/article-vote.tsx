@@ -7,6 +7,7 @@ import IconArrowUp from "@/components/icon/icon-arrow-up";
 import AnimatedScore from "@/components/animated-score/AnimatedScore";
 import Counter from "@/components/counter/counter";
 import VoteCounter from "@/components/counter/vote-counter";
+import ClickSpark from "@/components/ClickSpark";
 
 type VoteValue = -1 | 0 | 1;
 
@@ -118,7 +119,7 @@ export default function ArticleVote({
                 onClick={handleUpvote}
                 disabled={disabled}
             >
-                <IconArrowUp className={cx("w-6 h-6 pointer-events-none", upActive && "text-emerald-600")} isUp={upActive} />
+                <IconArrowUp className={cx("w-6 h-6 pointer-events-none", upActive && "text-blue-400")} isUp={upActive} />
             </ButtonIcon>
 
             <AnimatedScore

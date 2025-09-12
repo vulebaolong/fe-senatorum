@@ -9,6 +9,7 @@ import NodataOverlay from "../../no-data/NodataOverlay";
 import { Skeleton } from "../../ui/skeleton";
 import ArticleItem from "../article-item/article-item";
 import { cn } from "@/lib/utils";
+import ClickSpark from "@/components/ClickSpark";
 
 type TProps = {
     filters?: Record<string, any>;
@@ -44,7 +45,7 @@ export default function Articlelist({ filters, id, type }: TProps) {
         if (!getAllArticle.data?.items) return;
 
         const newArticles = getAllArticle.data.items;
-        
+
         setArticles((prev) => {
             if (page === 1) return newArticles;
             return [...prev, ...newArticles];
@@ -65,7 +66,7 @@ export default function Articlelist({ filters, id, type }: TProps) {
     };
 
     return (
-        <div ref={containerRef} className={`relative p-5 gap-5 h-[calc(100vh-var(--header-height))] overflow-y-scroll`}>
+        <div ref={containerRef} className={`relative p-5 gap-5 h-[calc(100dvh-var(--header-height))] overflow-y-scroll`}>
             <div
                 className={cn(
                     `relative grid gap-5 justify-center [grid-template-columns:repeat(auto-fill,minmax(${itemWidth}px,${itemWidth}px))] min-h-[calc(100%-4px)]`

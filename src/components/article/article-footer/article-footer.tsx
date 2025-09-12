@@ -1,6 +1,6 @@
 import { TArticle } from "@/types/article.type";
 import ArticleVote from "../article-vote/article-vote";
-import { Eye, LinkIcon, MessageCircle, Share2 } from "lucide-react";
+import { Eye, LinkIcon, MessageCircle, MessageSquare, Share2 } from "lucide-react";
 import ArticleBookmark from "../article-bookmark/article-bookmark";
 import ButtonIcon from "@/components/custom/button-custom/button-icon";
 import { formatCompactIntl } from "@/helpers/function.helper";
@@ -72,7 +72,7 @@ export default function ArticleFooter({ article }: TProps) {
             </div>
 
             <div className="flex  items-center gap-1 justify-center">
-                <MessageCircle className="text-muted-foreground" size={16} />
+                <MessageSquare className="text-muted-foreground" size={16} />
                 <p className="text-xs font-semibold text-muted-foreground">{formatCompactIntl(article.ArticleCounters?.commentCount || 0)}</p>
             </div>
 
