@@ -20,7 +20,7 @@ export const TITLE = `Tabbicus`;
 export const LOGO = `/base-1024.png`;
 export const FALLBACK_IMAGE = "/images/fallback-image.png";
 
-export const VERSION = "1.0.5";
+export const VERSION = "1.0.6";
 
 console.log({
     NEXT_PUBLIC_IS_PRODUCTION,
