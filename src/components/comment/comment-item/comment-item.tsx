@@ -14,6 +14,7 @@ import LineCurve from "../line/line-curve";
 import LineStraight from "../line/line-straight";
 import { Badge } from "@/components/ui/badge";
 import { Spotlight } from "lucide-react";
+import ExpandableText from "@/components/expandable-text/ExpandableText";
 
 type CommentItemProps = {
     comment: TListComment;
@@ -114,7 +115,16 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                                     </Badge>
                                 )}
                             </div>
-                            <div className="text-sm break-words">{comment.content}</div>
+                            <ExpandableText
+                                text={comment.content}
+                                placement="inline"
+                                maxLines={3}
+                                moreLabel="...more"
+                                lessLabel="less"
+                                fadeFromClass="from-[#F0F2F5] dark:from-[#333334]"
+                                inlineButtonBgClass="bg-[#F0F2F5] dark:bg-[#333334]"
+                                fadeHeightClass="h-full"
+                            />
                         </div>
 
                         {/* Meta actions */}

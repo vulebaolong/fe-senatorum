@@ -1,19 +1,15 @@
 import { useGetCommentByArticle } from "@/api/tantask/comment.tanstack";
+import { SOCKET_COMMENT } from "@/constant/comment.constant";
+import { useSocket } from "@/hooks/socket.hook";
+import { useAppSelector } from "@/redux/store";
 import { TArticle } from "@/types/article.type";
-import { TComment, TJoinRoomCommentReq, TListComment, TRoomCommentRes } from "@/types/comment.type";
-import { Dispatch, Fragment, RefObject, SetStateAction, useEffect, useRef, useState } from "react";
+import { TSocketRes } from "@/types/base.type";
+import { TJoinRoomCommentReq, TListComment, TRoomCommentRes } from "@/types/comment.type";
+import { Dispatch, Fragment, SetStateAction, useEffect, useRef, useState } from "react";
 import { AppendLoading } from "../data-state/append-state/AppendState";
-import NodataOverlay from "../no-data/NodataOverlay";
+import NoCommentsOverlay from "../no-data/no-comments-overlay";
 import { Skeleton } from "../ui/skeleton";
 import CommentItem from "./comment-item/comment-item";
-import { TJoinRoomReq, TJoinRoomRes } from "@/types/chat.type";
-import { TSocketRes } from "@/types/base.type";
-import { useSocket } from "@/hooks/socket.hook";
-import { SOCKET_COMMENT } from "@/constant/comment.constant";
-import { useAppSelector } from "@/redux/store";
-import NoCommentsOverlay from "../no-data/no-comments-overlay";
-import { capLevel } from "@/helpers/function.helper";
-import ClickSpark from "../ClickSpark";
 
 type TProps = {
     article: TArticle;
@@ -59,7 +55,6 @@ export default function CommentList({ article, listComment, setListComment }: TP
         socket?.emit(SOCKET_COMMENT.JOIN_ROOM_COMMENT, payload);
 
         const handleNewComment = ({ data }: TSocketRes<TRoomCommentRes>) => {
-            console.log(data);
             if (data.authorIdComment === info.id) return;
             if (data.parentId === null || data.level === 0) {
                 // Cách 1: refetch ngay, KHÔNG bật isLoading (chỉ isFetching = true)
@@ -80,9 +75,6 @@ export default function CommentList({ article, listComment, setListComment }: TP
     }, [getCommentByArticle.data?.totalPage]);
 
     const handleEndReached = () => {
-        // if (getAllArticle.isFetching || getAllArticle.isLoading || page >= totalPageRef.current) return;
-        // setPage((prev) => prev + 1);
-        console.log("handleEndReached", getCommentByArticle.isFetching, getCommentByArticle.isLoading, page, totalPageRef.current);
         if (getCommentByArticle.isFetching || getCommentByArticle.isLoading || page >= totalPageRef.current) return;
         setPage((prev) => prev + 1);
     };

@@ -49,7 +49,7 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
             {/* <ClickSpark sparkColor="#fff" sparkSize={10} sparkRadius={15} sparkCount={8} duration={400}> */}
             <article className="relative flex flex-col p-4 sm:p-5">
                 {/* Mặc định 1 cột; lên lg mới tách 0.73/0.27 */}
-                <div className="flex-1 grid gap-5 lg:[grid-template-columns:0.73fr_0.27fr]">
+                <div className="flex-1 grid gap-5 lg:[grid-template-columns:0.65fr_0.35fr]">
                     {/* Main */}
                     <div className="min-w-0 w-full">
                         <div className="mb-2 flex w-full items-center justify-between">
@@ -59,7 +59,8 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
 
                         <div className="flex flex-col gap-6 md:gap-8 lg:gap-10">
                             {/* Thumb + meta: mobile 1 cột; lg split 60/40 */}
-                            <div className="grid gap-4 md:gap-5 lg:[grid-template-columns:0.60fr_0.40fr]">
+                            {/* <div className="grid gap-4 md:gap-5 lg:[grid-template-columns:0.60fr_0.40fr]"> */}
+                            <div className="grid gap-4 md:gap-5">
                                 {/* Thumbnail */}
                                 <div className="min-w-0 w-full h-full border-sidebar-border border shadow-sm aspect-video overflow-hidden rounded-xl">
                                     <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`} alt={article.slug} />
@@ -82,6 +83,11 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                                             <Clock4 size={12} />
                                             {formatLocalTime(article.publishedAt)}
                                         </span>
+                                    </div>
+
+                                    {/* footer */}
+                                    <div className="pt-1">
+                                        <ArticleFooter article={article} />
                                     </div>
 
                                     {/* author */}
@@ -115,27 +121,23 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                                             </div>
                                         )}
                                     </div>
-
-                                    {/* footer */}
-                                    <div className="pt-1">
-                                        <ArticleFooter article={article} />
-                                    </div>
                                 </div>
                             </div>
 
                             {/* Content + comments */}
                             <div>
                                 <Editor isViewOnly initialContentJSON={article.content} />
-                                <div className="py-4 md:py-5 px-1.5 md:px-2">
-                                    <CommentInput inputId="comment-input" article={article} setListComment={setListComment} commentParent={null} />
-                                </div>
-                                <CommentList article={article} listComment={listComment} setListComment={setListComment} />
                             </div>
                         </div>
                     </div>
 
                     {/* Sidebar — chỉ sticky ở lg trở lên */}
-                    <div className="min-w-0 w-full lg:sticky lg:top-0 lg:self-start lg:h-fit">{/* <RelatedSidebar ... /> */}</div>
+                    <div className="min-w-0 w-full lg:sticky lg:top-5 lg:self-start lg:h-fit">
+                        <div className="pb-4 md:pb-5 px-1.5 md:px-2">
+                            <CommentInput inputId="comment-input" article={article} setListComment={setListComment} commentParent={null} />
+                        </div>
+                        <CommentList article={article} listComment={listComment} setListComment={setListComment} />
+                    </div>
                 </div>
 
                 {/* JSON-LD Article */}

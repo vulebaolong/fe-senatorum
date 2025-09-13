@@ -56,7 +56,7 @@ export default function ArticleItem({ article }: TProps) {
                 </div>
 
                 {/* title */}
-                <div className="leading-6 text-xl px-5 font-bold line-clamp-3 h-[73px]">{article.title}</div>
+                <div className="leading-6 text-xl px-5 font-bold line-clamp-2 h-[50px]">{article.title}</div>
 
                 {/* category */}
                 <div className="px-2">
