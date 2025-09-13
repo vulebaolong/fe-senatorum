@@ -105,11 +105,11 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                         {replyingCommentId && <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />}
 
                         {/* comment */}
-                        <div className={cn("rounded-xl p-2 w-fit max-w-full", "bg-[#F0F2F5] dark:bg-[#333334]")}>
+                        <div className={cn("rounded-lg p-2 w-fit max-w-full", "bg-[#F0F2F5] dark:bg-[#333334]")}>
                             <div className="flex items-center gap-1">
                                 <Name name={comment.Users.name} username={comment.Users.username} />
                                 {comment.Users.id === article.userId && (
-                                    <Badge className="h-4 w-fit !text-[10px] text-muted-foreground" variant="secondary">
+                                    <Badge className="dark h-4 w-fit !text-[10px] text-muted-foreground" variant="secondary">
                                         <Spotlight className="!w-2.5 !h-2.5" />
                                         Author
                                     </Badge>

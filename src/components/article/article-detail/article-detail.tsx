@@ -53,7 +53,7 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                 <div className="flex-1 grid gap-5 lg:[grid-template-columns:0.65fr_0.35fr]">
                     {/* Main */}
                     <div className="min-w-0 w-full">
-                        <div className="mb-2 flex w-full items-center justify-between">
+                        <div className="mb-2 flex w-full items-center justify-between h-8">
                             <ArticleType type={article.Types} />
                             {info?.id === article.Users.id && <ArticleDetailAction detailArticle={article} />}
                         </div>
@@ -135,7 +135,7 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                     {/* Sidebar — chỉ sticky ở lg trở lên */}
                     {/* py-4 sm:py-6 lg:py-8 */}
                     <div className={cn("min-w-0 w-full", "lg:sticky lg:self-start lg:h-fit", "top-4 sm:top-6 lg:top-8")}>
-                        <div className="pb-4 md:pb-5 px-1.5 md:px-2">
+                        <div className="mb-2 px-1.5 md:px-2">
                             <CommentInput inputId="comment-input" article={article} setListComment={setListComment} commentParent={null} />
                         </div>
                         <CommentList article={article} listComment={listComment} setListComment={setListComment} />

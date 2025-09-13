@@ -157,7 +157,7 @@ const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article,
                 minRows={1}
                 maxRows={10}
                 value={value}
-                onChange={(e) => setValue(e.target.value)}
+                onChange={(e) => setValue(e.target.value.normalize("NFC"))}
                 onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
                     // Enter để gửi, Shift+Enter để xuống dòng
                     if (e.key === "Enter" && !e.shiftKey && !isComposing) {
