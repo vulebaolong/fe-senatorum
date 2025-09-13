@@ -2,6 +2,7 @@
 
 import CommentInput from "@/components/comment/comment-input/comment-input";
 import CommentList from "@/components/comment/comment-list";
+import { Container } from "@/components/container/container";
 import AvatartImageCustom from "@/components/custom/avatar-custom/avatart-custom";
 import ImageCustom from "@/components/custom/image-custom/ImageCustom";
 import Editor from "@/components/lexical/editor";
@@ -44,10 +45,9 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
     };
 
     return (
-        // Mobile: để body scroll tự nhiên; từ md trở lên mới khóa chiều cao + scroll nội bộ
         <div className="h-[calc(100dvh-var(--header-height))] overflow-y-scroll">
             {/* <ClickSpark sparkColor="#fff" sparkSize={10} sparkRadius={15} sparkCount={8} duration={400}> */}
-            <article className="relative flex flex-col p-4 sm:p-5">
+            <Container as="article" className="py-4 sm:py-6 lg:py-8">
                 {/* Mặc định 1 cột; lên lg mới tách 0.73/0.27 */}
                 <div className="flex-1 grid gap-5 lg:[grid-template-columns:0.65fr_0.35fr]">
                     {/* Main */}
@@ -142,7 +142,7 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
 
                 {/* JSON-LD Article */}
                 <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-            </article>
+            </Container>
             {/* </ClickSpark> */}
         </div>
     );

@@ -1,11 +1,11 @@
 "use client";
 
-import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
+import { checkPathImage } from "@/helpers/function.helper";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
 import { TUser } from "@/types/user.type";
-import { Pencil, User } from "lucide-react";
+import { ArrowLeft, Pencil, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
 import AvatartImageCustom from "../custom/avatar-custom/avatart-custom";
@@ -15,7 +15,8 @@ import { Card, CardContent } from "../ui/card";
 import ProfileCount from "./profile-count/profile-count";
 import ProfileFollow from "./profile-follow/profile-follow";
 import ProfileTabs from "./profile-tabs/profile-tabs";
-import { checkPathImage } from "@/helpers/function.helper";
+import { Separator } from "../ui/separator";
+import { HeaderPage } from "../header/header-page/header-page";
 
 type Props = {
     dataProfile: TUser;
@@ -31,27 +32,12 @@ export default function Profile({ dataProfile, isFollowing }: Props) {
     return (
         <div className="h-[calc(100dvh-var(--header-height))] flex flex-col">
             {/* header */}
-            <div className="relative bg-background  w-full p-3 shadow-sm">
-                <div className="max-w-6xl mx-auto px-6">
-                    <div className="flex items-center justify-between">
-                        <p className="text-lg font-semibold">Profile</p>
-
-                        {/* <div className="flex items-center gap-2">
-                            <Button variant="outline" size="sm">
-                                <Share /> Share
-                            </Button>
-                            <Button variant="outline" size="sm">
-                                <MoreHorizontal className="w-4 h-4" />
-                            </Button>
-                        </div> */}
-                    </div>
-                </div>
-            </div>
+            <HeaderPage as="header" backTo={ROUTER_CLIENT.HOME} backLabel="Back to Home" title="Profile" />
 
             {/* body */}
             <div ref={bodyRef} className="flex-1 px-3 py-5 overflow-y-auto scroll-smooth">
                 <div className="max-w-6xl mx-auto px-6 flex flex-col gap-5">
-                    {/* Profile Header */}
+                    {/* header */}
                     <Card className="py-0">
                         <CardContent className="p-0">
                             {/* Cover Image */}

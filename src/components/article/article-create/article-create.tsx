@@ -29,6 +29,7 @@ import { z } from "zod";
 import Editor from "../../lexical/editor";
 import { CategoryMultiSelect } from "./select/category-multi-select";
 import TypeSelect from "./select/type-select";
+import { Container } from "@/components/container/container";
 
 const FormSchema = z.object({
     title: z.string().nonempty("Title is required."),
@@ -215,7 +216,7 @@ export default function ArticleCreate({ type, dataArticle, dataListTypeArticle, 
                     </div>
 
                     {/* body */}
-                    <div className="flex-1 p-5 overflow-y-auto">
+                    <Container className="flex-1 p-5 overflow-y-auto">
                         <div className={cn("flex flex-col", "lg:flex-row")}>
                             {/* LEFT */}
                             <div className="flex-1 min-w-0 transition-[width] duration-300">
@@ -398,7 +399,7 @@ export default function ArticleCreate({ type, dataArticle, dataListTypeArticle, 
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </Container>
                 </div>
             </form>
         </Form>

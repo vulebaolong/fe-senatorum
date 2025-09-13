@@ -1,6 +1,5 @@
 "use client";
 
-import Header from "@/components/header/header";
 import { AppSidebar } from "@/components/nav/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { VERSION } from "@/constant/app.constant";
@@ -9,6 +8,7 @@ import { useAppDispatch } from "@/redux/store";
 import { SET_OPEN_VERSION_UPDATE_DIALOG } from "@/redux/slices/setting.slice";
 import { TSocketRes } from "@/types/base.type";
 import { useEffect } from "react";
+import Header from "@/components/header/header-root/header";
 
 type TProps = {
     children: React.ReactNode;

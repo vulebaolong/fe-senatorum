@@ -7,9 +7,9 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowUpRight, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import ImageCustom from "../custom/image-custom/ImageCustom";
-import { Button } from "../ui/button";
-import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "../ui/command";
+import ImageCustom from "../../custom/image-custom/ImageCustom";
+import { Button } from "../../ui/button";
+import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "../../ui/command";
 
 // --- helpers ---
 function buildQuery(params: { pageIndex: number; pageSize: number; title: string }) {
