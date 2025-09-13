@@ -20,6 +20,7 @@ import { useState } from "react";
 import ArticleFooter from "../article-footer/article-footer";
 import ArticleType from "../article-type/article-type";
 import ArticleDetailAction from "./article-detail-action";
+import { cn } from "@/lib/utils";
 
 type TProps = {
     article: TArticle;
@@ -132,7 +133,8 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                     </div>
 
                     {/* Sidebar — chỉ sticky ở lg trở lên */}
-                    <div className="min-w-0 w-full lg:sticky lg:top-5 lg:self-start lg:h-fit">
+                    {/* py-4 sm:py-6 lg:py-8 */}
+                    <div className={cn("min-w-0 w-full", "lg:sticky lg:self-start lg:h-fit", "top-4 sm:top-6 lg:top-8")}>
                         <div className="pb-4 md:pb-5 px-1.5 md:px-2">
                             <CommentInput inputId="comment-input" article={article} setListComment={setListComment} commentParent={null} />
                         </div>

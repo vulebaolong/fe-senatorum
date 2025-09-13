@@ -20,10 +20,15 @@ type TProps = {
 export default function Articlelist({ filters, id, type }: TProps) {
     const [page, setPage] = useState(1);
     const [articles, setArticles] = useState<TArticle[]>([]);
-    const pageSize = 3;
+    
     const totalPageRef = useRef(0);
-    const containerRef = useRef(null);
-    const bottomTriggerRef = useRef(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const bottomTriggerRef = useRef<HTMLDivElement | null>(null);
+    
+    const pageSize = 8;
+    const itemWidth = 300;
+    const gap = 20;
+    const skeletonCount = useFillSkeletons(containerRef, itemWidth, articles.length, gap);
 
     const getAllArticle = (() => {
         if (type === "all") return useGetAllArticle;
@@ -54,10 +59,6 @@ export default function Articlelist({ filters, id, type }: TProps) {
     useEffect(() => {
         if (getAllArticle.data?.totalPage) totalPageRef.current = getAllArticle.data.totalPage;
     }, [getAllArticle.data?.totalPage]);
-
-    const itemWidth = 300;
-    const gap = 20;
-    const skeletonCount = useFillSkeletons(containerRef, itemWidth, articles.length, gap);
 
     const handleEndReached = () => {
         if (getAllArticle.isFetching || getAllArticle.isLoading || page >= totalPageRef.current) return;
