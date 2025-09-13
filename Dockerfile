@@ -70,3 +70,4 @@ CMD ["node", "server.js"]
 #   -t img-fe_senatorum:latest .
 
 # docker run -d --name con-fe_senatorum -p 3001:3000 img-fe_senatorum:latest
+
