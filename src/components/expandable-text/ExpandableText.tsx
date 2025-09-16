@@ -1,8 +1,7 @@
 "use client";
 
-import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button"; // kept for users who pass custom renderers with Button
+import * as React from "react";
 
 type ToggleRender = (opts: { onClick: () => void }) => React.ReactNode;
 
@@ -10,8 +9,6 @@ type ExpandableTextProps = {
     text: string;
     /** Maximum number of lines when collapsed (requires @tailwindcss/line-clamp) */
     maxLines?: 3 | 4 | 5 | 6;
-    /** Do not show the toggle if text length is under this threshold */
-    minCharsToToggle?: number;
     /** Extra classes applied to the text container */
     className?: string;
     /** Initial expanded state */
@@ -98,7 +95,6 @@ type ExpandableTextProps = {
 export default function ExpandableText({
     text,
     maxLines = 3,
-    minCharsToToggle = 120,
     className,
     defaultExpanded = false,
     placement = "below",
@@ -111,12 +107,28 @@ export default function ExpandableText({
     fadeHeightClass = "h-6",
 }: ExpandableTextProps) {
     const [expanded, setExpanded] = React.useState(defaultExpanded);
+    const textRef = React.useRef<HTMLDivElement>(null);
+    const [isClamped, setIsClamped] = React.useState(false);
 
     // Map numeric `maxLines` to Tailwind's clamp classes.
     const clampClass = expanded ? "" : ({ 3: "line-clamp-3", 4: "line-clamp-4", 5: "line-clamp-5", 6: "line-clamp-6" } as const)[maxLines];
 
-    // Only render the toggle when text is long enough.
-    const showToggle = (text?.length ?? 0) >= minCharsToToggle;
+    // Đo xem có thật sự bị clamp không
+    React.useLayoutEffect(() => {
+        const el = textRef.current;
+        if (!el) return;
+
+        const measure = () => {
+            if (expanded) return setIsClamped(false);
+            // nếu bị cắt, scrollHeight sẽ > clientHeight
+            setIsClamped(el.scrollHeight > el.clientHeight + 1);
+        };
+
+        measure();
+        // re-measure khi resize hoặc text đổi
+        window.addEventListener("resize", measure);
+        return () => window.removeEventListener("resize", measure);
+    }, [text, expanded, maxLines]);
 
     // Default toggle buttons (spans to keep output minimal and style-neutral).
     const DefaultMore = (
@@ -137,11 +149,15 @@ export default function ExpandableText({
     return (
         <div>
             {/* Text block (clamped when not expanded) */}
-            <div className={cn("relative text-sm leading-6 text-foreground/90 break-words", clampClass, className)} aria-expanded={expanded}>
-                <p>{text}</p>
+            <div
+                ref={textRef}
+                className={cn("relative text-sm leading-6 text-foreground/90 break-words", clampClass, className)}
+                aria-expanded={expanded}
+            >
+                <p className="whitespace-pre-wrap">{text}</p>
 
                 {/* Inline placement: fade overlay + floating toggle at bottom-right while COLLAPSED */}
-                {showToggle && !expanded && placement === "inline" && (
+                {isClamped && !expanded && placement === "inline" && (
                     <>
                         {/* Fade overlay to soften the end of the last visible line */}
                         <div
@@ -158,7 +174,7 @@ export default function ExpandableText({
             </div>
 
             {/* "Below" placement OR when EXPANDED (show the appropriate toggle) */}
-            {showToggle && (placement === "below" || expanded) && <div>{expanded ? Less : More}</div>}
+            {isClamped && (placement === "below" || expanded) && <div>{expanded ? Less : More}</div>}
         </div>
     );
 }
