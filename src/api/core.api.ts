@@ -120,9 +120,16 @@ class APIClient {
             headers: newHeaders,
             body: handleBody(),
         });
+
+        // console.log({ response });
+
         // ✅ Xử lý lỗi 403: Access Token không hợp lệ hoặc đã hết hạn → Cần refresh token
         if (response.status === 403) {
-            console.log(`(${response.status}) Access Token không hợp lệ hoặc đã hết hạn → Cần refresh token \n ${response.url}`);
+            console.error({
+                status: response.status,
+                url: response.url,
+                statusText: response.statusText,
+            });
             try {
                 accessToken = await refreshToken();
 
@@ -149,9 +156,12 @@ class APIClient {
 
         // ✅ Xử lý lỗi 401: không có quyền truy cập tài nguyên ngay cả khi đã đăng nhập -> Logout
         if (response.status === 401) {
-            console.log(`(${response.status}) không có quyền truy cập tài nguyên ngay cả khi đã đăng nhập -> Logout`);
+            console.error({
+                status: response.status,
+                url: response.url,
+                statusText: response.statusText,
+            });
             await logout();
-            // throw new Error("Unauthorized, logging out...");
         }
 
         if (!response.ok) {

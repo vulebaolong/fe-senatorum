@@ -14,17 +14,19 @@ import { useAutoArticleView } from "@/hooks/use-article-view";
 import { useAppSelector } from "@/redux/store";
 import { TArticle } from "@/types/article.type";
 import { TListComment } from "@/types/comment.type";
-import { Clock4 } from "lucide-react";
+import { Clock4, LogIn } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ArticleFooter from "../article-footer/article-footer";
 import ArticleType from "../article-type/article-type";
 import ArticleDetailAction from "./article-detail-action";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
 
 type TProps = {
     article: TArticle;
-    isFollowing: boolean;
+    isFollowing?: boolean;
 };
 
 export default function ArticleDetail({ article, isFollowing }: TProps) {
@@ -116,10 +118,14 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                                                 <span className="truncate text-xs text-muted-foreground">@{article.Users.username}</span>
                                             </div>
                                         </div>
-                                        {info?.id !== article.Users.id && (
-                                            <div className="shrink-0">
-                                                <ProfileFollow isFollowing={isFollowing} followingId={article.Users.id} />
-                                            </div>
+                                        {isFollowing && (
+                                            <>
+                                                {info?.id !== article.Users.id && (
+                                                    <div className="shrink-0">
+                                                        <ProfileFollow isFollowing={isFollowing} followingId={article.Users.id} />
+                                                    </div>
+                                                )}
+                                            </>
                                         )}
                                     </div>
                                 </div>
@@ -136,7 +142,19 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                     {/* py-4 sm:py-6 lg:py-8 */}
                     <div className={cn("min-w-0 w-full", "lg:sticky lg:self-start lg:h-fit", "top-4 sm:top-6 lg:top-8")}>
                         <div className="mb-2 px-1.5 md:px-2">
-                            <CommentInput inputId="comment-input" article={article} setListComment={setListComment} commentParent={null} />
+                            {info && <CommentInput inputId="comment-input" article={article} setListComment={setListComment} commentParent={null} />}
+                            {/* {info ? (
+                                <CommentInput inputId="comment-input" article={article} setListComment={setListComment} commentParent={null} />
+                            ) : (
+                                <Button
+                                    className={cn("!text-xs", "h-8 w-8", "sm:h-8 sm:w-20")}
+                                    onClick={() => {
+                                        router.push(ROUTER_CLIENT.LOGIN);
+                                    }}
+                                >
+                                    <LogIn /> <span className={cn("hidden sm:inline font-bold")}>Login</span>
+                                </Button>
+                            )} */}
                         </div>
                         <CommentList article={article} listComment={listComment} setListComment={setListComment} />
                     </div>

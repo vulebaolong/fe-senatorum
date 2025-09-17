@@ -12,10 +12,12 @@ import { cn } from "@/lib/utils";
 import { SidebarTrigger } from "../custom/sidebar-custom";
 import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { useAppSelector } from "@/redux/store";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { open } = useSidebar();
     const router = useRouter();
+    const info = useAppSelector((state) => state.user.info);
 
     return (
         <Sidebar collapsible="icon" {...props} className="h-[calc(100svh-var(--header-height))] bottom-0 top-[var(--header-height)]">
@@ -82,9 +84,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarContent>
                 <NavMain />
             </SidebarContent>
-            <SidebarFooter>
-                <NavUser />
-            </SidebarFooter>
+            {info && (
+                <SidebarFooter>
+                    <NavUser />
+                </SidebarFooter>
+            )}
         </Sidebar>
     );
 }

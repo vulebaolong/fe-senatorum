@@ -4,9 +4,8 @@ import { logout } from "@/api/core.api";
 import { useGetInfoMutation } from "@/api/tantask/auth.tanstack";
 import { useGetVersion } from "@/api/tantask/setting-system.tanstack";
 import { VersionUpdateDialog } from "@/components/version-update-dialog/version-update-dialog";
-import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { SET_INFO } from "@/redux/slices/user.slice";
-import { Loader2 } from "lucide-react";
+import { useAppDispatch } from "@/redux/store";
 import { useEffect, useState } from "react";
 
 type TProps = {
@@ -37,18 +36,6 @@ export default function Template({ children }: TProps) {
         <>
             {allowRender && children}
             {getVersion.data?.version && <VersionUpdateDialog latest={getVersion.data?.version} />}
-            {/* <div
-                style={{
-                    position: "fixed",
-                    zIndex: 99999,
-                    visibility: loadingPage || getInfo.isPending || !allowRender ? "visible" : "hidden",
-                    bottom: "20px",
-                    left: "20px",
-                }}
-                className="flex items-center justify-center"
-            >
-                <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-            </div> */}
         </>
     );
 }

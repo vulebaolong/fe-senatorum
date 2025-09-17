@@ -8,6 +8,9 @@ import AnimatedScore from "@/components/animated-score/AnimatedScore";
 import Counter from "@/components/counter/counter";
 import VoteCounter from "@/components/counter/vote-counter";
 import ClickSpark from "@/components/ClickSpark";
+import { useAppSelector } from "@/redux/store";
+import { useRouter } from "next/navigation";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
 
 type VoteValue = -1 | 0 | 1;
 
@@ -33,6 +36,9 @@ export default function ArticleVote({
     onChange,
     debounceMs = 300,
 }: ArticleVoteProps) {
+    const info = useAppSelector((state) => state.user.info);
+    const router = useRouter();
+
     const articleVote = useArticleVote();
     const articleUnVote = useArticleUnVote();
 
@@ -83,16 +89,24 @@ export default function ArticleVote({
 
     const handleUpvote = (e: React.MouseEvent) => {
         e.stopPropagation();
-        if (disabled) return; // chỉ tắt khi bạn chủ động disable (VD: chưa đăng nhập)
-        const nextVote: VoteValue = myVote === 1 ? 0 : 1; // toggle
-        applyOptimistic(nextVote);
+        if (info) {
+            if (disabled) return; // chỉ tắt khi bạn chủ động disable (VD: chưa đăng nhập)
+            const nextVote: VoteValue = myVote === 1 ? 0 : 1; // toggle
+            applyOptimistic(nextVote);
+        } else {
+            router.push(ROUTER_CLIENT.LOGIN);
+        }
     };
 
     const handleDownvote = (e: React.MouseEvent) => {
         e.stopPropagation();
-        if (disabled) return;
-        const nextVote: VoteValue = myVote === -1 ? 0 : -1; // toggle
-        applyOptimistic(nextVote);
+        if (info) {
+            if (disabled) return;
+            const nextVote: VoteValue = myVote === -1 ? 0 : -1; // toggle
+            applyOptimistic(nextVote);
+        } else {
+            router.push(ROUTER_CLIENT.LOGIN);
+        }
     };
 
     // Helper class

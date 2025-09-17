@@ -4,6 +4,9 @@ import { MessageSquarePlus } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react"; // framer-motion v11 dùng import này
 import * as React from "react";
 import ImageCustom from "../custom/image-custom/ImageCustom";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
+import { useAppSelector } from "@/redux/store";
+import { useRouter } from "next/navigation";
 
 type NoCommentsOverlayProps = {
     visible?: boolean;
@@ -29,6 +32,9 @@ export default function NoCommentsOverlay({
     subtitle = "Your words could spark the first chat ✨",
     className,
 }: NoCommentsOverlayProps) {
+    const info = useAppSelector((state) => state.user.info);
+    const router = useRouter();
+
     const focusTarget = React.useCallback(() => {
         // Cho phép parent chèn logic (vd: check login)
         onRequestFocus?.();
@@ -103,7 +109,11 @@ export default function NoCommentsOverlay({
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation(); // tránh trigger 2 lần
-                                        focusTarget();
+                                        if(info) {
+                                            focusTarget();
+                                        } else {
+                                            router.push(ROUTER_CLIENT.LOGIN)
+                                        }
                                     }}
                                 >
                                     Start the conversation

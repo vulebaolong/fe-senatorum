@@ -33,22 +33,24 @@ export function NavMain() {
                             </TooltipContent>
                         </Tooltip>
                     </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
-                            onClick={() => {
-                                if (info?.name) {
-                                    router.push(`/${info?.username}#my-article`);
-                                } else {
-                                    console.log("info?.name is null");
-                                }
-                            }}
-                            className="items-center justify-center border"
-                            variant={"outline"}
-                            tooltip={"My Article"}
-                        >
-                            <span>My Article</span>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
+                    {info && (
+                        <SidebarMenuItem>
+                            <SidebarMenuButton
+                                onClick={() => {
+                                    if (info?.name) {
+                                        router.push(`/${info?.username}#my-article`);
+                                    } else {
+                                        console.log("info?.name is null");
+                                    }
+                                }}
+                                className="items-center justify-center border"
+                                variant={"outline"}
+                                tooltip={"My Article"}
+                            >
+                                <span>My Article</span>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    )}
                 </SidebarMenu>
             </SidebarGroup>
             {/* <SidebarGroup>

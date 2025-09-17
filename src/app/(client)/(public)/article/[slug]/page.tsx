@@ -3,6 +3,7 @@ import { getIsFollowingAction } from "@/api/actions/follow.action";
 import ArticleDetail from "@/components/article/article-detail/article-detail";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
+import { getAccessToken } from "@/helpers/cookies.helper";
 import { CircleX } from "lucide-react";
 
 import type { Metadata } from "next";
@@ -49,15 +50,16 @@ export async function generateMetadata({ params }: TProps): Promise<Metadata> {
 export default async function Page({ params }: TProps) {
     const { slug } = await params;
     const dataDetailArticle = await getDetailArticleAction(slug);
+    const accessToken = await getAccessToken();
     let isFollowing: boolean | undefined = undefined;
-    if (dataDetailArticle.data?.Users?.id) {
+    if (dataDetailArticle.data?.Users?.id && accessToken) {
         const { data } = await getIsFollowingAction(dataDetailArticle.data.Users.id);
         isFollowing = data?.following;
     }
 
     return (
         <>
-            {dataDetailArticle.data && isFollowing !== undefined ? (
+            {dataDetailArticle.data ? (
                 <ArticleDetail article={dataDetailArticle.data} isFollowing={isFollowing} />
             ) : (
                 <Alert variant="default">

@@ -10,6 +10,7 @@ import { useEffect, useMemo, useState } from "react";
 import ImageCustom from "../../custom/image-custom/ImageCustom";
 import { Button } from "../../ui/button";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "../../ui/command";
+import { useAppSelector } from "@/redux/store";
 
 // --- helpers ---
 function buildQuery(params: { pageIndex: number; pageSize: number; title: string }) {
@@ -37,6 +38,7 @@ async function fetchArticles(title: string, limit = 8) {
 export default function Search() {
     const router = useRouter();
     const [open, setOpen] = useState(false);
+    const info = useAppSelector((state) => state.user.info);
 
     // q = text đang gõ; kw = text đã debounce (đem đi search)
     const [q, setQ] = useState("");
@@ -91,7 +93,13 @@ export default function Search() {
     return (
         <>
             <Button
-                onClick={() => setOpen(true)}
+                onClick={() => {
+                    if (info) {
+                        setOpen(true);
+                    } else {
+                        router.push("/login");
+                    }
+                }}
                 variant="secondary"
                 className="h-full w-full flex items-center justify-between gap-2 rounded-full px-4 dark:bg-muted bg-zinc-100 order-sidebar-border border relative"
             >

@@ -6,6 +6,9 @@ import { Bookmark } from "lucide-react";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { useAddBookmark, useRemoveBookmark } from "@/api/tantask/article-bookmark.tanstack";
 import { TArticle } from "@/types/article.type";
+import { useAppSelector } from "@/redux/store";
+import { useRouter } from "next/navigation";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
 // optional: import toast from "@/components/ui/use-toast";
 
 type TProps = {
@@ -17,6 +20,8 @@ type TProps = {
 export default function ArticleBookmark({ articleId, initial = false, debounceMs = 300 }: TProps) {
     const addBookmark = useAddBookmark();
     const removeBookmark = useRemoveBookmark();
+    const info = useAppSelector((state) => state.user.info);
+    const router = useRouter();
 
     // UI state (optimistic)
     const [isBookmarked, setIsBookmarked] = useState<boolean>(initial);
@@ -60,6 +65,10 @@ export default function ArticleBookmark({ articleId, initial = false, debounceMs
     );
 
     const onClick = (e: React.MouseEvent) => {
+        if (!info) {
+            router.push(ROUTER_CLIENT.LOGIN);
+            return;
+        }
         e.stopPropagation();
         // Toggle UI ngay, ghi nhận “ý định” rồi để debounce commit
         setIsBookmarked((prev) => {
