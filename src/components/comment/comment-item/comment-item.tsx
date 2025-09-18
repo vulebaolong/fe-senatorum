@@ -84,7 +84,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
             <div className={`relative flex items-start gap-2 ${level > 0 ? "pl-2" : ""}`}>
                 {level > 0 && <LineCurve className="absolute top-0 right-full h-[18px] w-[25px]" />}
                 {/* Avatar */}
-                <div className="relative z-10 bg-white dark:bg-[#252728] h-10 w-8 rounded-full flex items-start justify-center">
+                <div className={cn("relative z-10 bg-[#f5f5f5] dark:bg-[#151515] h-10 w-8 rounded-full flex items-start justify-center", "lg:bg-white lg:dark:bg-[#252728]")}>
                     <AvatartImageCustom
                         onClick={(e) => {
                             e.stopPropagation();
@@ -105,7 +105,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                         {replyingCommentId && <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />}
 
                         {/* comment */}
-                        <div className={cn("rounded-lg p-2 w-fit max-w-full", "bg-[#F0F2F5] dark:bg-[#333334]")}>
+                        <div className={cn("rounded-lg p-2 w-fit max-w-full", "bg-[#fff] dark:bg-[#333334]")}>
                             <div className="flex items-center gap-1">
                                 <Name name={comment.Users.name} username={comment.Users.username} />
                                 {comment.Users.id === article.userId && (
@@ -121,8 +121,8 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                                 maxLines={3}
                                 moreLabel="...more"
                                 lessLabel="less"
-                                fadeFromClass="from-[#F0F2F5] dark:from-[#333334]"
-                                inlineButtonBgClass="bg-[#F0F2F5] dark:bg-[#333334]"
+                                fadeFromClass="from-[#fff] dark:from-[#333334]"
+                                inlineButtonBgClass="bg-[#fff] dark:bg-[#333334]"
                                 fadeHeightClass="h-full"
                             />
                         </div>

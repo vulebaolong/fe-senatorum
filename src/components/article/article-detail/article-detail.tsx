@@ -1,5 +1,6 @@
 "use client";
 
+import { useGetInfoQuery } from "@/api/tantask/auth.tanstack";
 import CommentInput from "@/components/comment/comment-input/comment-input";
 import CommentList from "@/components/comment/comment-list";
 import { Container } from "@/components/container/container";
@@ -11,18 +12,16 @@ import ProfileFollow from "@/components/profile/profile-follow/profile-follow";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
 import { formatLocalTime } from "@/helpers/function.helper";
 import { useAutoArticleView } from "@/hooks/use-article-view";
+import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
 import { TArticle } from "@/types/article.type";
 import { TListComment } from "@/types/comment.type";
-import { Clock4, LogIn } from "lucide-react";
+import { Clock4 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ArticleFooter from "../article-footer/article-footer";
 import ArticleType from "../article-type/article-type";
 import ArticleDetailAction from "./article-detail-action";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { ROUTER_CLIENT } from "@/constant/router.constant";
 
 type TProps = {
     article: TArticle;
@@ -30,6 +29,7 @@ type TProps = {
 };
 
 export default function ArticleDetail({ article, isFollowing }: TProps) {
+    useGetInfoQuery();
     const info = useAppSelector((state) => state.user.info);
     const [listComment, setListComment] = useState<TListComment[]>([]);
     const router = useRouter();
@@ -48,7 +48,7 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
     };
 
     return (
-        <div className="h-[calc(100dvh-var(--header-height))] overflow-y-scroll">
+        <div className="h-[calc(100dvh-var(--header-height))] overflow-y-scroll border-none outline-none">
             {/* <ClickSpark sparkColor="#fff" sparkSize={10} sparkRadius={15} sparkCount={8} duration={400}> */}
             <Container as="article" className="py-4 sm:py-6 lg:py-8">
                 {/* Mặc định 1 cột; lên lg mới tách 0.73/0.27 */}
@@ -140,8 +140,14 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
 
                     {/* Sidebar — chỉ sticky ở lg trở lên */}
                     {/* py-4 sm:py-6 lg:py-8 */}
-                    <div className={cn("min-w-0 w-full", "lg:sticky lg:self-start lg:h-fit", "top-4 sm:top-6 lg:top-8")}>
-                        <div className="mb-2 px-1.5 md:px-2">
+                    <div
+                        className={cn(
+                            "min-w-0 w-full border-t border-sidebar-border",
+                            "lg:border-t-0 lg:sticky lg:self-start lg:h-fit",
+                            "top-4 sm:top-6 lg:top-8"
+                        )}
+                    >
+                        <div className={cn("sticky top-0 z-20 bg-[#f5f5f5] dark:bg-[#151515]", "pt-5 pb-2 px-1.5 md:px-2", "lg:pt-0")}>
                             {info && <CommentInput inputId="comment-input" article={article} setListComment={setListComment} commentParent={null} />}
                             {/* {info ? (
                                 <CommentInput inputId="comment-input" article={article} setListComment={setListComment} commentParent={null} />

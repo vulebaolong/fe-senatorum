@@ -132,7 +132,7 @@ const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article,
             },
         });
     };
-
+    const isEmpty = value.length === 0;
     return (
         <div className="flex items-start gap-2">
             {/* avatar */}
@@ -149,7 +149,7 @@ const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article,
             </div>
 
             {/* input */}
-            <Textarea
+            {/* <Textarea
                 id={inputId}
                 ref={textareaRef}
                 className="flex-1 rounded-2xl" // thay cho sx={{ flex: 1 }}
@@ -167,7 +167,41 @@ const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article,
                 }}
                 onCompositionStart={() => setIsComposing(true)}
                 onCompositionEnd={() => setIsComposing(false)}
-            />
+            /> */}
+
+            <div className="relative flex-1">
+                {/* Textarea thật: KHÔNG đặt placeholder (để lib không đo theo placeholder) */}
+                <Textarea
+                    id={inputId}
+                    ref={textareaRef}
+                    className="flex-1 rounded-2xl" // thay cho sx={{ flex: 1 }}
+                    placeholder=""
+                    minRows={1}
+                    maxRows={10}
+                    value={value}
+                    onChange={(e) => setValue(e.target.value.normalize("NFC"))}
+                    onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+                        // Enter để gửi, Shift+Enter để xuống dòng
+                        if (e.key === "Enter" && !e.shiftKey && !isComposing) {
+                            e.preventDefault();
+                            handleCreateComment();
+                        }
+                    }}
+                    onCompositionStart={() => setIsComposing(true)}
+                    onCompositionEnd={() => setIsComposing(false)}
+                />
+
+                {/* Fake placeholder: overlay 1 dòng, không làm đổi chiều cao */}
+                {isEmpty && (
+                    <div
+                        aria-hidden
+                        className="pointer-events-none absolute inset-y-0 left-3 right-3 flex items-center text-sm text-muted-foreground/70 transition-opacity duration-150"
+                        style={{ paddingRight: 0 }}
+                    >
+                        <span className="truncate">Got a thought? We'd love to hear it 😸</span>
+                    </div>
+                )}
+            </div>
 
             {/* button send */}
             <Button onClick={handleCreateComment} variant="outline" size="icon" className="size-8 rounded-full">

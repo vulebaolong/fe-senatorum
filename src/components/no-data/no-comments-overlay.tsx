@@ -1,12 +1,11 @@
 // NoCommentsOverlay.tsx
 import { Button } from "@/components/ui/button";
-import { MessageSquarePlus } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react"; // framer-motion v11 dùng import này
-import * as React from "react";
-import ImageCustom from "../custom/image-custom/ImageCustom";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { useAppSelector } from "@/redux/store";
+import { AnimatePresence, motion } from "motion/react"; // framer-motion v11 dùng import này
 import { useRouter } from "next/navigation";
+import * as React from "react";
+import ImageCustom from "../custom/image-custom/ImageCustom";
 
 type NoCommentsOverlayProps = {
     visible?: boolean;
@@ -65,11 +64,7 @@ export default function NoCommentsOverlay({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
-                    className={[
-                        "absolute inset-0 z-10 flex items-center justify-center rounded-2xl",
-                        "backdrop-blur-sm bg-background/50", // glass nhẹ
-                        className ?? "",
-                    ].join(" ")}
+                    className={["absolute inset-0 z-10 flex items-center justify-center rounded-2xl", className ?? ""].join(" ")}
                     // Click bất kỳ đâu cũng focus
                     // onClick={focusTarget}
                     // Cho bàn phím: Enter/Space để kích hoạt
@@ -109,10 +104,10 @@ export default function NoCommentsOverlay({
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation(); // tránh trigger 2 lần
-                                        if(info) {
+                                        if (info) {
                                             focusTarget();
                                         } else {
-                                            router.push(ROUTER_CLIENT.LOGIN)
+                                            router.push(ROUTER_CLIENT.LOGIN);
                                         }
                                     }}
                                 >

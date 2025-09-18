@@ -10,6 +10,7 @@ import { AppendLoading } from "../data-state/append-state/AppendState";
 import NoCommentsOverlay from "../no-data/no-comments-overlay";
 import { Skeleton } from "../ui/skeleton";
 import CommentItem from "./comment-item/comment-item";
+import { cn } from "@/lib/utils";
 
 type TProps = {
     article: TArticle;
@@ -82,7 +83,7 @@ export default function CommentList({ article, listComment, setListComment }: TP
     return (
         <div
             ref={containerRef}
-            className={`p-2 pb-1 h-[500px] flex flex-col overflow-y-scroll border-sidebar-border border shadow-sm rounded-2xl bg-white dark:bg-[#252728]`}
+            className={cn("min-h-[500px]","p-2 pb-1 lg:h-[500px] flex flex-col lg:overflow-y-scroll lg:border-sidebar-border lg:border lg:shadow-sm rounded-2xl lg:bg-white lg:dark:bg-[#252728]")}
         >
             <div className="relative flex-1">
                 <AppendLoading
