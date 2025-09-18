@@ -39,7 +39,7 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
         "@context": "https://schema.org",
         "@type": "Article",
         headline: article.title,
-        image: article.thumbnail ? [`${NEXT_PUBLIC_BASE_DOMAIN_FE}/${article.thumbnail}`] : undefined,
+        image: article.thumbnail ? [`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`] : undefined,
         datePublished: article.publishedAt,
         dateModified: article.updatedAt,
         author: article.Users?.username ? [{ "@type": "Person", name: article.Users.username }] : undefined,
