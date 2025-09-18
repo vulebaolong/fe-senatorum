@@ -2,7 +2,7 @@ import { getDetailArticleAction } from "@/api/actions/article.action";
 import { getIsFollowingAction } from "@/api/actions/follow.action";
 import ArticleDetail from "@/components/article/article-detail/article-detail";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
+import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE, TITLE } from "@/constant/app.constant";
 import { getAccessToken } from "@/helpers/cookies.helper";
 import { CircleX } from "lucide-react";
 
@@ -11,6 +11,9 @@ import type { Metadata } from "next";
 type TProps = {
     params: Promise<{ slug: string }>;
 };
+
+const ogUrl = (publicId?: string) =>
+    publicId ? `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/c_fill,w_1200,h_630,q_auto,f_jpg/${publicId}` : `${NEXT_PUBLIC_BASE_DOMAIN_FE}/og-default.jpg`;
 
 export async function generateMetadata({ params }: TProps): Promise<Metadata> {
     const { slug } = await params;
@@ -21,9 +24,9 @@ export async function generateMetadata({ params }: TProps): Promise<Metadata> {
     const url = `${NEXT_PUBLIC_BASE_DOMAIN_FE}/article/${article.slug}`;
     const title = article.title;
     const desc = article.title;
-    const ogImage = article.thumbnail ? `${NEXT_PUBLIC_BASE_DOMAIN_FE}/${article.thumbnail}` : `${NEXT_PUBLIC_BASE_DOMAIN_FE}/og-default.jpg`;
+    const ogImage = ogUrl(article.thumbnail);
 
-    return {
+    const result: Metadata = {
         title, // sẽ áp dụng template ở Root: "%s | TITLE"
         description: desc,
         alternates: { canonical: url },
@@ -32,11 +35,11 @@ export async function generateMetadata({ params }: TProps): Promise<Metadata> {
             url,
             title,
             description: desc,
-            siteName: process.env.NEXT_PUBLIC_SITE_NAME ?? undefined,
+            siteName: TITLE ?? undefined,
             images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
             authors: article.Users?.username ? [article.Users.username] : undefined,
-            publishedTime: article.publishedAt ?? undefined,
-            modifiedTime: article.updatedAt ?? undefined,
+            publishedTime: article.publishedAt ? new Date(article.publishedAt).toISOString() : undefined,
+            modifiedTime: article.updatedAt ? new Date(article.updatedAt).toISOString() : undefined,
         },
         twitter: {
             card: "summary_large_image",
@@ -45,6 +48,10 @@ export async function generateMetadata({ params }: TProps): Promise<Metadata> {
             images: [ogImage],
         },
     };
+
+    // console.dir({ result }, { depth: null, colors: true });
+
+    return result;
 }
 
 export default async function Page({ params }: TProps) {
