@@ -148,29 +148,36 @@ export default function ExpandableText({
 
     return (
         <div>
-            {/* Text block (clamped when not expanded) */}
             <div
-                ref={textRef}
-                className={cn("relative text-sm leading-6 text-foreground/90 break-words", clampClass, className)}
-                aria-expanded={expanded}
+                className="et-collapse"
+                data-expanded={expanded ? "true" : "false"}
+                data-clamped={isClamped ? "true" : "false"}
+                style={{ ["--et-lines" as any]: maxLines, ["--et-lh" as any]: "1.5rem" }}
             >
-                <p className="whitespace-pre-wrap">{text}</p>
+                {/* Text block (clamped when not expanded) */}
+                <div
+                    ref={textRef}
+                    className={cn("relative text-sm leading-6 text-foreground/90 break-words", clampClass, className)}
+                    aria-expanded={expanded}
+                >
+                    <p className="whitespace-pre-wrap">{text}</p>
 
-                {/* Inline placement: fade overlay + floating toggle at bottom-right while COLLAPSED */}
-                {isClamped && !expanded && placement === "inline" && (
-                    <>
-                        {/* Fade overlay to soften the end of the last visible line */}
-                        <div
-                            className={cn(
-                                "pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t rounded-b-[inherit] to-transparent",
-                                fadeHeightClass,
-                                fadeFromClass
-                            )}
-                        />
-                        {/* Background patch under the toggle button to mask underlying text */}
-                        <div className={cn("absolute bottom-0 right-0 pl-2", inlineButtonBgClass)}>{More}</div>
-                    </>
-                )}
+                    {/* Inline placement: fade overlay + floating toggle at bottom-right while COLLAPSED */}
+                    {isClamped && !expanded && placement === "inline" && (
+                        <>
+                            {/* Fade overlay to soften the end of the last visible line */}
+                            <div
+                                className={cn(
+                                    "pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t rounded-b-[inherit] to-transparent",
+                                    fadeHeightClass,
+                                    fadeFromClass
+                                )}
+                            />
+                            {/* Background patch under the toggle button to mask underlying text */}
+                            <div className={cn("absolute bottom-0 right-0 pl-2", inlineButtonBgClass)}>{More}</div>
+                        </>
+                    )}
+                </div>
             </div>
 
             {/* "Below" placement OR when EXPANDED (show the appropriate toggle) */}

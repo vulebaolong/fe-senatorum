@@ -166,5 +166,24 @@
 }
 
 body {
-  font-family: var(--font-quicksand), var(--font-geist-sans), system-ui, sans-serif;
+    font-family: var(--font-quicksand), var(--font-geist-sans), system-ui, sans-serif;
+}
+
+.et-collapse {
+    overflow: clip;
+    transition: block-size 0.28s ease;
+    interpolate-size: allow-keywords;
+}
+.et-collapse[data-expanded="true"] {
+    block-size: auto;
+}
+
+/* collapsed + có clamp => giới hạn theo số dòng */
+.et-collapse[data-expanded="false"][data-clamped="true"] {
+    block-size: calc(var(--et-lines) * var(--et-lh));
+}
+
+/* collapsed + KHÔNG clamp => để auto (1 dòng không bị cao) */
+.et-collapse[data-expanded="false"][data-clamped="false"] {
+    block-size: auto;
 }
