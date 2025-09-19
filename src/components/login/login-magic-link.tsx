@@ -38,13 +38,18 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
         };
         loginMagicLink.mutate(payload, {
             onSuccess: () => {
-                toast.success("Vui lòng kiểm tra email để đăng nhập", {
+                toast.success("We've emailed you a sign-in link.", {
+                    id: "magic-link-sent",
+                    description: (
+                        <div className="space-y-1">
+                            <p>If you don't receive an email, check your spam folder.</p>
+                            <p className="text-xs italic opacity-70">The link expires in 2 minutes.</p>
+                        </div>
+                    ),
                     duration: Infinity,
                     action: {
-                        label: "Đã hiểu",
-                        onClick: () => {
-                            /* custom action nếu muốn */
-                        },
+                        label: "Dismiss",
+                        onClick: () => {},
                     },
                 });
             },

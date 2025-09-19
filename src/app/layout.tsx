@@ -10,7 +10,7 @@ const DEFAULT_DESC = "Selected articles, tutorials and knowledge sharing.";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
-const quicksand = Quicksand({ variable: "--font-quicksand", subsets: ["vietnamese"] });
+const quicksand = Quicksand({ variable: "--font-quicksand", subsets: ["vietnamese", "latin", "latin-ext"] });
 
 export const metadata: Metadata = {
     metadataBase: new URL(NEXT_PUBLIC_BASE_DOMAIN_FE),
