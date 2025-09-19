@@ -152,7 +152,7 @@ const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article,
             {/* <Textarea
                 id={inputId}
                 ref={textareaRef}
-                className="flex-1 rounded-2xl" // thay cho sx={{ flex: 1 }}
+                className="flex-1 rounded-2xl h-[30px]" // thay cho sx={{ flex: 1 }}
                 placeholder="Got a thought? We'd love to hear it 😸"
                 minRows={1}
                 maxRows={10}
@@ -174,7 +174,7 @@ const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article,
                 <Textarea
                     id={inputId}
                     ref={textareaRef}
-                    className="flex-1 rounded-2xl" // thay cho sx={{ flex: 1 }}
+                    className="flex-1 rounded-2xl py-[1.5px] mt-[1px]" // thay cho sx={{ flex: 1 }}
                     placeholder=""
                     minRows={1}
                     maxRows={10}
@@ -195,7 +195,7 @@ const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article,
                 {isEmpty && (
                     <div
                         aria-hidden
-                        className="pointer-events-none absolute inset-y-0 left-3 right-3 flex items-center text-sm text-muted-foreground/70 transition-opacity duration-150"
+                        className="h-fit pt-[6px] pointer-events-none absolute inset-y-0 left-3 right-3 flex items-center text-sm text-muted-foreground/70 transition-opacity duration-150"
                         style={{ paddingRight: 0 }}
                     >
                         <span className="truncate">Got a thought? We'd love to hear it 😸</span>

@@ -84,7 +84,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
             <div className={`relative flex items-start gap-2 ${level > 0 ? "pl-2" : ""}`}>
                 {level > 0 && <LineCurve className="absolute top-0 right-full h-[18px] w-[25px]" />}
                 {/* Avatar */}
-                <div className={cn("relative z-10 bg-[#f5f5f5] dark:bg-[#151515] h-10 w-8 rounded-full flex items-start justify-center", "lg:bg-white lg:dark:bg-[#252728]")}>
+                <div className={cn("relative z-10 bg-[#f5f5f5] dark:bg-[#151515] h-10 w-8 rounded-full flex items-start justify-center", "lg:bg-[#f1f1f1] lg:dark:bg-[#252728]")}>
                     <AvatartImageCustom
                         onClick={(e) => {
                             e.stopPropagation();

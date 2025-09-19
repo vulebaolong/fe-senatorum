@@ -84,7 +84,7 @@ export default function ProfileBasic() {
                                         <div className="relative">
                                             <Input placeholder="name" {...field} />
                                             <p className="absolute top-1/2 right-2 -translate-y-1/2  text-xs text-gray-500">
-                                                {form.watch("name").length || 0}/50
+                                                {form.watch("name")?.length || 0}/50
                                             </p>
                                         </div>
                                     </FormControl>
@@ -108,7 +108,7 @@ export default function ProfileBasic() {
                                                 <span className="absolute top-1/2 left-2 -translate-y-1/2 text-gray-500">@</span>
                                             </div>
                                             <p className="absolute top-1/2 right-2 -translate-y-1/2  text-xs text-gray-500">
-                                                {form.watch("name").length || 0}/50
+                                                {form.watch("username")?.length || 0}/50
                                             </p>
                                         </div>
                                     </FormControl>
@@ -135,7 +135,7 @@ export default function ProfileBasic() {
                                                 maxRows={5}
                                             />
                                             <p className="absolute bottom-2 right-2 text-xs text-gray-500">
-                                                {form.watch("name").length || 0}/100
+                                                {form.watch("bio")?.length || 0}/100
                                             </p>
                                         </div>
                                     </FormControl>

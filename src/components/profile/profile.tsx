@@ -39,7 +39,7 @@ export default function Profile({ dataProfile, isFollowing }: Props) {
                 <Container>
                     <div className="flex flex-col gap-5">
                         {/* header */}
-                        <Card className="py-0">
+                        <Card className="py-0 overflow-hidden">
                             <CardContent className="p-0">
                                 {/* Cover Image */}
                                 <div

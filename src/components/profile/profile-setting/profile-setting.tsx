@@ -1,15 +1,15 @@
 "use client";
 
 import { useGetInfoQuery } from "@/api/tantask/auth.tanstack";
+import { Container } from "@/components/container/container";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useAppSelector } from "@/redux/store";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import ProfileBasic from "./profile-basic";
-import ProfileImages from "./profile-avatar";
 import ProfileAvatar from "./profile-avatar";
 import ProfileBanner from "./profile-banner";
+import ProfileBasic from "./profile-basic";
 
 export default function ProfileSetting() {
     useGetInfoQuery();
@@ -40,15 +40,19 @@ export default function ProfileSetting() {
             </div>
 
             {/* body */}
-            <div className="flex flex-col gap-10 flex-1 p-5 overflow-y-auto">
-                {/*  Profile Banner */}
-                <ProfileBanner />
+            <div className="flex-1 p-5 overflow-y-auto">
+                <Container>
+                    <div className="flex flex-col gap-10">
+                        {/*  Profile Banner */}
+                        <ProfileBanner />
 
-                {/*  Profile Images */}
-                <ProfileAvatar />
+                        {/*  Profile Images */}
+                        <ProfileAvatar />
 
-                {/* Basic Information */}
-                <ProfileBasic />
+                        {/* Basic Information */}
+                        <ProfileBasic />
+                    </div>
+                </Container>
             </div>
         </div>
     );
