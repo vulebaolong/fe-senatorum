@@ -181,7 +181,7 @@ export default function ExpandableText({
             </div>
 
             {/* "Below" placement OR when EXPANDED (show the appropriate toggle) */}
-            {(placement === "below" || expanded) && <div>{expanded ? Less : More}</div>}
+            {isClamped && (placement === "below" || expanded) && <div>{expanded ? Less : More}</div>}
         </div>
     );
 }
