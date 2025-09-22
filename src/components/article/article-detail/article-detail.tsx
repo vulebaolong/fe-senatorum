@@ -147,7 +147,7 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                             "top-4 sm:top-6 lg:top-8"
                         )}
                     >
-                        <div className={cn("sticky top-0 z-20 bg-[#f5f5f5] dark:bg-[#151515]", "pt-5 pb-2 px-1.5 md:px-2", "lg:pt-0")}>
+                        <div className={cn("sticky top-0 z-20 bg-[#f5f5f5] dark:bg-[#151515]", "pt-5 pb-2 md:px-2", "lg:pt-0")}>
                             {info && <CommentInput inputId="comment-input" article={article} setListComment={setListComment} commentParent={null} />}
                             {/* {info ? (
                                 <CommentInput inputId="comment-input" article={article} setListComment={setListComment} commentParent={null} />

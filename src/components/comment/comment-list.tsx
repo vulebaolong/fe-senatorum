@@ -82,7 +82,10 @@ export default function CommentList({ article, listComment, setListComment }: TP
     return (
         <div
             ref={containerRef}
-            className={cn("min-h-[500px]","p-2 pb-1 lg:h-[500px] flex flex-col lg:overflow-y-scroll lg:border-sidebar-border lg:border lg:shadow-sm rounded-2xl lg:bg-[#f1f1f1] lg:dark:bg-[#252728]")}
+            className={cn(
+                "min-h-[500px]",
+                "p-2 px-0 md:px-2 pb-1 lg:h-[500px] flex flex-col lg:overflow-y-scroll lg:border-sidebar-border lg:border lg:shadow-sm rounded-2xl lg:bg-[#f1f1f1] lg:dark:bg-[#252728]"
+            )}
         >
             <div className="relative flex-1">
                 <AppendLoading
