@@ -20,11 +20,10 @@ type TProps = {
 export default function Articlelist({ filters, id, type }: TProps) {
     const [page, setPage] = useState(1);
     const [articles, setArticles] = useState<TArticle[]>([]);
-    
+
     const totalPageRef = useRef(0);
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const bottomTriggerRef = useRef<HTMLDivElement | null>(null);
-    
+
     const pageSize = 8;
     const itemWidth = 300;
     const gap = 20;
@@ -79,7 +78,7 @@ export default function Articlelist({ filters, id, type }: TProps) {
                     isLoading={getAllArticle.isLoading}
                     isEmpty={articles.length === 0}
                     isError={getAllArticle.isError}
-                    onBottom={handleEndReached}
+                    onLoadMore={handleEndReached}
                     containerRef={containerRef}
                     footerLoadingComponent={Array.from({ length: skeletonCount }).map((_, i) => (
                         <Skeleton key={i} className={cn(`h-full w-full rounded-xl`)} />
@@ -94,7 +93,6 @@ export default function Articlelist({ filters, id, type }: TProps) {
                     })}
                 </AppendLoading>
             </div>
-            <div ref={bottomTriggerRef} className="w-full h-1"></div>
         </div>
     );
 }

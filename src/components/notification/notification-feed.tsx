@@ -1,18 +1,18 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { motion, type Variants, type HTMLMotionProps } from "framer-motion";
+import { useGetAllNotification, useReadNotification } from "@/api/tantask/notification.tanstack";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
+import { formatLocalTime } from "@/helpers/function.helper";
+import { useFillSkeletons } from "@/hooks/fill-skeleton-article";
 import { cn } from "@/lib/utils";
-import { useQueryClient } from "@tanstack/react-query";
-import { MessageSquare, FileText } from "lucide-react";
 import { NotificationType } from "@/types/enum/notification.enum";
 import { TNotification } from "@/types/notification.type";
-import { ROUTER_CLIENT } from "@/constant/router.constant";
+import { useQueryClient } from "@tanstack/react-query";
+import { motion, type HTMLMotionProps, type Variants } from "framer-motion";
+import { FileText, MessageSquare } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
 import AvatartImageCustom from "../custom/avatar-custom/avatart-custom";
-import { formatLocalTime } from "@/helpers/function.helper";
-import { useGetAllNotification, useReadNotification } from "@/api/tantask/notification.tanstack";
-import { useFillSkeletons } from "@/hooks/fill-skeleton-article";
 import { AppendLoading } from "../data-state/append-state/AppendState";
 import NodataOverlay from "../no-data/NodataOverlay";
 
@@ -261,7 +261,6 @@ export default function NotificationFeed({ mode }: { mode: FeedMode }) {
     const pageSize = 10;
     const totalPageRef = useRef(0);
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const bottomTriggerRef = useRef<HTMLDivElement | null>(null);
     const queryClient = useQueryClient();
 
     const getAllNotification = useGetAllNotification({
@@ -316,7 +315,7 @@ export default function NotificationFeed({ mode }: { mode: FeedMode }) {
                     isLoading={getAllNotification.isLoading}
                     isEmpty={notifications.length === 0}
                     isError={getAllNotification.isError}
-                    onBottom={handleEndReached}
+                    onLoadMore={handleEndReached}
                     containerRef={containerRef}
                     footerLoadingComponent={Array.from({ length: skeletonCount }).map((_, i) => (
                         <Skeleton key={i} className="min-h-[54px] h-full w-full rounded-xl" />
@@ -331,7 +330,6 @@ export default function NotificationFeed({ mode }: { mode: FeedMode }) {
                     ))}
                 </AppendLoading>
             </div>
-            <div ref={bottomTriggerRef} className="w-full h-1" />
         </div>
     );
 }

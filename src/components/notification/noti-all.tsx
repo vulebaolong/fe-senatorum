@@ -1,6 +1,8 @@
 import { useGetAllNotification, useReadNotification } from "@/api/tantask/notification.tanstack";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { formatLocalTime } from "@/helpers/function.helper";
 import { useFillSkeletons } from "@/hooks/fill-skeleton-article";
+import { cn } from "@/lib/utils";
 import { NotificationType } from "@/types/enum/notification.enum";
 import { TNotification } from "@/types/notification.type";
 import { useQueryClient } from "@tanstack/react-query";
@@ -12,8 +14,6 @@ import { AppendLoading } from "../data-state/append-state/AppendState";
 import NodataOverlay from "../no-data/NodataOverlay";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
-import { cn } from "@/lib/utils";
-import { ROUTER_CLIENT } from "@/constant/router.constant";
 
 const rowV = { rest: {}, hover: {} };
 
@@ -50,7 +50,6 @@ export default function NotiAll() {
     const pageSize = 3;
     const totalPageRef = useRef(0);
     const containerRef = useRef(null);
-    const bottomTriggerRef = useRef(null);
     const queryClient = useQueryClient();
 
     const getAllNotification = useGetAllNotification({
@@ -99,7 +98,7 @@ export default function NotiAll() {
                     isLoading={getAllNotification.isLoading}
                     isEmpty={notifications.length === 0}
                     isError={getAllNotification.isError}
-                    onBottom={handleEndReached}
+                    onLoadMore={handleEndReached}
                     containerRef={containerRef}
                     footerLoadingComponent={Array.from({ length: skeletonCount }).map((_, i) => (
                         <Skeleton key={i} className="min-h-[50px] h-full w-full rounded-xl" />
@@ -182,7 +181,6 @@ export default function NotiAll() {
                     })}
                 </AppendLoading>
             </div>
-            <div ref={bottomTriggerRef} className="w-full h-1"></div>
         </div>
     );
 }

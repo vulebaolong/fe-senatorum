@@ -1,6 +1,7 @@
 import { useGetCommentByArticle } from "@/api/tantask/comment.tanstack";
 import { SOCKET_COMMENT } from "@/constant/comment.constant";
 import { useSocket } from "@/hooks/socket.hook";
+import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
 import { TArticle } from "@/types/article.type";
 import { TSocketRes } from "@/types/base.type";
@@ -10,7 +11,6 @@ import { AppendLoading } from "../data-state/append-state/AppendState";
 import NoCommentsOverlay from "../no-data/no-comments-overlay";
 import { Skeleton } from "../ui/skeleton";
 import CommentItem from "./comment-item/comment-item";
-import { cn } from "@/lib/utils";
 
 type TProps = {
     article: TArticle;
@@ -23,7 +23,6 @@ export default function CommentList({ article, listComment, setListComment }: TP
     const pageSize = 10;
     const totalPageRef = useRef(0);
     const containerRef = useRef(null);
-    const bottomTriggerRef = useRef(null);
 
     const { socket } = useSocket();
     const info = useAppSelector((state) => state.user.info);
@@ -90,7 +89,7 @@ export default function CommentList({ article, listComment, setListComment }: TP
                     isLoading={getCommentByArticle.isLoading}
                     isEmpty={!getCommentByArticle.data || listComment.length === 0}
                     isError={getCommentByArticle.isError}
-                    onBottom={handleEndReached}
+                    onLoadMore={handleEndReached}
                     containerRef={containerRef}
                     footerLoadingComponent={<Skeleton className="min-h-[50px] h-full w-full rounded-xl" />}
                     initialLoadingComponent={<Skeleton className="h-[50px] w-full rounded-xl" />}
@@ -118,7 +117,6 @@ export default function CommentList({ article, listComment, setListComment }: TP
                     })}
                 </AppendLoading>
             </div>
-            <div ref={bottomTriggerRef} className="w-full h-1 shrink"></div>
         </div>
     );
 }
