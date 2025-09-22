@@ -1,97 +1,26 @@
 "use client";
 
+import { useCollapseTransition } from "@/hooks/use-collapse-transition";
 import { cn } from "@/lib/utils";
 import * as React from "react";
 
-type ToggleRender = (opts: { onClick: () => void }) => React.ReactNode;
+type ToggleRenderer = (options: { onClick: () => void }) => React.ReactNode;
 
-type ExpandableTextProps = {
+type ExpandableTextProperties = {
     text: string;
-    /** Maximum number of lines when collapsed (requires @tailwindcss/line-clamp) */
     maxLines?: 3 | 4 | 5 | 6;
-    /** Extra classes applied to the text container */
     className?: string;
-    /** Initial expanded state */
     defaultExpanded?: boolean;
-
-    /**
-     * Position of the toggle button when the text is COLLAPSED.
-     * - "below": show the toggle under the paragraph (default)
-     * - "inline": show the toggle at the end of the last visible line (with a fade overlay)
-     */
     placement?: "below" | "inline";
-
-    /** Override default labels when NOT providing renderers */
     moreLabel?: string;
     lessLabel?: string;
-
-    /**
-     * Custom renderers for toggle buttons.
-     * If provided, these override `moreLabel` / `lessLabel`.
-     * Receive a single prop: `{ onClick }`.
-     */
-    renderMore?: ToggleRender;
-    renderLess?: ToggleRender;
-
-    /**
-     * Tailwind class(es) for the starting color of the fade gradient
-     * used in "inline" placement. You can include dark mode variants.
-     * Example: 'from-[#F0F2F5] dark:from-[#333334]'.
-     * Default: "from-background"
-     */
+    renderMore?: ToggleRenderer;
+    renderLess?: ToggleRenderer;
     fadeFromClass?: string;
-
-    /**
-     * Tailwind background class(es) painted UNDER the inline button
-     * to mask text behind it (so the button looks attached to the text).
-     * Example: 'bg-[#F0F2F5] dark:bg-[#333334]'.
-     * Default: "bg-background"
-     */
     inlineButtonBgClass?: string;
-
-    /** Height of the fade strip (e.g. "h-6"). Default: "h-6" */
     fadeHeightClass?: string;
 };
 
-/**
- * ExpandableText — truncates long text to a fixed number of lines and provides a toggle to expand/collapse.
- *
- * Features:
- * - Line clamping (3–6 lines) in collapsed state.
- * - Two toggle placements:
- *    • "below" — toggle appears under the paragraph.
- *    • "inline" — toggle sits at the end of the last visible line with a subtle fade overlay.
- * - Customizable labels or fully custom toggle renderers.
- * - Configurable fade color and height to match any background.
- *
- * @example Basic
- * ```tsx
- * <ExpandableText text={content} />
- * ```
- *
- * @example Inline like Facebook
- * ```tsx
- * <ExpandableText text={content} placement="inline" maxLines={3} />
- * ```
- *
- * @example Custom buttons
- * ```tsx
- * <ExpandableText
- *   text={content}
- *   placement="inline"
- *   renderMore={({ onClick }) => (
- *     <Button variant="secondary" size="xs" className="h-6" onClick={onClick}>
- *       Read more →
- *     </Button>
- *   )}
- *   renderLess={({ onClick }) => (
- *     <Button variant="ghost" size="xs" className="h-6" onClick={onClick}>
- *       Collapse
- *     </Button>
- *   )}
- * />
- * ```
- */
 export default function ExpandableText({
     text,
     maxLines = 3,
@@ -105,67 +34,103 @@ export default function ExpandableText({
     fadeFromClass = "from-background",
     inlineButtonBgClass = "bg-background",
     fadeHeightClass = "h-6",
-}: ExpandableTextProps) {
-    const [expanded, setExpanded] = React.useState(defaultExpanded);
-    const textRef = React.useRef<HTMLDivElement>(null);
-    const [isClamped, setIsClamped] = React.useState(false);
+}: ExpandableTextProperties) {
+    const textBlockReference = React.useRef<HTMLDivElement>(null);
+    const [isTrulyClamped, setIsTrulyClamped] = React.useState(false);
 
-    // Map numeric `maxLines` to Tailwind's clamp classes.
-    const clampClass = expanded ? "" : ({ 3: "line-clamp-3", 4: "line-clamp-4", 5: "line-clamp-5", 6: "line-clamp-6" } as const)[maxLines];
+    // NEW: tạm tắt clamp đúng lúc expand để hook đo chiều cao thật
+    const [disableClampForExpand, setDisableClampForExpand] = React.useState(false);
 
-    // Đo xem có thật sự bị clamp không
+    const getCollapsedHeightFromLines = React.useCallback(
+        (containerElement: HTMLElement) => {
+            const textElement = textBlockReference.current;
+            if (!textElement) return 0;
+            const computedStyle = window.getComputedStyle(textElement);
+            const lineHeightString = computedStyle.lineHeight;
+            const lineHeightPixel = lineHeightString === "normal" ? (parseFloat(computedStyle.fontSize) || 16) * 1.5 : parseFloat(lineHeightString);
+            return Math.max(0, lineHeightPixel * maxLines);
+        },
+        [maxLines]
+    );
+
+    const collapse = useCollapseTransition({
+        initialExpanded: defaultExpanded,
+        getCollapsedHeight: getCollapsedHeightFromLines,
+        animationDurationMs: 280,
+        animationEasing: "ease",
+        capCollapsedAtContentHeight: true,
+        recomputeWhen: [text, maxLines],
+    });
+
+    // Đo đúng: so tổng số dòng với maxLines
     React.useLayoutEffect(() => {
-        const el = textRef.current;
-        if (!el) return;
+        const element = textBlockReference.current;
+        if (!element) return;
 
         const measure = () => {
-            if (expanded) return setIsClamped(false);
-            // nếu bị cắt, scrollHeight sẽ > clientHeight
-            setIsClamped(el.scrollHeight > el.clientHeight + 1);
+            if (collapse.isExpanded) {
+                setIsTrulyClamped(false);
+                return;
+            }
+            const computed = window.getComputedStyle(element);
+            const lineHeightString = computed.lineHeight;
+            const lineHeightPixel = lineHeightString === "normal" ? (parseFloat(computed.fontSize) || 16) * 1.5 : parseFloat(lineHeightString);
+            const totalLineCount = Math.round(element.scrollHeight / lineHeightPixel);
+            setIsTrulyClamped(totalLineCount > maxLines);
         };
 
         measure();
-        // re-measure khi resize hoặc text đổi
         window.addEventListener("resize", measure);
         return () => window.removeEventListener("resize", measure);
-    }, [text, expanded, maxLines]);
+    }, [text, maxLines, collapse.isExpanded]);
 
-    // Default toggle buttons (spans to keep output minimal and style-neutral).
+    // Nút mặc định
+    const handleClickExpand = () => {
+        // TẮT CLAMP ngay frame hiện tại để hook đo scrollHeight thật
+        setDisableClampForExpand(true);
+        requestAnimationFrame(() => {
+            collapse.setExpanded(true);
+            // khi đã expand, không cần bật lại (đang mở thì không dùng clamp)
+        });
+    };
+    const handleClickCollapse = () => {
+        // Bật lại clamp khi đóng
+        setDisableClampForExpand(false);
+        collapse.setExpanded(false);
+    };
+
     const DefaultMore = (
-        <span className="px-0 h-auto text-sm font-bold hover:underline cursor-pointer" onClick={() => setExpanded(true)}>
+        <span className="px-0 h-auto text-sm font-bold hover:underline cursor-pointer" onClick={handleClickExpand}>
             {moreLabel}
         </span>
     );
-
     const DefaultLess = (
-        <span className="px-0 h-auto text-sm font-bold hover:underline cursor-pointer" onClick={() => setExpanded(false)}>
+        <span className="px-0 h-auto text-sm font-bold hover:underline cursor-pointer" onClick={handleClickCollapse}>
             {lessLabel}
         </span>
     );
 
-    const More = renderMore ? renderMore({ onClick: () => setExpanded(true) }) : DefaultMore;
-    const Less = renderLess ? renderLess({ onClick: () => setExpanded(false) }) : DefaultLess;
+    const MoreButton = renderMore ? renderMore({ onClick: handleClickExpand }) : DefaultMore;
+    const LessButton = renderLess ? renderLess({ onClick: handleClickCollapse }) : DefaultLess;
+
+    // Áp dụng clamp CHỈ khi đang đóng VÀ không ở trạng thái “tắt clamp để expand”
+    const shouldApplyClamp = !collapse.isExpanded && !disableClampForExpand;
+    const clampClassName = shouldApplyClamp
+        ? ({ 3: "line-clamp-3", 4: "line-clamp-4", 5: "line-clamp-5", 6: "line-clamp-6" } as const)[maxLines]
+        : "line-clamp-none";
 
     return (
         <div>
-            <div
-                className="et-collapse"
-                data-expanded={expanded ? "true" : "false"}
-                data-clamped={isClamped ? "true" : "false"}
-                style={{ ["--et-lines" as any]: maxLines, ["--et-lh" as any]: "1.5rem" }}
-            >
-                {/* Text block (clamped when not expanded) */}
+            <div ref={collapse.containerReference} className="et-collapse overflow-hidden" data-expanded={collapse.isExpanded ? "true" : "false"}>
                 <div
-                    ref={textRef}
-                    className={cn("relative text-sm leading-6 text-foreground/90 break-words", clampClass, className)}
-                    aria-expanded={expanded}
+                    ref={textBlockReference}
+                    className={cn("relative text-sm leading-6 text-foreground/90 break-words", clampClassName, className)}
+                    aria-expanded={collapse.isExpanded}
                 >
-                    <p className="whitespace-pre-wrap">{text}</p>
+                    <p className="whitespace-pre-wrap m-0">{text}</p>
 
-                    {/* Inline placement: fade overlay + floating toggle at bottom-right while COLLAPSED */}
-                    {isClamped && !expanded && placement === "inline" && (
+                    {isTrulyClamped && !collapse.isExpanded && placement === "inline" && (
                         <>
-                            {/* Fade overlay to soften the end of the last visible line */}
                             <div
                                 className={cn(
                                     "pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t rounded-b-[inherit] to-transparent",
@@ -173,15 +138,15 @@ export default function ExpandableText({
                                     fadeFromClass
                                 )}
                             />
-                            {/* Background patch under the toggle button to mask underlying text */}
-                            <div className={cn("absolute bottom-0 right-0 pl-2", inlineButtonBgClass)}>{More}</div>
+                            <div className={cn("absolute bottom-0 right-0 pl-2", inlineButtonBgClass)}>{MoreButton}</div>
                         </>
                     )}
                 </div>
             </div>
 
-            {/* "Below" placement OR when EXPANDED (show the appropriate toggle) */}
-            {isClamped && (placement === "below" || expanded) && <div>{expanded ? Less : More}</div>}
+            {isTrulyClamped && (placement === "below" || collapse.isExpanded) && (
+                <div className="mt-1">{collapse.isExpanded ? LessButton : MoreButton}</div>
+            )}
         </div>
     );
 }

@@ -187,3 +187,8 @@ body {
 .et-collapse[data-expanded="false"][data-clamped="false"] {
     block-size: auto;
 }
+
+.et-collapse--animating {
+    overflow: hidden;
+    will-change: height;
+}
