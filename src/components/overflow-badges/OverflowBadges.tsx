@@ -77,7 +77,7 @@ export function OverflowBadges({
             {/* container hiển thị */}
             <div ref={hostRef} className={cn("flex items-center gap-1 overflow-hidden", className)} title={items.join(", ")}>
                 {items.slice(0, visibleCount).map((name, i) => (
-                    <Badge key={i} variant="outline">
+                    <Badge key={i} variant="secondary" className="text-black bg-white">
                         {name}
                     </Badge>
                 ))}
@@ -89,7 +89,7 @@ export function OverflowBadges({
                 <div ref={measureRef} className="flex items-center" style={{ gap: `${gapPx}px` }}>
                     {measureItems.map((name, i) => (
                         <div key={i} data-kind="badge" className="inline-block">
-                            <Badge variant="outline">{name}</Badge>
+                            <Badge variant="secondary" className="text-black bg-white">{name}</Badge>
                         </div>
                     ))}
                     {/* đo badge +N với N thực tế */}

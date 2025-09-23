@@ -52,87 +52,110 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
             {/* <ClickSpark sparkColor="#fff" sparkSize={10} sparkRadius={15} sparkCount={8} duration={400}> */}
             <Container as="article" className="py-4 sm:py-6 lg:py-8">
                 {/* Mặc định 1 cột; lên lg mới tách 0.73/0.27 */}
-                <div className="flex-1 grid gap-5 lg:[grid-template-columns:0.65fr_0.35fr]">
+                <div className="flex-1 grid gap-10 lg:[grid-template-columns:0.65fr_0.35fr]">
                     {/* Main */}
-                    <div className="min-w-0 w-full">
-                        <div className="mb-2 flex w-full items-center justify-between h-8">
-                            <ArticleType type={article.Types} />
-                            {info?.id === article.Users.id && <ArticleDetailAction detailArticle={article} />}
-                        </div>
-
-                        <div className="flex flex-col gap-6 md:gap-8 lg:gap-10">
-                            {/* Thumb + meta: mobile 1 cột; lg split 60/40 */}
-                            {/* <div className="grid gap-4 md:gap-5 lg:[grid-template-columns:0.60fr_0.40fr]"> */}
-                            <div className="grid gap-4 md:gap-5">
-                                {/* Thumbnail */}
-                                <div className="min-w-0 w-full h-full border-sidebar-border border shadow-sm aspect-video overflow-hidden rounded-xl">
+                    <div className=" min-w-0 w-full">
+                        <div className="flex flex-col gap-0">
+                            <div className="relative">
+                                <div className="min-w-0 w-full h-full border-sidebar-border border shadow-sm aspect-[632/355] overflow-hidden rounded-t-lg">
                                     <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`} alt={article.slug} />
                                 </div>
 
-                                {/* Meta */}
-                                <div className="min-w-0 w-full h-full flex flex-col gap-3 md:gap-4 lg:gap-2 justify-between">
+                                <div className="absolute top-0 flex w-full items-center justify-between h-8 p-5 h-auto">
+                                    <ArticleType type={article.Types} />
+                                    {info?.id === article.Users.id && <ArticleDetailAction detailArticle={article} />}
+                                </div>
+
+                                <div
+                                    className={cn(
+                                        "pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t rounded-b-[inherit] to-transparent",
+                                        "from-[rgba(0,0,0,0.5)] dark:from-[#333334]",
+                                        "h-1/3"
+                                    )}
+                                />
+
+                                <div className="absolute inset-x-0 bottom-0 p-5">
                                     {/* categories */}
                                     <OverflowBadges
                                         className="h-[22px]"
                                         gapPx={4}
                                         items={article.ArticleCategories.map((it) => `#${it.Categories.name}`)}
                                     />
+                                </div>
+                            </div>
 
-                                    {/* title + time */}
-                                    <div className="text-xl sm:text-2xl md:text-3xl font-bold leading-snug line-clamp-5 md:line-clamp-4 md:h-[96px] lg:h-[128px]">
-                                        {article.title}
-                                        <br />
-                                        <span className="mt-1 inline-flex items-center gap-1 text-muted-foreground text-[11px] sm:text-xs font-medium">
-                                            <Clock4 size={12} />
-                                            {formatLocalTime(article.publishedAt)}
-                                        </span>
-                                    </div>
+                            {/* Meta */}
+                            <div
+                                className={cn(
+                                    "py-5 min-w-0 w-full h-full flex flex-col gap-3 md:gap-4 lg:gap-2 justify-between bg-background",
+                                    "px-2"
+                                )}
+                            >
+                                {/* title + time */}
+                                <p
+                                    className={cn(
+                                        // typography
+                                        "font-bold tracking-tight leading-tight break-words truncate",
+                                        // cân chữ đẹp trên trình duyệt hỗ trợ
+                                        "supports-[text-wrap:balance]:text-balance",
 
-                                    {/* footer */}
-                                    <div className="pt-1">
-                                        <ArticleFooter article={article} />
-                                    </div>
+                                        // cỡ chữ theo breakpoint
+                                        "text-xl sm:text-2xl md:text-3xl lg:text-3xl",
 
-                                    {/* author */}
-                                    <div className="flex items-center gap-2">
-                                        <div className="flex flex-1 items-center gap-2 py-1.5 text-left text-sm">
-                                            <AvatartImageCustom
+                                        // clamp số dòng theo breakpoint (không còn height cố định)
+                                        "line-clamp-3 sm:line-clamp-4 md:line-clamp-4 lg:line-clamp-5"
+                                    )}
+                                >
+                                    {article.title}
+                                </p>
+
+                                {/* footer */}
+                                <div className="pt-1">
+                                    <ArticleFooter article={article} />
+                                </div>
+
+                                {/* author */}
+                                <div className="flex items-center gap-2">
+                                    <div className="flex flex-1 items-center gap-2 py-1.5 text-left text-sm">
+                                        <AvatartImageCustom
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                router.push(`/${article.Users.username}`);
+                                            }}
+                                            className="h-8 w-8 rounded-full cursor-pointer"
+                                            name={article.Users.name}
+                                            src={article.Users.avatar}
+                                        />
+                                        <div className="grid flex-1 text-left leading-tight">
+                                            <span
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     router.push(`/${article.Users.username}`);
                                                 }}
-                                                className="h-8 w-8 rounded-full cursor-pointer"
-                                                name={article.Users.name}
-                                                src={article.Users.avatar}
-                                            />
-                                            <div className="grid flex-1 text-left leading-tight">
-                                                <span
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        router.push(`/${article.Users.username}`);
-                                                    }}
-                                                    className="truncate font-medium hover:underline cursor-pointer w-fit text-sm"
-                                                >
-                                                    {article.Users.name}
-                                                </span>
-                                                <span className="truncate text-xs text-muted-foreground">@{article.Users.username}</span>
+                                                className="truncate font-medium hover:underline cursor-pointer w-fit text-sm"
+                                            >
+                                                {article.Users.name}
+                                            </span>
+                                            <div className="inline-flex items-center gap-1 text-muted-foreground text-[11px] sm:text-xs font-medium">
+                                                <Clock4 size={12} />
+                                                {formatLocalTime(article.publishedAt)}
                                             </div>
                                         </div>
-                                        {isFollowing && (
-                                            <>
-                                                {info?.id !== article.Users.id && (
-                                                    <div className="shrink-0">
-                                                        <ProfileFollow isFollowing={isFollowing} followingId={article.Users.id} />
-                                                    </div>
-                                                )}
-                                            </>
-                                        )}
                                     </div>
+                                    {isFollowing && (
+                                        <>
+                                            {info?.id !== article.Users.id && (
+                                                <div className="shrink-0">
+                                                    <ProfileFollow isFollowing={isFollowing} followingId={article.Users.id} />
+                                                </div>
+                                            )}
+                                        </>
+                                    )}
                                 </div>
                             </div>
 
                             {/* Content + comments */}
-                            <div>
+                            <div className={cn("py-5 bg-background", "px-2")}>
                                 <Editor isViewOnly initialContentJSON={article.content} />
                             </div>
                         </div>

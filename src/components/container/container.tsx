@@ -17,5 +17,5 @@ export const Container = React.forwardRef(function Container<E extends React.Ele
     ref: React.ComponentRef<E> extends never ? never : React.Ref<any>
 ) {
     const Comp = (as ?? "div") as React.ElementType;
-    return <Comp ref={ref} className={cn("container mx-auto px-4 sm:px-6 lg:px-8", className)} {...(props as object)} />;
+    return <Comp ref={ref} className={cn("container mx-auto px-4 sm:px-10 lg:px-20", className)} {...(props as object)} />;
 }) as <E extends React.ElementType = "div">(props: ContainerProps<E> & { ref?: React.ComponentRef<E> }) => React.ReactElement | null;

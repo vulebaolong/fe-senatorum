@@ -52,7 +52,7 @@ export default function ArticleDetailAction({ detailArticle }: TProps) {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     {/* KHÔNG gắn onClick điều hướng ở Trigger */}
-                    <Button variant="ghost" size="icon" className="size-6 outline-0">
+                    <Button size="icon" variant={"default"} className="size-6 outline-0">
                         <EllipsisVertical />
                     </Button>
                 </DropdownMenuTrigger>

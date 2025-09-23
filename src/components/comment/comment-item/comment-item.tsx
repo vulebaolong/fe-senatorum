@@ -118,7 +118,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                             <ExpandableText
                                 text={comment.content}
                                 placement="inline"
-                                maxLines={3}
+                                maxLines={5}
                                 moreLabel="...more"
                                 lessLabel="less"
                                 fadeFromClass="from-[#fff] dark:from-[#333334]"
