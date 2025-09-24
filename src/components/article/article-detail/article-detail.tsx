@@ -213,7 +213,7 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                                 article={article}
                                 listComment={listComment}
                                 setListComment={setListComment}
-                                className={cn("py-2 px-0 md:px-2 flex-1 min-h-0")}
+                                className={cn("py-2 px-0 md:px-2 flex-1 min-h-[500px]")}
                             />
                         </div>
                     </div>

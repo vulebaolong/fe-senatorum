@@ -94,6 +94,7 @@ export default function CommentList({ article, listComment, setListComment, clas
                     <NoCommentsOverlay
                         visible
                         inputId={"comment-input"} // hoặc inputId="comment-input"
+                        className="max-h-[500px]"
                         // title="No comments yet"
                         // subtitle="Be the first to comment!"
                         // onRequestFocus={() => { if (!isLoggedIn) openLoginModal(); }}
