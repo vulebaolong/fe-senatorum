@@ -9,7 +9,7 @@ import { TCreateCommentReq, TListComment } from "@/types/comment.type";
 import { ECommentStatus } from "@/types/enum/comment-status.enum";
 import { SendHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Dispatch, forwardRef, SetStateAction, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { Dispatch, forwardRef, SetStateAction, useImperativeHandle, useRef, useState } from "react";
 import { toast } from "sonner";
 
 export type CommentInputHandle = {
