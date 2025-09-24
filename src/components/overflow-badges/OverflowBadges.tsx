@@ -1,23 +1,22 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
+import { Badge, badgeVariants } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { VariantProps } from "class-variance-authority";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
-/** Hiển thị badges 1 hàng; khi thiếu chỗ -> hiện +N */
-export function OverflowBadges({
-    items,
-    className,
-    gapPx = 4, // tương ứng tailwind gap-1
-    moreLabel = (n: number) => `+${n}`,
-}: {
+type TProps = {
     items: string[];
     className?: string;
     /** Khoảng cách giữa badges (px) – khớp với class gap-* bạn dùng */
     gapPx?: number;
     /** Tùy biến text cho “+N” */
     moreLabel?: (n: number) => string;
-}) {
+    classNameBadge?: string;
+} & VariantProps<typeof badgeVariants>;
+
+/** Hiển thị badges 1 hàng; khi thiếu chỗ -> hiện +N */
+export function OverflowBadges({ items, className, gapPx = 4, moreLabel = (n: number) => `+${n}`, classNameBadge, variant }: TProps) {
     const hostRef = useRef<HTMLDivElement>(null);
 
     // container ẩn để đo width từng badge & badge +N
@@ -77,7 +76,7 @@ export function OverflowBadges({
             {/* container hiển thị */}
             <div ref={hostRef} className={cn("flex items-center gap-1 overflow-hidden", className)} title={items.join(", ")}>
                 {items.slice(0, visibleCount).map((name, i) => (
-                    <Badge key={i} variant="secondary" className="text-black bg-white">
+                    <Badge key={i} variant={variant} className={cn(classNameBadge)}>
                         {name}
                     </Badge>
                 ))}
@@ -89,7 +88,9 @@ export function OverflowBadges({
                 <div ref={measureRef} className="flex items-center" style={{ gap: `${gapPx}px` }}>
                     {measureItems.map((name, i) => (
                         <div key={i} data-kind="badge" className="inline-block">
-                            <Badge variant="secondary" className="text-black bg-white">{name}</Badge>
+                            <Badge variant="secondary">
+                                {name}
+                            </Badge>
                         </div>
                     ))}
                     {/* đo badge +N với N thực tế */}

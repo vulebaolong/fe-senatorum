@@ -1,23 +1,11 @@
 import { useDeleteArticle } from "@/api/tantask/article.tanstack";
 import ConfirmDialog from "@/components/dialog/dialog-confirm";
-import DialogSubmitDelete from "@/components/dialog/dialog-submit-delete";
 import { Button } from "@/components/ui/button";
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { TResAction } from "@/types/app.type";
 import { TArticle } from "@/types/article.type";
 import { EllipsisVertical, Pencil, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useState } from "react";
 
 type TProps = {
     detailArticle: TArticle;
@@ -52,9 +40,9 @@ export default function ArticleDetailAction({ detailArticle }: TProps) {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     {/* KHÔNG gắn onClick điều hướng ở Trigger */}
-                    <Button size="icon" variant={"default"} className="size-6 outline-0">
-                        <EllipsisVertical />
-                    </Button>
+                    <div className="size-5 flex items-center justify-center bg-[oklch(20.5%_0_0)] rounded-sm">
+                        <EllipsisVertical color="#fff" size={15}/>
+                    </div>
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent side="bottom" align="end">

@@ -22,6 +22,7 @@ import { useState } from "react";
 import ArticleFooter from "../article-footer/article-footer";
 import ArticleType from "../article-type/article-type";
 import ArticleDetailAction from "./article-detail-action";
+import { Separator } from "@/components/ui/separator";
 
 type TProps = {
     article: TArticle;
@@ -53,19 +54,22 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
             <Container as="article" className="py-4 sm:py-6 lg:py-8">
                 {/* Mặc định 1 cột; lên lg mới tách 0.73/0.27 */}
                 <div className="flex-1 grid gap-10 lg:[grid-template-columns:0.65fr_0.35fr]">
-                    {/* Main */}
+                    {/* left */}
                     <div className=" min-w-0 w-full">
                         <div className="flex flex-col gap-0">
                             <div className="relative">
-                                <div className="min-w-0 w-full h-full border-sidebar-border border shadow-sm aspect-[632/355] overflow-hidden rounded-t-lg">
+                                {/* article - thumbnail */}
+                                <div className="min-w-0 w-full h-full aspect-[632/355] overflow-hidden rounded-t-lg">
                                     <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`} alt={article.slug} />
                                 </div>
 
-                                <div className="absolute top-0 flex w-full items-center justify-between h-8 p-5 h-auto">
+                                {/* article - type */}
+                                <div className="absolute top-0 flex w-full items-center justify-between p-5 h-auto">
                                     <ArticleType type={article.Types} />
                                     {info?.id === article.Users.id && <ArticleDetailAction detailArticle={article} />}
                                 </div>
 
+                                {/* article - overlay thumbnail */}
                                 <div
                                     className={cn(
                                         "pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t rounded-b-[inherit] to-transparent",
@@ -74,10 +78,12 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                                     )}
                                 />
 
+                                {/* article - categories */}
                                 <div className="absolute inset-x-0 bottom-0 p-5">
-                                    {/* categories */}
                                     <OverflowBadges
                                         className="h-[22px]"
+                                        classNameBadge="text-black bg-white"
+                                        variant={"secondary"}
                                         gapPx={4}
                                         items={article.ArticleCategories.map((it) => `#${it.Categories.name}`)}
                                     />
@@ -91,11 +97,12 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                                     "px-2"
                                 )}
                             >
-                                {/* title + time */}
+                                {/* title */}
                                 <p
                                     className={cn(
                                         // typography
                                         "font-bold tracking-tight leading-tight break-words truncate",
+
                                         // cân chữ đẹp trên trình duyệt hỗ trợ
                                         "supports-[text-wrap:balance]:text-balance",
 
@@ -161,18 +168,32 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                         </div>
                     </div>
 
-                    {/* Sidebar — chỉ sticky ở lg trở lên */}
-                    {/* py-4 sm:py-6 lg:py-8 */}
-                    <div
-                        className={cn(
-                            "min-w-0 w-full border-t border-sidebar-border",
-                            "lg:border-t-0 lg:sticky lg:self-start lg:h-fit",
-                            "top-4 sm:top-6 lg:top-8"
-                        )}
-                    >
-                        <div className={cn("sticky top-0 z-20 bg-[#f5f5f5] dark:bg-[#151515]", "pt-5 pb-2 md:px-2", "lg:pt-0")}>
-                            {info && <CommentInput inputId="comment-input" article={article} setListComment={setListComment} commentParent={null} />}
-                            {/* {info ? (
+                    <Separator className="visible lg:hidden" />
+
+                    {/* right — chỉ sticky ở lg trở lên */}
+                    <div className={cn("min-w-0 w-full")}>
+                        <div className="lg:h-[calc(100dvh-var(--header-height)-64px)] flex flex-col lg:sticky top-4 sm:top-6 lg:top-8 lg:border-sidebar-border lg:border lg:shadow-sm rounded-lg overflow-hidden">
+                            {/* comment header */}
+                            <div
+                                className={cn(
+                                    "pb-2 md:p-2 md:pt-0 lg:p-2 space-y-5 lg:border-b lg:border-sidebar-border bg-[#f5f5f5] dark:bg-[#151515]"
+                                )}
+                            >
+                                {/* comment title */}
+                                <p className="text-xl font-bold">
+                                    Comments <span className="text-sm text-muted-foreground">({article.ArticleCounters?.commentCount || 0})</span>
+                                </p>
+                                {/* comment input */}
+                                <div>
+                                    {info && (
+                                        <CommentInput
+                                            inputId="comment-input"
+                                            article={article}
+                                            setListComment={setListComment}
+                                            commentParent={null}
+                                        />
+                                    )}
+                                    {/* {info ? (
                                 <CommentInput inputId="comment-input" article={article} setListComment={setListComment} commentParent={null} />
                             ) : (
                                 <Button
@@ -184,8 +205,17 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                                     <LogIn /> <span className={cn("hidden sm:inline font-bold")}>Login</span>
                                 </Button>
                             )} */}
+                                </div>
+                            </div>
+
+                            {/* comment list */}
+                            <CommentList
+                                article={article}
+                                listComment={listComment}
+                                setListComment={setListComment}
+                                className={cn("py-2 px-0 md:px-2 flex-1 min-h-0")}
+                            />
                         </div>
-                        <CommentList article={article} listComment={listComment} setListComment={setListComment} />
                     </div>
                 </div>
 

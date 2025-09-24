@@ -16,9 +16,10 @@ type TProps = {
     article: TArticle;
     listComment: TListComment[];
     setListComment: Dispatch<SetStateAction<TListComment[]>>;
+    className?: string;
 };
 
-export default function CommentList({ article, listComment, setListComment }: TProps) {
+export default function CommentList({ article, listComment, setListComment, className }: TProps) {
     const [page, setPage] = useState(1);
     const pageSize = 10;
     const totalPageRef = useRef(0);
@@ -80,46 +81,33 @@ export default function CommentList({ article, listComment, setListComment }: TP
     };
 
     return (
-        <div
-            ref={containerRef}
-            className={cn(
-                "min-h-[500px]",
-                "p-2 px-0 md:px-2 pb-1 lg:h-[500px] flex flex-col lg:overflow-y-scroll lg:border-sidebar-border lg:border lg:shadow-sm rounded-2xl lg:bg-[#f1f1f1] lg:dark:bg-[#252728]"
-            )}
-        >
-            <div className="relative flex-1">
-                <AppendLoading
-                    isLoading={getCommentByArticle.isLoading}
-                    isEmpty={!getCommentByArticle.data || listComment.length === 0}
-                    isError={getCommentByArticle.isError}
-                    onLoadMore={handleEndReached}
-                    containerRef={containerRef}
-                    footerLoadingComponent={<Skeleton className="min-h-[50px] h-full w-full rounded-xl" />}
-                    initialLoadingComponent={<Skeleton className="h-[50px] w-full rounded-xl" />}
-                    noDataComponent={
-                        <NoCommentsOverlay
-                            visible
-                            inputId={"comment-input"} // hoặc inputId="comment-input"
-                            // title="No comments yet"
-                            // subtitle="Be the first to comment!"
-                            // onRequestFocus={() => { if (!isLoggedIn) openLoginModal(); }}
-                        />
-                    }
-                >
-                    {listComment.map((comment: TListComment, index) => {
-                        return (
-                            <Fragment key={comment.id}>
-                                <CommentItem
-                                    comment={comment}
-                                    article={article}
-                                    level={comment.level ?? 0}
-                                    isLast={index === listComment.length - 1}
-                                />
-                            </Fragment>
-                        );
-                    })}
-                </AppendLoading>
-            </div>
+        <div ref={containerRef} className={cn("relative", "h-full lg:overflow-y-scroll", className)}>
+            <AppendLoading
+                isLoading={getCommentByArticle.isLoading}
+                isEmpty={!getCommentByArticle.data || listComment.length === 0}
+                isError={getCommentByArticle.isError}
+                onLoadMore={handleEndReached}
+                containerRef={containerRef}
+                footerLoadingComponent={<Skeleton className="min-h-[50px] h-full w-full rounded-xl" />}
+                initialLoadingComponent={<Skeleton className="h-[50px] w-full rounded-xl" />}
+                noDataComponent={
+                    <NoCommentsOverlay
+                        visible
+                        inputId={"comment-input"} // hoặc inputId="comment-input"
+                        // title="No comments yet"
+                        // subtitle="Be the first to comment!"
+                        // onRequestFocus={() => { if (!isLoggedIn) openLoginModal(); }}
+                    />
+                }
+            >
+                {listComment.map((comment: TListComment, index) => {
+                    return (
+                        <Fragment key={comment.id}>
+                            <CommentItem comment={comment} article={article} level={comment.level ?? 0} isLast={index === listComment.length - 1} />
+                        </Fragment>
+                    );
+                })}
+            </AppendLoading>
         </div>
     );
 }

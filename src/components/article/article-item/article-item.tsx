@@ -61,10 +61,10 @@ export default function ArticleItem({ article }: TProps) {
                 {/* category */}
                 <div className="px-2">
                     <OverflowBadges
-                        className="h-[22px]" // giữ chiều cao 1 dòng nếu muốn
-                        gapPx={4} // khớp với gap-1
+                        className="h-[22px]"
+                        gapPx={4}
                         items={article.ArticleCategories.map((it) => `#${it.Categories.name}`)}
-                        // moreLabel={(n) => `+${n}`}                // có thể tuỳ biến
+                        variant={"outline"}
                     />
                 </div>
 
