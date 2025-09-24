@@ -1,20 +1,20 @@
 import { useMutationCommentByParent } from "@/api/tantask/comment.tanstack";
 import AvatartImageCustom from "@/components/custom/avatar-custom/avatart-custom";
+import ExpandableText from "@/components/expandable-text/ExpandableText";
 import Name from "@/components/name/name";
+import { Badge } from "@/components/ui/badge";
 import { formatLocalTime } from "@/helpers/function.helper";
 import { typingText } from "@/helpers/motion.helper";
 import { cn } from "@/lib/utils";
 import { TArticle } from "@/types/article.type";
 import { TComment, TListComment } from "@/types/comment.type";
+import { Spotlight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import CommentInput, { CommentInputHandle } from "../comment-input/comment-input";
 import LineCurve from "../line/line-curve";
 import LineStraight from "../line/line-straight";
-import { Badge } from "@/components/ui/badge";
-import { Spotlight } from "lucide-react";
-import ExpandableText from "@/components/expandable-text/ExpandableText";
 
 type CommentItemProps = {
     comment: TListComment;
@@ -84,7 +84,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
             <div className={`relative flex items-start gap-2 ${level > 0 ? "pl-2" : ""}`}>
                 {level > 0 && <LineCurve className="absolute top-0 right-full h-[18px] w-[25px]" />}
                 {/* Avatar */}
-                <div className={cn("relative z-10 bg-[#f5f5f5] dark:bg-[#151515] h-10 w-8 rounded-full flex items-start justify-center", "lg:bg-[#f1f1f1] lg:dark:bg-[#252728]")}>
+                <div className={cn("relative z-10 bg-[#f5f5f5] dark:bg-[#151515] h-10 w-8 rounded-full flex items-start justify-center")}>
                     <AvatartImageCustom
                         onClick={(e) => {
                             e.stopPropagation();

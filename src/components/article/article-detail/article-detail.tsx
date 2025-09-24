@@ -9,6 +9,7 @@ import ImageCustom from "@/components/custom/image-custom/ImageCustom";
 import Editor from "@/components/lexical/editor";
 import { OverflowBadges } from "@/components/overflow-badges/OverflowBadges";
 import ProfileFollow from "@/components/profile/profile-follow/profile-follow";
+import { Separator } from "@/components/ui/separator";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
 import { formatLocalTime } from "@/helpers/function.helper";
 import { useAutoArticleView } from "@/hooks/use-article-view";
@@ -22,7 +23,6 @@ import { useState } from "react";
 import ArticleFooter from "../article-footer/article-footer";
 import ArticleType from "../article-type/article-type";
 import ArticleDetailAction from "./article-detail-action";
-import { Separator } from "@/components/ui/separator";
 
 type TProps = {
     article: TArticle;
@@ -161,7 +161,7 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                                 </div>
                             </div>
 
-                            {/* Content + comments */}
+                            {/* Content  */}
                             <div className={cn("py-5 bg-background", "px-2")}>
                                 <Editor isViewOnly initialContentJSON={article.content} />
                             </div>
