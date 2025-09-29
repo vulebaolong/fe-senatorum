@@ -1,13 +1,13 @@
 "use client";
 
-import { RefObject, useCallback } from "react";
 import Articlelist from "@/components/article/article-list/article-list";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
-import { useAppSelector } from "@/redux/store";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useHashScrollWithin } from "@/hooks/use-hash-scroll-within";
-import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/redux/store";
 import { TUser } from "@/types/user.type";
+import { useRouter } from "next/navigation";
+import { RefObject } from "react";
 
 type TProps = {
     profile: TUser | null;
@@ -36,9 +36,14 @@ export default function ProfileTabs({ profile, bodyRef, tabsAnchorRef }: TProps)
                     <TabsTrigger value="my-article" id="my-article">
                         {info?.id === profile?.id ? "My articles" : "Articles"}
                     </TabsTrigger>
-                    {info?.id === profile?.id && (
+                    {/* {info?.id === profile?.id && (
                         <TabsTrigger value="upvoted" id="upvoted">
                             Upvoted
+                        </TabsTrigger>
+                    )} */}
+                    {info?.id === profile?.id && (
+                        <TabsTrigger value="heart" id="heart">
+                            Heart
                         </TabsTrigger>
                     )}
                     {info?.id === profile?.id && (
@@ -58,6 +63,12 @@ export default function ProfileTabs({ profile, bodyRef, tabsAnchorRef }: TProps)
             <TabsContent value="upvoted">
                 <Card className="p-0">
                     <Articlelist type="upvoted" filters={{ userId: profile?.id }} />
+                </Card>
+            </TabsContent>
+
+            <TabsContent value="heart">
+                <Card className="p-0">
+                    <Articlelist type="heart" filters={{ userId: profile?.id }} />
                 </Card>
             </TabsContent>
 

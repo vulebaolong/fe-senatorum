@@ -6,14 +6,21 @@ import {
     getDetailArticleAction,
     getMyArticleAction,
     getMyBookmarkedArticleAction,
+    getMyHeartArticleAction,
     getMyUpvotedArticleAction,
     getOtherArticleAction,
     publishArticleAction,
     upsertArticleDraftAction,
-    upsertArticleEditAction
+    upsertArticleEditAction,
 } from "@/api/actions/article.action";
-import { wait } from "@/helpers/function.helper";
-import { TCreateArticleReq, TDeleteArticleReq, TPublishArticleReq, TUpdateArticleReq, TUpsertArticleDarftReq, TUpsertArticleEditReq } from "@/types/article.type";
+import {
+    TCreateArticleReq,
+    TDeleteArticleReq,
+    TPublishArticleReq,
+    TUpdateArticleReq,
+    TUpsertArticleDarftReq,
+    TUpsertArticleEditReq,
+} from "@/types/article.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useGetAllArticle = (payload: any) => {
@@ -61,6 +68,23 @@ export const useGetMyBookmarkedArticle = (payload: any) => {
             const query = `page=${pageIndex}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
 
             const { data, status, message } = await getMyBookmarkedArticleAction(query);
+            if (status === "error" || data === null) throw new Error(message);
+
+            console.log({ useGetMyBookmarkedArticle: data });
+            return data;
+        },
+    });
+};
+
+export const useGetMyHeartArticle = (payload: any) => {
+    return useQuery({
+        queryKey: ["get-my-heart-article", payload],
+        queryFn: async () => {
+            const { pagination, filters, sort } = payload;
+            const { pageIndex, pageSize } = pagination;
+            const query = `page=${pageIndex}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
+
+            const { data, status, message } = await getMyHeartArticleAction(query);
             if (status === "error" || data === null) throw new Error(message);
 
             console.log({ useGetMyBookmarkedArticle: data });

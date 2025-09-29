@@ -1,12 +1,18 @@
 "use client";
 
-import { useGetAllArticle, useGetMyArticle, useGetMyBookmarkedArticle, useGetMyUpvotedArticle } from "@/api/tantask/article.tanstack";
+import {
+    useGetAllArticle,
+    useGetMyArticle,
+    useGetMyBookmarkedArticle,
+    useGetMyHeartArticle,
+    useGetMyUpvotedArticle,
+} from "@/api/tantask/article.tanstack";
 import PostItem from "@/components/post/post-item";
 import { cn } from "@/lib/utils";
 import { TArticle } from "@/types/article.type";
 import { EArticleVariant } from "@/types/enum/article.enum";
 import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import NodataOverlay from "../../no-data/NodataOverlay";
 import { Skeleton } from "../../ui/skeleton";
 import ArticleItem from "../article-item/article-item";
@@ -16,7 +22,7 @@ type ArticleWithGroup = TArticle & { __groupKey: number };
 type TProps = {
     filters?: Record<string, any>;
     id?: string;
-    type: "all" | "my" | "upvoted" | "bookmarked";
+    type: "all" | "my" | "upvoted" | "bookmarked" | "heart";
 };
 
 export default function Articlelist({ filters, id, type }: TProps) {
@@ -36,6 +42,7 @@ export default function Articlelist({ filters, id, type }: TProps) {
         if (type === "all") return useGetAllArticle;
         if (type === "upvoted") return useGetMyUpvotedArticle;
         if (type === "bookmarked") return useGetMyBookmarkedArticle;
+        if (type === "heart") return useGetMyHeartArticle;
         return useGetMyArticle;
     }, [type]);
 
@@ -81,7 +88,6 @@ export default function Articlelist({ filters, id, type }: TProps) {
             totalPageRef.current = getAllArticle.data.totalPage;
         }
     }, [getAllArticle.data?.totalPage]);
-
 
     const canLoadMore = !getAllArticle.isFetching && !getAllArticle.isLoading && page < totalPageRef.current;
 

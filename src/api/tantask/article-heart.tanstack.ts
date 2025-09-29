@@ -1,8 +1,6 @@
-import { TArticleBookmarkReq } from "@/types/article-bookmark.type";
 import { TArticleHeartReq } from "@/types/article-heart.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import _ from "lodash";
-import { removeBookmarkAction } from "../actions/article-bookmark.action";
 import { addHeartAction, getAllArticleHeartAction, removeHeartAction } from "../actions/article-heart.action";
 
 export const useGetAllArticleHeart = () => {

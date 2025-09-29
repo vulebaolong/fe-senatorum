@@ -31,6 +31,7 @@ export const ENDPOINT = {
         ARTICLE_MY: "/article/my",
         ARTICLE_MY_UPVOTED: "/article/my-upvoted",
         ARTICLE_MY_BOOKMARKED: "/article/my-bookmarked",
+        ARTICLE_MY_HEART: "/article/my-heart",
         ARTICLE_OTHER: "/article/other",
         ARTICLE_UPSERT_DRAFT: "/article/upsert-draft",
         ARTICLE_UPSERT_EDIT: "/article/upsert-edit",
