@@ -19,6 +19,7 @@ type ExpandableTextProperties = {
     fadeFromClass?: string;
     inlineButtonBgClass?: string;
     fadeHeightClass?: string;
+    onTransitionEnd?: (expanded: boolean) => void;
 };
 
 export default function ExpandableText({
@@ -34,6 +35,7 @@ export default function ExpandableText({
     fadeFromClass = "from-background",
     inlineButtonBgClass = "bg-background",
     fadeHeightClass = "h-6",
+    onTransitionEnd,
 }: ExpandableTextProperties) {
     const textBlockReference = React.useRef<HTMLDivElement>(null);
     const [isTrulyClamped, setIsTrulyClamped] = React.useState(false);
@@ -61,6 +63,20 @@ export default function ExpandableText({
         capCollapsedAtContentHeight: true,
         recomputeWhen: [text, maxLines],
     });
+
+    React.useEffect(() => {
+        const container = collapse.containerReference.current;
+        if (!container) return;
+
+        const handleTransitionEnd = (event: TransitionEvent) => {
+            // đảm bảo đúng target (tránh bubble từ con)
+            if (event.target !== container) return;
+            onTransitionEnd?.(collapse.isExpanded);
+        };
+
+        container.addEventListener("transitionend", handleTransitionEnd);
+        return () => container.removeEventListener("transitionend", handleTransitionEnd);
+    }, [collapse.containerReference, collapse.isExpanded, onTransitionEnd]);
 
     // Đo đúng: so tổng số dòng với maxLines
     React.useLayoutEffect(() => {

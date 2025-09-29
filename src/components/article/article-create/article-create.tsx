@@ -216,8 +216,8 @@ export default function ArticleCreate({ type, dataArticle, dataListTypeArticle, 
                     </div>
 
                     {/* body */}
-                    <div className="flex-1 p-5 overflow-y-auto">
-                        <Container>
+                    <div className="flex-1 overflow-y-auto">
+                        <Container className="py-4 sm:py-6 lg:py-8">
                             <div className={cn("flex flex-col", "lg:flex-row")}>
                                 {/* LEFT */}
                                 <div className="flex-1 min-w-0 transition-[width] duration-300">
@@ -290,7 +290,7 @@ export default function ArticleCreate({ type, dataArticle, dataListTypeArticle, 
                                             render={({ field }) => (
                                                 <FormItem>
                                                     {/* <FormLabel>Content</FormLabel> */}
-                                                    <div className="rounded-2xl border">
+                                                    <div className="rounded-2xl border min-w-0">
                                                         <Editor
                                                             initialContentJSON={article?.content}
                                                             onChange={field.onChange}

@@ -10,4 +10,5 @@ export type TArticleCounter = {
     voteCount: number;
     upvoteCount: number;
     downvoteCount: number;
+    heartCount: number;
 } & TBaseTimestamps;

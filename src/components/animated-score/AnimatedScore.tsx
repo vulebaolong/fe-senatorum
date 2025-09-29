@@ -65,7 +65,7 @@ export default function AnimatedScore({ value, className, fontPx = 14, maxDigits
                         transition={{ duration: 0.18 }}
                         className="mr-[2px]"
                     >
-                        −
+                        -
                     </motion.span>
                 ) : (
                     <motion.span key="space" className="mr-[2px]" />
@@ -114,6 +114,7 @@ export default function AnimatedScore({ value, className, fontPx = 14, maxDigits
                     exit={{ y: 4, opacity: 0 }}
                     transition={{ duration: 0.18 }}
                     className={suffix ? "ml-[2px]" : ""}
+                    style={{ fontSize: `${fontPx}px` }}
                 >
                     {suffix}
                 </motion.span>

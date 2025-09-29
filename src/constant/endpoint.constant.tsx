@@ -40,11 +40,23 @@ export const ENDPOINT = {
         ARTICLE_PUBLISH: "/article/publish",
         ARTICLE_DELETE: "/article/delete",
     },
+    POST: {
+        POST_GET_DRAFT: "/post/draft",
+        POST_UPSERT_DRAFT: "/post/upsert-draft",
+        POST_UPLOAD_IMAGE: "/post/upload-image-post",
+        POST_DELETE_IMAGE: "/post/delete-image-post",
+        POST_PUBLISH: "/post/publish",
+    },
     ARTICLE_BOOKMARK: {
-        ARTICLE_BOOKMARK_ALL: "/article-bookmark",
-        ARTICLE_TOGGLE_BOOKMARK: "/article-bookmark/toggle-article-bookmark",
-        ADD_BOOKMARK: "/article-bookmark/add",
-        REMOVE_BOOKMARK: "/article-bookmark/remove",
+        BOOKMARK_ALL: "/article-bookmark",
+        BOOKMARK_TOGGLE: "/article-bookmark/toggle-article-bookmark",
+        BOOKMARK_ADD: "/article-bookmark/add",
+        BOOKMARK_REMOVE: "/article-bookmark/remove",
+    },
+    ARTICLE_HEART: {
+        HEART_ALL: "/article-heart",
+        HEART_ADD: "/article-heart/add",
+        HEART_REMOVE: "/article-heart/remove",
     },
     ARTICLE_VIEW: {
         ARTICLE_VIEW: "/article-view",
@@ -111,5 +123,5 @@ export const ENDPOINT = {
     },
     SETTING_SYSTEM: {
         SETTING_SYSTEM: "/setting-system",
-    }
+    },
 };

@@ -7,7 +7,7 @@ import { TRes } from "@/types/app.type";
 
 export async function toggleArticleBookmarkAction(payload: TArticleBookmarkReq) {
     try {
-        const result = await api.post<TRes<boolean>>(`${ENDPOINT.ARTICLE_BOOKMARK.ARTICLE_TOGGLE_BOOKMARK}`, payload);
+        const result = await api.post<TRes<boolean>>(`${ENDPOINT.ARTICLE_BOOKMARK.BOOKMARK_TOGGLE}`, payload);
         const { data } = result;
         return { status: "success", message: result.message, data: data };
     } catch (error: any) {
@@ -17,7 +17,7 @@ export async function toggleArticleBookmarkAction(payload: TArticleBookmarkReq) 
 
 export async function getAllArticleBookmarkAction() {
     try {
-        const result = await api.get<TRes<TArticleBookmark[]>>(`${ENDPOINT.ARTICLE_BOOKMARK.ARTICLE_BOOKMARK_ALL}`);
+        const result = await api.get<TRes<TArticleBookmark[]>>(`${ENDPOINT.ARTICLE_BOOKMARK.BOOKMARK_ALL}`);
         const { data } = result;
         return { status: "success", message: result.message, data: data };
     } catch (error: any) {
@@ -27,7 +27,7 @@ export async function getAllArticleBookmarkAction() {
 
 export async function addBookmarkAction(payload: TArticleBookmarkReq) {
     try {
-        const result = await api.post<TRes<boolean>>(`${ENDPOINT.ARTICLE_BOOKMARK.ADD_BOOKMARK}/${payload.articleId}`);
+        const result = await api.post<TRes<boolean>>(`${ENDPOINT.ARTICLE_BOOKMARK.BOOKMARK_ADD}/${payload.articleId}`);
         const { data } = result;
         return { status: "success", message: result.message, data: data };
     } catch (error: any) {
@@ -37,7 +37,7 @@ export async function addBookmarkAction(payload: TArticleBookmarkReq) {
 
 export async function removeBookmarkAction(payload: TArticleBookmarkReq) {
     try {
-        const result = await api.delete<TRes<boolean>>(`${ENDPOINT.ARTICLE_BOOKMARK.REMOVE_BOOKMARK}/${payload.articleId}`);
+        const result = await api.delete<TRes<boolean>>(`${ENDPOINT.ARTICLE_BOOKMARK.BOOKMARK_REMOVE}/${payload.articleId}`);
         const { data } = result;
         return { status: "success", message: result.message, data: data };
     } catch (error: any) {

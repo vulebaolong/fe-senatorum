@@ -67,7 +67,10 @@ export function MaxLengthPlugin({ maxCharacters }: TProps): JSX.Element {
     return (
         <div>
             <p className={cn(textTone === "destructive" ? "text-red-500" : textTone === "warning" ? "text-amber-500" : "text-primary")}>
-                {textLen}/<span className="text-[8px] text-muted-foreground">{maxCharacters <= 0 ? "??" : maxCharacters} characters</span>
+                {textLen}/
+                <span className="text-[8px] text-muted-foreground">
+                    {maxCharacters <= 0 ? "??" : maxCharacters} <span className="hidden sm:inline">characters</span>
+                </span>
             </p>
 
             <Progress value={percent} className={cn("h-[1px] w-full", progressTone)} />

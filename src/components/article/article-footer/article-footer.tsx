@@ -1,17 +1,15 @@
-import { TArticle } from "@/types/article.type";
-import ArticleVote from "../article-vote/article-vote";
-import { Eye, LinkIcon, MessageCircle, MessageSquare, Share2 } from "lucide-react";
-import ArticleBookmark from "../article-bookmark/article-bookmark";
-import ButtonIcon from "@/components/custom/button-custom/button-icon";
-import { formatCompactIntl } from "@/helpers/function.helper";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import FacebookIcon from "../article-detail/icon-social/facebook-icon";
-import XIcon from "../article-detail/icon-social/x-icon";
-import InstagramIcon from "../article-detail/icon-social/instagram-icon";
-import RedditIcon from "../article-detail/icon-social/reddit-icon";
 import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
+import { formatCompactIntl } from "@/helpers/function.helper";
+import { TArticle } from "@/types/article.type";
+import { Eye, LinkIcon, MessageSquare, Share2 } from "lucide-react";
+import ArticleBookmark from "../article-bookmark/article-bookmark";
+import FacebookIcon from "../article-detail/icon-social/facebook-icon";
 import LinkedInIcon from "../article-detail/icon-social/linked-in-icon";
+import RedditIcon from "../article-detail/icon-social/reddit-icon";
+import XIcon from "../article-detail/icon-social/x-icon";
+import ArticleHeart from "../article-heart/article-heart";
 
 const buildAbsoluteUrl = (path: string) => new URL(path, NEXT_PUBLIC_BASE_DOMAIN_FE!).toString();
 
@@ -57,24 +55,34 @@ export default function ArticleFooter({ article }: TProps) {
 
     return (
         <div className="flex items-center justify-between w-full">
-            <ArticleVote
+            {/* <ArticleVote
                 articleId={article.id}
                 initialScore={article.ArticleCounters?.voteCount || 0} // tổng điểm hiện tại
                 initialMyVote={article.ArticleVotes[0]?.value || 0} // -1 | 0 | 1
                 onChange={({ score, myVote }) => {
                     // (tùy chọn) cập nhật UI ở parent hoặc analytics
                 }}
+            /> */}
+
+            <ArticleHeart
+                articleId={article.id}
+                heartCountInit={article.ArticleCounters?.heartCount || 0}
+                initial={article.ArticleHearts.length > 0}
             />
 
-            <div className="flex  items-center gap-1 justify-center">
-                <Eye className="text-muted-foreground" size={16} />
-                <p className="text-xs font-semibold text-muted-foreground">{formatCompactIntl(article.ArticleCounters?.viewCount || 0)}</p>
-            </div>
+            <Button size="icon" className="h-6 px-[5px] rounded-lg w-auto" variant={"ghost"}>
+                <div className="flex items-center gap-1 justify-center">
+                    <Eye className="text-muted-foreground" />
+                    <p className="text-xs font-semibold text-muted-foreground">{formatCompactIntl(article.ArticleCounters?.viewCount || 0)}</p>
+                </div>
+            </Button>
 
-            <div className="flex  items-center gap-1 justify-center">
-                <MessageSquare className="text-muted-foreground" size={16} />
-                <p className="text-xs font-semibold text-muted-foreground">{formatCompactIntl(article.ArticleCounters?.commentCount || 0)}</p>
-            </div>
+            <Button size="icon" className="h-6 px-[5px] rounded-lg w-auto" variant={"ghost"}>
+                <div className="flex items-center gap-1 justify-center">
+                    <MessageSquare className="text-muted-foreground" />
+                    <p className="text-xs font-semibold text-muted-foreground">{formatCompactIntl(article.ArticleCounters?.commentCount || 0)}</p>
+                </div>
+            </Button>
 
             <ArticleBookmark articleId={article.id} initial={article.ArticleBookmarks.length > 0} />
 
@@ -88,7 +96,7 @@ export default function ArticleFooter({ article }: TProps) {
                         aria-label="Chia sẻ"
                         data-no-card-click
                     >
-                        <Share2 className="size-[15px]" />
+                        <Share2 className="text-muted-foreground" />
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent data-side="right" className="flex gap-2 h-[50px] w-fit p-1" onPointerDownCapture={(e) => e.stopPropagation()}>

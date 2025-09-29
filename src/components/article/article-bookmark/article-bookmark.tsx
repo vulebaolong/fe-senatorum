@@ -82,8 +82,8 @@ export default function ArticleBookmark({ articleId, initial = false, debounceMs
     return (
         <Button onClick={onClick} size="icon" className="size-6" variant={"ghost"} aria-pressed={isBookmarked}>
             <Bookmark
-                style={{ width: 15, height: 15 }}
-                className="transition-transform"
+                // style={{ width: 15, height: 15 }}
+                className="transition-transform text-muted-foreground"
                 // tô màu khi đã bookmark
                 fill={isBookmarked ? "currentColor" : "none"}
             />

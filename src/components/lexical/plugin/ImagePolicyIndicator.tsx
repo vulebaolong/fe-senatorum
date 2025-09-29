@@ -36,7 +36,7 @@ export default function ImagePolicyIndicator({ maxSizeImage, maxImagesCount }: T
                         tone === "destructive" ? "text-red-500" : tone === "warning" ? "text-amber-500" : "text-primary"
                     )}
                 >
-                    {count}/<span className="text-[8px] text-muted-foreground">{maxImagesCount <= 0 ? "??" : maxImagesCount} images</span>
+                    {count}/<span className="text-[8px] text-muted-foreground">{maxImagesCount <= 0 ? "??" : maxImagesCount} <span className="hidden sm:inline">images</span></span>
                 </p>
                 <Progress value={percent} className={cn("h-[1px] w-full", progressTone)} />
             </div>

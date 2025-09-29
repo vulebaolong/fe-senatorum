@@ -9,6 +9,7 @@ import { SET_OPEN_VERSION_UPDATE_DIALOG } from "@/redux/slices/setting.slice";
 import { TSocketRes } from "@/types/base.type";
 import { useEffect } from "react";
 import Header from "@/components/header/header-root/header";
+import CreatePost from "@/components/post/create-post";
 
 type TProps = {
     children: React.ReactNode;
@@ -36,11 +37,12 @@ export default function layout({ children }: TProps) {
 
     return (
         <>
-            <Header />
             <SidebarProvider defaultOpen={false} className="pt-[var(--header-height)]">
+                <Header />
                 <AppSidebar />
                 <SidebarInset>{children}</SidebarInset>
             </SidebarProvider>
+            <CreatePost type="create" />
         </>
     );
 }

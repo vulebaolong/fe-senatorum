@@ -9,7 +9,7 @@ export default function layout({ children }: TProps) {
         <div
             className={cn(
                 "relative flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10",
-                "bg-[url('/images/bg/bg-3.webp')]",
+                "bg-[url('/images/bg/bg-6.webp')]",
                 "bg-cover bg-center bg-no-repeat",
                 // Overlay rất nhẹ chỉ để tăng contrast nhẹ
                 "before:content-[''] before:absolute before:inset-0 before:pointer-events-none",
