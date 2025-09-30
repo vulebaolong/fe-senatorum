@@ -53,7 +53,7 @@ export default function NotiUnread() {
     const queryClient = useQueryClient();
 
     const getAllNotification = useGetAllNotification({
-        pagination: { pageIndex: page, pageSize },
+        pagination: { page: page, pageSize },
         filters: {
             isRead: false,
         },

@@ -13,11 +13,11 @@ import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, C
 import { useAppSelector } from "@/redux/store";
 
 // --- helpers ---
-function buildQuery(params: { pageIndex: number; pageSize: number; title: string }) {
-    const { pageIndex, pageSize, title } = params;
+function buildQuery(params: { page: number; pageSize: number; title: string }) {
+    const { page, pageSize, title } = params;
     const filters = JSON.stringify({ title }); // BE đọc filters.keyword
     const sp = new URLSearchParams({
-        page: String(pageIndex),
+        page: String(page),
         pageSize: String(pageSize),
         filters,
         sortBy: "views",
@@ -28,7 +28,7 @@ function buildQuery(params: { pageIndex: number; pageSize: number; title: string
 
 // --- API wrapper bạn đã có ---
 async function fetchArticles(title: string, limit = 8) {
-    const query = buildQuery({ pageIndex: 1, pageSize: limit, title });
+    const query = buildQuery({ page: 1, pageSize: limit, title });
     const res = await getAllArticleAction(query); // <- dùng hàm sẵn có của bạn
     console.log({ getAllArticleAction: res });
     if (res.status === "error" || !res.data) throw new Error(res.message);

@@ -19,7 +19,7 @@ export const useRoles = (payload: any) => {
         queryKey: ["roles", payload],
         queryFn: async () => {
             const { data, status, message } = await getRolesAction(
-                `page=${payload.pagination.pageIndex}&pageSize=${payload.pagination.pageSize}&filters=${JSON.stringify(payload.filters)}&sortBy=${payload.sort?.sortBy
+                `page=${payload.pagination.page}&pageSize=${payload.pagination.pageSize}&filters=${JSON.stringify(payload.filters)}&sortBy=${payload.sort?.sortBy
                 }&isDesc=${payload.sort?.isDesc}`
             );
             if (status === "error" || data === null) throw new Error(message);

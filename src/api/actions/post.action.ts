@@ -46,9 +46,9 @@ export async function deleteImagePostByPublicIdAction(payload: string): Promise<
     }
 }
 
-export async function publishPostAction(): Promise<TResAction<boolean | null>> {
+export async function publishPostAction(): Promise<TResAction<TArticle | null>> {
     try {
-        const result = await api.post<TRes<boolean>>(ENDPOINT.POST.POST_PUBLISH);
+        const result = await api.post<TRes<TArticle>>(ENDPOINT.POST.POST_PUBLISH);
         const { data } = result;
         return { status: "success", message: result.message, data: data };
     } catch (error: any) {

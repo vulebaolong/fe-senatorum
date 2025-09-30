@@ -1,16 +1,15 @@
-import { TArticle } from "@/types/article.type";
-import React from "react";
-import AvatartImageCustom from "../custom/avatar-custom/avatart-custom";
-import { useRouter } from "next/navigation";
 import { formatLocalTime } from "@/helpers/function.helper";
-import PostTag from "./post-tag";
-import { Separator } from "@radix-ui/react-separator";
+import { useAutoRelayout } from "@/hooks/auto-relayout";
+import { TArticle } from "@/types/article.type";
+import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid";
+import { useRouter } from "next/navigation";
+import React from "react";
 import ArticleFooter from "../article/article-footer/article-footer";
+import AvatartImageCustom from "../custom/avatar-custom/avatart-custom";
+import ExpandableText from "../expandable-text/ExpandableText";
 import FacebookCollage from "../facebook-collage/facebook-collage";
 import { generateStableId } from "../images-upload/images-upload";
-import ExpandableText from "../expandable-text/ExpandableText";
-import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid";
-import { useAutoRelayout } from "@/hooks/auto-relayout";
+import { Separator } from "../ui/separator";
 
 type TProps = {
     article: TArticle;
@@ -28,7 +27,7 @@ export default function PostItem({ article, gridRef }: TProps) {
             //     router.push(`${ROUTER_CLIENT.ARTICLE}/${article.slug}`);
             // }}
             ref={itemRef}
-            className="flex flex-col pt-5 space-y-5 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[0px] h-min w-full cursor-pointer"
+            className="flex flex-col pt-5 gap-5 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[0px] h-min w-full cursor-pointer"
         >
             {/* header */}
             <div className=" h-[40px] flex items-center justify-between px-5 ">
@@ -55,8 +54,6 @@ export default function PostItem({ article, gridRef }: TProps) {
                         <p className="text-xs text-muted-foreground">{formatLocalTime(article.publishedAt, `ago`)}</p>
                     </div>
                 </div>
-
-                <PostTag />
             </div>
 
             {/* title */}

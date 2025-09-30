@@ -53,7 +53,7 @@ export default function NotiAll() {
     const queryClient = useQueryClient();
 
     const getAllNotification = useGetAllNotification({
-        pagination: { pageIndex: page, pageSize },
+        pagination: { page: page, pageSize },
         filters: {},
         sort: { sortBy: `createdAt`, isDesc: true },
     });

@@ -264,7 +264,7 @@ export default function NotificationFeed({ mode }: { mode: FeedMode }) {
     const queryClient = useQueryClient();
 
     const getAllNotification = useGetAllNotification({
-        pagination: { pageIndex: page, pageSize },
+        pagination: { page: page, pageSize },
         filters: mode === "unread" ? { isRead: false } : {},
         sort: { sortBy: "createdAt", isDesc: true },
     });

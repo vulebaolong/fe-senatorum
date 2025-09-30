@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 import ga from "./ga.slice";
+import article from "./article.slice";
 import setting from "./setting.slice";
 import user from "./user.slice";
 
@@ -7,6 +8,7 @@ const combinedReducer = combineReducers({
     user,
     setting,
     ga,
+    article,
 });
 
 export const rootReducer = (state: any, action: any) => {

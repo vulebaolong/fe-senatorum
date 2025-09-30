@@ -1,20 +1,18 @@
 import { useDeleteImagePostByPublicId, useGetDraftPost, usePublishPost, useUploadImagePost, useUpsertPostDarft } from "@/api/tantask/post.tanstack";
+import { SET_ARTICLE_NEW, SET_OFFSET_NEW } from "@/redux/slices/article.slice";
 import { SET_OPEN_CREATE_POST_DIALOG } from "@/redux/slices/setting.slice";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import ImagesUpload from "../images-upload/images-upload";
 import NavUserInfo from "../nav/nav-user-info";
 import { Textarea } from "../textarea/textarea";
 import { Button } from "../ui/button";
+import { ButtonLoading } from "../ui/button-loading";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Separator } from "../ui/separator";
-import { ButtonLoading } from "../ui/button-loading";
-import PostTag from "./post-tag";
-import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { ROUTER_CLIENT } from "@/constant/router.constant";
 
 type TProps = {
     type: "create" | "edit";
@@ -27,7 +25,6 @@ export default function CreatePost({ type }: TProps) {
     const firstRunRef = useRef(true);
     const [imageUrls, setImageUrls] = useState<string[]>([]);
     const [loadingUpsertPostDraft, setLoadingUpsertPostDraft] = useState(false);
-    const queryClient = useQueryClient();
     const router = useRouter();
 
     const getDraftPost = useGetDraftPost();
@@ -90,12 +87,12 @@ export default function CreatePost({ type }: TProps) {
 
     const handleCreatePost = () => {
         publishPost.mutate(undefined, {
-            onSuccess: () => {
+            onSuccess: (newArticle) => {
                 setValue("");
                 setImageUrls([]);
                 dispatch(SET_OPEN_CREATE_POST_DIALOG(false));
-                // queryClient.invalidateQueries({ queryKey: [`get-all-article`] });
-                router.push(ROUTER_CLIENT.HOME);
+                dispatch(SET_ARTICLE_NEW(newArticle));
+                dispatch(SET_OFFSET_NEW());
             },
         });
     };
@@ -130,7 +127,6 @@ export default function CreatePost({ type }: TProps) {
                     <DialogTitle>Create Quick Post</DialogTitle>
 
                     <div className="flex items-center gap-2">
-                        <PostTag />
                         <DialogClose asChild>
                             <Button variant="secondary" size="icon" className="size-6">
                                 <X />

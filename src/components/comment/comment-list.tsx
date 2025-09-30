@@ -34,7 +34,7 @@ export default function CommentList({ article, listComment, setListComment, clas
     });
 
     const getCommentByArticle = useGetCommentByArticle({
-        pagination: { pageIndex: page, pageSize },
+        pagination: { page: page, pageSize },
         filters: filtersValue,
         sort: { sortBy: `createdAt`, isDesc: true },
     });

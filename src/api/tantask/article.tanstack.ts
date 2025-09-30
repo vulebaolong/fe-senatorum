@@ -13,6 +13,8 @@ import {
     upsertArticleDraftAction,
     upsertArticleEditAction,
 } from "@/api/actions/article.action";
+import { buildQueryString } from "@/helpers/build-query";
+import { TQuery } from "@/types/app.type";
 import {
     TCreateArticleReq,
     TDeleteArticleReq,
@@ -23,20 +25,24 @@ import {
 } from "@/types/article.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-export const useGetAllArticle = (payload: any) => {
+export const useGetAllArticle = (payload: TQuery) => {
     return useQuery({
         queryKey: ["get-all-article", payload],
         queryFn: async () => {
-            const { pagination, filters, sort } = payload;
-            const { pageIndex, pageSize } = pagination;
-            const query = `page=${pageIndex}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
+            // const { pagination, filters, sort } = payload;
+            // const { page, pageSize, afterUUIDv7 } = pagination;
+            // const query = `${page ? `page=${page}`: ""}${afterUUIDv7 ? `&afterUUIDv7=${afterUUIDv7}`: ""}&pageSize=${pageSize}&filters=${JSON.stringify(
+            //     filters
+            // )}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
 
-            const { data, status, message } = await getAllArticleAction(query);
+            const queryString = buildQueryString(payload);
+
+            const { data, status, message } = await getAllArticleAction(queryString);
             if (status === "error" || data === null) throw new Error(message);
 
             // await wait(3000);
-
             console.log({ useGetAllArticle: data });
+
             return data;
         },
     });
@@ -47,8 +53,8 @@ export const useGetMyUpvotedArticle = (payload: any) => {
         queryKey: ["get-my-upvoted-article", payload],
         queryFn: async () => {
             const { pagination, filters, sort } = payload;
-            const { pageIndex, pageSize } = pagination;
-            const query = `page=${pageIndex}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
+            const { page, pageSize } = pagination;
+            const query = `page=${page}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
 
             const { data, status, message } = await getMyUpvotedArticleAction(query);
             if (status === "error" || data === null) throw new Error(message);
@@ -64,8 +70,8 @@ export const useGetMyBookmarkedArticle = (payload: any) => {
         queryKey: ["get-my-bookmarked-article", payload],
         queryFn: async () => {
             const { pagination, filters, sort } = payload;
-            const { pageIndex, pageSize } = pagination;
-            const query = `page=${pageIndex}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
+            const { page, pageSize } = pagination;
+            const query = `page=${page}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
 
             const { data, status, message } = await getMyBookmarkedArticleAction(query);
             if (status === "error" || data === null) throw new Error(message);
@@ -81,8 +87,8 @@ export const useGetMyHeartArticle = (payload: any) => {
         queryKey: ["get-my-heart-article", payload],
         queryFn: async () => {
             const { pagination, filters, sort } = payload;
-            const { pageIndex, pageSize } = pagination;
-            const query = `page=${pageIndex}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
+            const { page, pageSize } = pagination;
+            const query = `page=${page}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
 
             const { data, status, message } = await getMyHeartArticleAction(query);
             if (status === "error" || data === null) throw new Error(message);
@@ -98,8 +104,8 @@ export const useGetMyArticle = (payload: any) => {
         queryKey: ["get-my-article", payload],
         queryFn: async () => {
             const { pagination, filters, sort } = payload;
-            const { pageIndex, pageSize } = pagination;
-            const query = `page=${pageIndex}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
+            const { page, pageSize } = pagination;
+            const query = `page=${page}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
 
             const { data, status, message } = await getMyArticleAction(query);
             if (status === "error" || data === null) throw new Error(message);
@@ -115,12 +121,10 @@ export const useGetOtherArticle = (payload: any & { id?: string }) => {
         queryKey: ["get-other-article", payload],
         queryFn: async () => {
             const { pagination, filters, sort, id } = payload;
-            const { pageIndex, pageSize } = pagination;
+            const { page, pageSize } = pagination;
             console.log({ id });
             if (!id) throw new Error("ID is required");
-            const query = `/${id}?page=${pageIndex}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${
-                sort?.isDesc
-            }`;
+            const query = `/${id}?page=${page}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
 
             const { data, status, message } = await getOtherArticleAction(query);
             if (status === "error" || data === null) throw new Error(message);

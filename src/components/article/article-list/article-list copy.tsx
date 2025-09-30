@@ -38,9 +38,8 @@ export default function Articlelist({ filters, id, type }: TProps) {
         return useGetMyArticle;
         // return useGetOtherArticle;
     })()({
-        pagination: { pageIndex: page, pageSize },
-        filters,
-        id: id,
+        pagination: { page: page, pageSize },
+        filters: filters || {},
         sort: { sortBy: `createdAt`, isDesc: true },
     });
 

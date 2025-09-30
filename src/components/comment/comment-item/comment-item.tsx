@@ -60,7 +60,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
 
         mutationCommentByParent.mutate(
             {
-                pagination: { pageIndex: nextPage, pageSize: meta.pageSize },
+                pagination: { page: nextPage, pageSize: meta.pageSize },
                 filters: { articleId: article.id, level: level + 1, parentId: commentId },
                 sort: { sortBy: "createdAt", isDesc: true }, // page 1 mới nhất -> nối vào cuối
             },
