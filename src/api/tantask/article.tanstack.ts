@@ -29,12 +29,6 @@ export const useGetAllArticle = (payload: TQuery) => {
     return useQuery({
         queryKey: ["get-all-article", payload],
         queryFn: async () => {
-            // const { pagination, filters, sort } = payload;
-            // const { page, pageSize, afterUUIDv7 } = pagination;
-            // const query = `${page ? `page=${page}`: ""}${afterUUIDv7 ? `&afterUUIDv7=${afterUUIDv7}`: ""}&pageSize=${pageSize}&filters=${JSON.stringify(
-            //     filters
-            // )}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
-
             const queryString = buildQueryString(payload);
 
             const { data, status, message } = await getAllArticleAction(queryString);
@@ -52,11 +46,9 @@ export const useGetMyUpvotedArticle = (payload: any) => {
     return useQuery({
         queryKey: ["get-my-upvoted-article", payload],
         queryFn: async () => {
-            const { pagination, filters, sort } = payload;
-            const { page, pageSize } = pagination;
-            const query = `page=${page}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
+            const queryString = buildQueryString(payload);
 
-            const { data, status, message } = await getMyUpvotedArticleAction(query);
+            const { data, status, message } = await getMyUpvotedArticleAction(queryString);
             if (status === "error" || data === null) throw new Error(message);
 
             console.log({ useGetMyUpvotedArticle: data });
@@ -69,11 +61,9 @@ export const useGetMyBookmarkedArticle = (payload: any) => {
     return useQuery({
         queryKey: ["get-my-bookmarked-article", payload],
         queryFn: async () => {
-            const { pagination, filters, sort } = payload;
-            const { page, pageSize } = pagination;
-            const query = `page=${page}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
+            const queryString = buildQueryString(payload);
 
-            const { data, status, message } = await getMyBookmarkedArticleAction(query);
+            const { data, status, message } = await getMyBookmarkedArticleAction(queryString);
             if (status === "error" || data === null) throw new Error(message);
 
             console.log({ useGetMyBookmarkedArticle: data });
@@ -86,14 +76,12 @@ export const useGetMyHeartArticle = (payload: any) => {
     return useQuery({
         queryKey: ["get-my-heart-article", payload],
         queryFn: async () => {
-            const { pagination, filters, sort } = payload;
-            const { page, pageSize } = pagination;
-            const query = `page=${page}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
+            const queryString = buildQueryString(payload);
 
-            const { data, status, message } = await getMyHeartArticleAction(query);
+            const { data, status, message } = await getMyHeartArticleAction(queryString);
             if (status === "error" || data === null) throw new Error(message);
 
-            console.log({ useGetMyBookmarkedArticle: data });
+            console.log({ useGetMyHeartArticle: data });
             return data;
         },
     });
@@ -103,11 +91,9 @@ export const useGetMyArticle = (payload: any) => {
     return useQuery({
         queryKey: ["get-my-article", payload],
         queryFn: async () => {
-            const { pagination, filters, sort } = payload;
-            const { page, pageSize } = pagination;
-            const query = `page=${page}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
+            const queryString = buildQueryString(payload);
 
-            const { data, status, message } = await getMyArticleAction(query);
+            const { data, status, message } = await getMyArticleAction(queryString);
             if (status === "error" || data === null) throw new Error(message);
 
             console.log({ useGetMyArticle: data });
