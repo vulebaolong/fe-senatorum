@@ -10,13 +10,13 @@ import {
 import PostItem from "@/components/post/post-item";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
+import { TQuery } from "@/types/app.type";
 import { TArticle } from "@/types/article.type";
 import { EArticleVariant } from "@/types/enum/article.enum";
 import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid";
 import { useEffect, useMemo, useRef, useState } from "react";
 import NodataOverlay from "../../no-data/NodataOverlay";
 import ArticleItem from "../article-item/article-item";
-import { TQuery } from "@/types/app.type";
 
 type ArticleWithGroup = TArticle & { __groupKey: number };
 
