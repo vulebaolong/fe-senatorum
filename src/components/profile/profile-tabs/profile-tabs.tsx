@@ -56,25 +56,25 @@ export default function ProfileTabs({ profile, bodyRef, tabsAnchorRef }: TProps)
 
             <TabsContent value="my-article">
                 <Card className="p-0">
-                    <Articlelist type="all" filters={{ userId: profile?.id }} />
+                    <Articlelist type="my" />
                 </Card>
             </TabsContent>
 
             <TabsContent value="upvoted">
                 <Card className="p-0">
-                    <Articlelist type="upvoted" filters={{ userId: profile?.id }} />
+                    <Articlelist type="upvoted" />
                 </Card>
             </TabsContent>
 
             <TabsContent value="heart">
                 <Card className="p-0">
-                    <Articlelist type="heart" filters={{ userId: profile?.id }} />
+                    <Articlelist type="heart" />
                 </Card>
             </TabsContent>
 
             <TabsContent value="bookmarked">
                 <Card className="p-0">
-                    <Articlelist type="bookmarked" filters={{ userId: profile?.id }} />
+                    <Articlelist type="bookmarked" />
                 </Card>
             </TabsContent>
         </Tabs>
