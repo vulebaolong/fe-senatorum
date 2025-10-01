@@ -4,13 +4,12 @@ import { useGetAllArticle, useGetMyArticle, useGetMyBookmarkedArticle, useGetMyU
 import { useFillSkeletons } from "@/hooks/fill-skeleton-article";
 import { cn } from "@/lib/utils";
 import { TArticle } from "@/types/article.type";
+import { EArticleVariant } from "@/types/enum/article.enum";
 import { useEffect, useRef, useState } from "react";
 import { AppendLoading } from "../../data-state/append-state/AppendState";
 import NodataOverlay from "../../no-data/NodataOverlay";
 import { Skeleton } from "../../ui/skeleton";
 import ArticleItem from "../article-item/article-item";
-import { EArticleVariant } from "@/types/enum/article.enum";
-import PostItem from "@/components/post/post-item";
 
 type TProps = {
     filters?: Record<string, any>;
