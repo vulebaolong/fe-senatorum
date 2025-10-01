@@ -12,7 +12,6 @@ const nextConfig: NextConfig = {
     },
     reactStrictMode: false,
     images: {
-        domains: ["be.tabbicus.com", "res.cloudinary.com"],
         remotePatterns: [
             {
                 protocol: "http",
