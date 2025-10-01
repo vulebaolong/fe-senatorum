@@ -1,0 +1,38 @@
+server {
+  listen 80;
+  server_name tabbicus.com www.tabbicus.com;
+  return 301 https://senatorum.com$request_uri;   # ép www -> non-www + HTTPS
+}
+
+
+server {
+  listen 443 ssl http2;
+  server_name tabbicus.com;
+
+  # Cloudflare Origin Certificate
+  ssl_certificate     /etc/ssl/cf-origin/tabbicus.com.pem;
+  ssl_certificate_key /etc/ssl/cf-origin/tabbicus.com.key;
+
+  client_max_body_size 100M;
+
+  # ----- Mặc định: proxy toàn bộ đến Next (SSR/route app) -----
+  location / {
+    proxy_pass http://127.0.0.1:3001;
+
+    proxy_http_version 1.1;
+    proxy_set_header Host              $host;
+    proxy_set_header X-Real-IP         $remote_addr;
+    proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-Port  443;
+
+    # Hỗ trợ WebSocket nếu app có dùng
+    proxy_set_header Upgrade           $http_upgrade;
+    proxy_set_header Connection        "upgrade";
+
+    # Giữ streaming/log ổn
+    proxy_buffering off;
+    proxy_request_buffering off;
+    proxy_read_timeout 3600;
+  }
+}

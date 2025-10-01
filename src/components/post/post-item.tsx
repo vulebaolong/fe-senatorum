@@ -1,99 +1,99 @@
-// import { formatLocalTime } from "@/helpers/function.helper";
-// import { useAutoRelayout } from "@/hooks/auto-relayout";
-// import { TArticle } from "@/types/article.type";
-// import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid";
-// import { useRouter } from "next/navigation";
-// import React from "react";
-// import ArticleFooter from "../article/article-footer/article-footer";
-// import AvatartImageCustom from "../custom/avatar-custom/avatart-custom";
-// import ExpandableText from "../expandable-text/ExpandableText";
-// import FacebookCollage from "../facebook-collage/facebook-collage";
-// import { generateStableId } from "../images-upload/images-upload";
-// import { Separator } from "../ui/separator";
+import { formatLocalTime } from "@/helpers/function.helper";
+import { useAutoRelayout } from "@/hooks/auto-relayout";
+import { TArticle } from "@/types/article.type";
+import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid";
+import { useRouter } from "next/navigation";
+import React from "react";
+import ArticleFooter from "../article/article-footer/article-footer";
+import AvatartImageCustom from "../custom/avatar-custom/avatart-custom";
+import ExpandableText from "../expandable-text/ExpandableText";
+import FacebookCollage from "../facebook-collage/facebook-collage";
+import { generateStableId } from "../images-upload/images-upload";
+import { Separator } from "../ui/separator";
 
-// type TProps = {
-//     article: TArticle;
-//     gridRef: React.RefObject<MasonryInfiniteGrid | null>;
-// };
+type TProps = {
+    article: TArticle;
+    gridRef: React.RefObject<MasonryInfiniteGrid | null>;
+};
 
-// export default function PostItem({ article, gridRef }: TProps) {
-//     const router = useRouter();
-//     const itemRef = React.useRef<HTMLElement | null>(null);
-//     useAutoRelayout(gridRef, itemRef, 0);
+export default function PostItem({ article, gridRef }: TProps) {
+    const router = useRouter();
+    const itemRef = React.useRef<HTMLElement | null>(null);
+    useAutoRelayout(gridRef, itemRef, 0);
 
-//     return (
-//         <article
-//             // onClick={() => {
-//             //     router.push(`${ROUTER_CLIENT.ARTICLE}/${article.slug}`);
-//             // }}
-//             ref={itemRef}
-//             className="flex flex-col pt-5 gap-5 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[0px] h-min w-full cursor-pointer"
-//         >
-//             {/* header */}
-//             <div className=" h-[40px] flex items-center justify-between px-5 ">
-//                 <div className="flex basis-[60%] items-center gap-1 min-w-0">
-//                     <AvatartImageCustom
-//                         onClick={(e) => {
-//                             e.stopPropagation();
-//                             router.push(`/${article.Users.username}`);
-//                         }}
-//                         className="h-8 w-8 rounded-full cursor-pointer"
-//                         name={article.Users.name}
-//                         src={article.Users.avatar}
-//                     />
-//                     <div className="flex flex-col min-w-0">
-//                         <p
-//                             onClick={(e) => {
-//                                 e.stopPropagation();
-//                                 router.push(`/${article.Users.username}`);
-//                             }}
-//                             className="text-sm font-semibold truncate hover:underline"
-//                         >
-//                             {article.Users.name}
-//                         </p>
-//                         <p className="text-xs text-muted-foreground">{formatLocalTime(article.publishedAt, `ago`)}</p>
-//                     </div>
-//                 </div>
-//             </div>
+    return (
+        <article
+            // onClick={() => {
+            //     router.push(`${ROUTER_CLIENT.ARTICLE}/${article.slug}`);
+            // }}
+            ref={itemRef}
+            className="flex flex-col pt-5 gap-5 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[0px] h-min w-full cursor-pointer"
+        >
+            {/* header */}
+            <div className=" h-[40px] flex items-center justify-between px-5 ">
+                <div className="flex basis-[60%] items-center gap-1 min-w-0">
+                    <AvatartImageCustom
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`/${article.Users.username}`);
+                        }}
+                        className="h-8 w-8 rounded-full cursor-pointer"
+                        name={article.Users.name}
+                        src={article.Users.avatar}
+                    />
+                    <div className="flex flex-col min-w-0">
+                        <p
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                router.push(`/${article.Users.username}`);
+                            }}
+                            className="text-sm font-semibold truncate hover:underline"
+                        >
+                            {article.Users.name}
+                        </p>
+                        <p className="text-xs text-muted-foreground">{formatLocalTime(article.publishedAt, `ago`)}</p>
+                    </div>
+                </div>
+            </div>
 
-//             {/* title */}
-//             <div className="px-2">
-//                 <ExpandableText
-//                     text={article.content}
-//                     placement="inline"
-//                     maxLines={5}
-//                     moreLabel="...more"
-//                     lessLabel="less"
-//                     fadeFromClass="from-[#fff] dark:from-[#171717]"
-//                     inlineButtonBgClass="bg-[#fff] dark:bg-[#171717]"
-//                     fadeHeightClass="h-full"
-//                 />
-//             </div>
+            {/* title */}
+            <div className="px-2">
+                <ExpandableText
+                    text={article.content}
+                    placement="inline"
+                    maxLines={5}
+                    moreLabel="...more"
+                    lessLabel="less"
+                    fadeFromClass="from-[#fff] dark:from-[#171717]"
+                    inlineButtonBgClass="bg-[#fff] dark:bg-[#171717]"
+                    fadeHeightClass="h-full"
+                />
+            </div>
 
-//             {/* images */}
-//             {article.imageUrls.length > 0 && (
-//                 <div className="flex-1 px-2">
-//                     <FacebookCollage
-//                         items={
-//                             article.imageUrls.map((imageUrl) => ({
-//                                 id: generateStableId(),
-//                                 localBlobUrl: null,
-//                                 serverUrl: imageUrl,
-//                                 uploading: false,
-//                             })) || []
-//                         }
-//                     />
-//                 </div>
-//             )}
+            {/* images */}
+            {article.imageUrls.length > 0 && (
+                <div className="flex-1 px-2">
+                    <FacebookCollage
+                        items={
+                            article.imageUrls.map((imageUrl) => ({
+                                id: generateStableId(),
+                                localBlobUrl: null,
+                                serverUrl: imageUrl,
+                                uploading: false,
+                            })) || []
+                        }
+                    />
+                </div>
+            )}
 
-//             {/* footer */}
-//             <div className="px-2 mt-auto">
-//                 <Separator />
+            {/* footer */}
+            <div className="px-2 mt-auto">
+                <Separator />
 
-//                 <div className="my-2">
-//                     <ArticleFooter article={article} />
-//                 </div>
-//             </div>
-//         </article>
-//     );
-// }
+                <div className="my-2">
+                    <ArticleFooter article={article} />
+                </div>
+            </div>
+        </article>
+    );
+}
