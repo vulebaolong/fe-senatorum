@@ -12,7 +12,6 @@ import {
     uploadBannerAction,
     uploadBannerDraftAction,
 } from "@/api/actions/user.action";
-import { wait } from "@/helpers/function.helper";
 import { TEditProfileReq } from "@/types/user.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -103,7 +102,7 @@ export const useUploadAvatarDraft = () => {
             const { data, status, message } = await uploadAvatarDraftAction(payload);
             if (status === "error" || data === null) throw new Error(message);
             console.log({ useUploadAvatarDraft: data });
-            await wait(10000);
+            // await wait(10000);
             return data;
         },
         onSuccess() {
@@ -165,7 +164,7 @@ export const useUploadBannerDraft = () => {
             const { data, status, message } = await uploadBannerDraftAction(payload);
             if (status === "error" || data === null) throw new Error(message);
             console.log({ useUploadBannerDraft: data });
-            await wait(10000);
+            // await wait(10000);
             return data;
         },
         onSuccess() {

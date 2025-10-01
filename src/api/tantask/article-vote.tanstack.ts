@@ -1,7 +1,6 @@
 import { TArticleUnVoteReq, TArticleVoteReq } from "@/types/article-vote.type";
 import { useMutation } from "@tanstack/react-query";
 import { articleUnVoteAction, articleVoteAction } from "../actions/article-vote.action";
-import { wait } from "@/helpers/function.helper";
 
 export const useArticleVote = () => {
     return useMutation({
