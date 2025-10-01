@@ -68,7 +68,7 @@ export default function ProfileTabs({ profile, bodyRef, tabsAnchorRef }: TProps)
 
             <TabsContent value="heart">
                 <Card className="p-0">
-                    {/* <Articlelist type="heart" /> */}
+                    <Articlelist type="heart" />
                 </Card>
             </TabsContent>
 
