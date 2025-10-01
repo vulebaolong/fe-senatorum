@@ -56,7 +56,7 @@ export default function ProfileTabs({ profile, bodyRef, tabsAnchorRef }: TProps)
 
             <TabsContent value="my-article">
                 <Card className="p-0">
-                    <Articlelist type="my" />
+                    <Articlelist type="my" filters={{ userId: profile?.id }} />
                 </Card>
             </TabsContent>
 
