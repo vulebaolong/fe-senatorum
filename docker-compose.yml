@@ -1,0 +1,8 @@
+services:
+    FE:
+        image: longbaolevu/img-fe_tabbicus:latest
+        container_name: con-fe_tabbicus
+        ports:
+            - 3070:3000
+        env_file:
+            - .env
