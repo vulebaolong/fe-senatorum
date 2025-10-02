@@ -11,7 +11,7 @@ jobs:
 
         steps:
             - name: đăng nhập docker hub
-              run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u longbaolevu --password-stdin
+              run: echo "${{ secrets.DOCKER_PASSWORD }}" | sudo docker login -u longbaolevu --password-stdin
 
             - name: chạy lần đầu
               run: sudo docker compose up -d
