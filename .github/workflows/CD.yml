@@ -13,11 +13,11 @@ jobs:
             - name: đăng nhập docker hub
               run: echo "${{ secrets.DOCKER_PASSWORD }}" | sudo docker login -u longbaolevu --password-stdin
 
-            - name: chạy lần đầu
-              run: sudo docker compose up -d
+            # - name: chạy lần đầu
+            #   run: sudo docker compose up -d
 
-            # - name: Pull FE image mới nhất
-            #   run: sudo docker compose -f docker-compose.yml pull FE
+            - name: Pull FE image mới nhất
+              run: sudo docker compose -f docker-compose.yml pull FE
 
-            # - name: Recreate FE only (không đụng BE/DB/REDIS)
-            #   run: sudo docker compose docker-compose.yml up -d
+            - name: Recreate FE only (không đụng BE/DB/REDIS)
+              run: sudo docker compose docker-compose.yml up -d
