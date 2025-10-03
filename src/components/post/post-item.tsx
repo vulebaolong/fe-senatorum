@@ -30,7 +30,7 @@ export default function PostItem({ article, gridRef }: TProps) {
             className="flex flex-col pt-5 gap-5 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[0px] h-min w-full cursor-pointer"
         >
             {/* header */}
-            <div className=" h-[40px] flex items-center justify-between px-5 ">
+            <div className="h-[40px] flex items-center justify-between px-2">
                 <div className="flex basis-[60%] items-center gap-1 min-w-0">
                     <AvatartImageCustom
                         onClick={(e) => {
@@ -57,18 +57,20 @@ export default function PostItem({ article, gridRef }: TProps) {
             </div>
 
             {/* title */}
-            <div className="px-2">
-                <ExpandableText
-                    text={article.content}
-                    placement="inline"
-                    maxLines={5}
-                    moreLabel="...more"
-                    lessLabel="less"
-                    fadeFromClass="from-[#fff] dark:from-[#171717]"
-                    inlineButtonBgClass="bg-[#fff] dark:bg-[#171717]"
-                    fadeHeightClass="h-full"
-                />
-            </div>
+            {article.content && (
+                <div className="px-2">
+                    <ExpandableText
+                        text={article.content}
+                        placement="inline"
+                        maxLines={5}
+                        moreLabel="...more"
+                        lessLabel="less"
+                        fadeFromClass="from-[#fff] dark:from-[#171717]"
+                        inlineButtonBgClass="bg-[#fff] dark:bg-[#171717]"
+                        fadeHeightClass="h-full"
+                    />
+                </div>
+            )}
 
             {/* images */}
             {article.imageUrls.length > 0 && (

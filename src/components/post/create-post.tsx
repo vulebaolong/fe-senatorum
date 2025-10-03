@@ -13,6 +13,8 @@ import { Button } from "../ui/button";
 import { ButtonLoading } from "../ui/button-loading";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Separator } from "../ui/separator";
+import { resError } from "@/helpers/function.helper";
+import { toast } from "sonner";
 
 type TProps = {
     type: "create" | "edit";
@@ -94,6 +96,9 @@ export default function CreatePost({ type }: TProps) {
                 dispatch(SET_ARTICLE_NEW(newArticle));
                 dispatch(SET_OFFSET_NEW());
             },
+            onError: (error) => {
+                toast.error(resError(error, `Publish Post failed`));
+            }
         });
     };
 
@@ -183,7 +188,6 @@ export default function CreatePost({ type }: TProps) {
                         onClick={handleCreatePost}
                         loading={publishPost.isPending}
                         disabled={
-                            !value?.trim() ||
                             publishPost.isPending ||
                             uploadImagePost.isPending ||
                             deleteImagePostByPublicId.isPending ||

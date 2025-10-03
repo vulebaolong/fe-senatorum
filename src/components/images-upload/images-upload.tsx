@@ -192,7 +192,7 @@ export default function ImagesUpload({
                                 className="gap-2"
                             >
                                 <Trash className="h-4 w-4" />
-                                Xoá ảnh #{index + 1}
+                                Remove #{index + 1}
                             </Button>
                         ))}
                     </div>

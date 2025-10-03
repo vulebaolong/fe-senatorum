@@ -27,7 +27,7 @@ export default function ArticleItem({ article }: TProps) {
                 className="flex flex-col pt-5 gap-5 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[384px] h-min w-full cursor-pointer"
             >
                 {/* header */}
-                <div className=" h-[40px] flex items-center justify-between px-5 ">
+                <div className="h-[40px] flex items-center justify-between px-2">
                     <div className="flex basis-[60%] items-center gap-1 min-w-0">
                         <AvatartImageCustom
                             onClick={(e) => {
