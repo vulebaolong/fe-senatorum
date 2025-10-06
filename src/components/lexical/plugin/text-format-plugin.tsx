@@ -29,9 +29,15 @@ export default function TextFormatControls() {
                 canFormat = true;
 
                 // nếu caret nằm trong Code block -> không cho format inline
+                // const anchor = selection.anchor.getNode();
+                // const top = anchor.getTopLevelElementOrThrow();
+                // if ($isCodeNode(top)) {
+                //     canFormat = false;
+                // }
                 const anchor = selection.anchor.getNode();
-                const top = anchor.getTopLevelElementOrThrow();
-                if ($isCodeNode(top)) {
+                const top = anchor.getTopLevelElement();
+
+                if (top && $isCodeNode(top)) {
                     canFormat = false;
                 }
 
