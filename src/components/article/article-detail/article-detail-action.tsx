@@ -3,15 +3,17 @@ import ConfirmDialog from "@/components/dialog/dialog-confirm";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { TArticle } from "@/types/article.type";
+import { EArticleVariant } from "@/types/enum/article.enum";
 import { EllipsisVertical, Pencil, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type TProps = {
     detailArticle: TArticle;
+    type: EArticleVariant;
 };
 
-export default function ArticleDetailAction({ detailArticle }: TProps) {
+export default function ArticleDetailAction({ detailArticle, type }: TProps) {
     const router = useRouter();
     const [openDelete, setOpenDelete] = useState(false);
 
@@ -45,7 +47,9 @@ export default function ArticleDetailAction({ detailArticle }: TProps) {
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent side="bottom" align="end">
-                    <DropdownMenuItem onClick={() => router.push(`/article/${detailArticle.slug}/edit`)}>
+                    <DropdownMenuItem
+                        onClick={() => router.push(`/${type === EArticleVariant.ARTICLE ? "article" : "post"}article/${detailArticle.slug}/edit`)}
+                    >
                         <Pencil className="mr-2 h-4 w-4" />
                         <span>Edit</span>
                     </DropdownMenuItem>

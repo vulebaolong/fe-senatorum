@@ -1,6 +1,7 @@
 import { getDetailArticleAction } from "@/api/actions/article.action";
 import { getIsFollowingAction } from "@/api/actions/follow.action";
 import ArticleDetail from "@/components/article/article-detail/article-detail";
+import PostDetail from "@/components/post/post-detail";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE, TITLE } from "@/constant/app.constant";
 import { getAccessToken } from "@/helpers/cookies.helper";
@@ -21,10 +22,10 @@ export async function generateMetadata({ params }: TProps): Promise<Metadata> {
 
     if (!article) return {};
 
-    const url = `${NEXT_PUBLIC_BASE_DOMAIN_FE}/article/${article.slug}`;
-    const title = article.title;
-    const desc = article.title;
-    const ogImage = ogUrl(article.thumbnail);
+    const url = `${NEXT_PUBLIC_BASE_DOMAIN_FE}/post/${article.slug}`;
+    const title = article.content;
+    const desc = article.content;
+    const ogImage = ogUrl(article.imageUrls[0]);
 
     const result: Metadata = {
         title, // sẽ áp dụng template ở Root: "%s | TITLE"
@@ -67,7 +68,7 @@ export default async function Page({ params }: TProps) {
     return (
         <>
             {dataDetailArticle.data ? (
-                <ArticleDetail article={dataDetailArticle.data} isFollowing={isFollowing} />
+                <PostDetail article={dataDetailArticle.data} isFollowing={isFollowing} />
             ) : (
                 <Alert variant="default">
                     <CircleX color="red" />

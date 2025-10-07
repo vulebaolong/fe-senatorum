@@ -23,6 +23,7 @@ import { useState } from "react";
 import ArticleFooter from "../article-footer/article-footer";
 import ArticleType from "../article-type/article-type";
 import ArticleDetailAction from "./article-detail-action";
+import { EArticleVariant } from "@/types/enum/article.enum";
 
 type TProps = {
     article: TArticle;
@@ -117,7 +118,7 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
 
                                 {/* footer */}
                                 <div className="pt-1">
-                                    <ArticleFooter article={article} />
+                                    <ArticleFooter article={article} type={EArticleVariant.ARTICLE} />
                                 </div>
 
                                 {/* author */}

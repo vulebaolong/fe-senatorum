@@ -39,7 +39,7 @@ export default function Articlelist({ filters, id, type }: TProps) {
     })()({
         pagination: { page: page, pageSize },
         filters: filters || {},
-        sort: { sortBy: `createdAt`, isDesc: true },
+        sort: { sortBy: `publishedAt`, isDesc: true },
     });
 
     // const getAllArticleBookmark = useGetAllArticleBookmark()

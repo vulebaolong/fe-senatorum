@@ -12,6 +12,7 @@ import XIcon from "../article-detail/icon-social/x-icon";
 import ArticleHeart from "../article-heart/article-heart";
 import { useAppSelector } from "@/redux/store";
 import ArticleDetailAction from "../article-detail/article-detail-action";
+import { EArticleVariant } from "@/types/enum/article.enum";
 
 const buildAbsoluteUrl = (path: string) => new URL(path, NEXT_PUBLIC_BASE_DOMAIN_FE!).toString();
 
@@ -19,9 +20,10 @@ const enc = (v: string) => encodeURIComponent(v);
 
 type TProps = {
     article: TArticle;
+    type: EArticleVariant;
 };
 
-export default function ArticleFooter({ article }: TProps) {
+export default function ArticleFooter({ article, type }: TProps) {
     const info = useAppSelector((state) => state.user.info);
 
     const url = buildAbsoluteUrl(`/article/${article.slug}`);
@@ -77,14 +79,18 @@ export default function ArticleFooter({ article }: TProps) {
             <Button size="icon" className="h-6 px-[5px] rounded-lg w-auto" variant={"ghost"}>
                 <div className="flex items-center gap-1 justify-center">
                     <Eye className="text-muted-foreground" />
-                    <p className="text-xs font-semibold text-muted-foreground">{formatCompactIntl(article.ArticleCounters?.viewCount || 0)}</p>
+                    {(article.ArticleCounters?.viewCount || 0) > 0 && (
+                        <p className="text-xs font-semibold text-muted-foreground">{formatCompactIntl(article.ArticleCounters?.viewCount)}</p>
+                    )}
                 </div>
             </Button>
 
             <Button size="icon" className="h-6 px-[5px] rounded-lg w-auto" variant={"ghost"}>
                 <div className="flex items-center gap-1 justify-center">
                     <MessageSquare className="text-muted-foreground" />
-                    <p className="text-xs font-semibold text-muted-foreground">{formatCompactIntl(article.ArticleCounters?.commentCount || 0)}</p>
+                    {(article.ArticleCounters?.commentCount || 0) > 0 && (
+                        <p className="text-xs font-semibold text-muted-foreground">{formatCompactIntl(article.ArticleCounters?.commentCount)}</p>
+                    )}
                 </div>
             </Button>
 
@@ -156,7 +162,7 @@ export default function ArticleFooter({ article }: TProps) {
                 </PopoverContent>
             </Popover>
 
-            {info?.id === article.Users.id && <ArticleDetailAction detailArticle={article} />}
+            {info?.id === article.Users.id && type === EArticleVariant.ARTICLE && <ArticleDetailAction detailArticle={article} type={type} />}
         </div>
     );
 }

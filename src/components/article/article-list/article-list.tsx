@@ -50,7 +50,7 @@ export default function Articlelist({ filters, type }: TProps) {
     const queryPayload: TQuery = {
         pagination: { pageSize, afterUUIDv7: lastArticleId },
         filters: filters || {},
-        sort: { sortBy: `createdAt`, isDesc: true },
+        sort: { sortBy: `publishedAt`, isDesc: true },
     };
 
     const filterKey = useMemo(() => JSON.stringify({ filters, type }), [filters, type]);

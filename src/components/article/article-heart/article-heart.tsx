@@ -98,14 +98,16 @@ export default function ArticleHeart({ articleId, heartCountInit, initial = fals
                     color="#fe0169"
                     fill={isHeart ? "#fe0169" : "none"}
                 />
-                <AnimatedScore
-                    value={heartCount}
-                    className="font-semibold text-center text-muted-foreground"
-                    fontPx={12} // khớp text-sm
-                    maxDigits={1} // khóa bề rộng 3 chữ số (000..999) trước khi compact
-                    compact // hiển thị 1.2K, 3.4M...
-                    compactDecimals={1}
-                />
+                {heartCount > 0 && (
+                    <AnimatedScore
+                        value={heartCount}
+                        className="font-semibold text-center text-muted-foreground"
+                        fontPx={12} // khớp text-sm
+                        maxDigits={1} // khóa bề rộng 3 chữ số (000..999) trước khi compact
+                        compact // hiển thị 1.2K, 3.4M...
+                        compactDecimals={1}
+                    />
+                )}
             </div>
         </Button>
     );

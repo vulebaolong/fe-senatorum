@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import ArticleFooter from "../article-footer/article-footer";
 import ArticleType from "../article-type/article-type";
 import ClickSpark from "@/components/ClickSpark";
+import { EArticleVariant } from "@/types/enum/article.enum";
 
 type TProps = {
     article: TArticle;
@@ -83,7 +84,7 @@ export default function ArticleItem({ article }: TProps) {
                     <Separator />
 
                     <div className="my-2">
-                        <ArticleFooter article={article} />
+                        <ArticleFooter article={article} type={EArticleVariant.ARTICLE} />
                     </div>
                 </div>
             </article>

@@ -10,6 +10,8 @@ import ExpandableText from "../expandable-text/ExpandableText";
 import FacebookCollage from "../facebook-collage/facebook-collage";
 import { generateStableId } from "../images-upload/images-upload";
 import { Separator } from "../ui/separator";
+import { ROUTER_CLIENT } from "@/constant/router.constant";
+import { EArticleVariant } from "@/types/enum/article.enum";
 
 type TProps = {
     article: TArticle;
@@ -20,9 +22,9 @@ export default function PostItem({ article }: TProps) {
 
     return (
         <article
-            // onClick={() => {
-            //     router.push(`${ROUTER_CLIENT.ARTICLE}/${article.slug}`);
-            // }}
+            onClick={() => {
+                router.push(`${ROUTER_CLIENT.POST}/${article.slug}`);
+            }}
             className="flex flex-col pt-2 gap-5 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[0px] h-min w-full cursor-pointer"
         >
             {/* header */}
@@ -52,7 +54,7 @@ export default function PostItem({ article }: TProps) {
                 </div>
             </div>
 
-            {/* title */}
+            {/* content */}
             {article.content && (
                 <div className="px-2">
                     <ExpandableText
@@ -89,7 +91,7 @@ export default function PostItem({ article }: TProps) {
                 <Separator />
 
                 <div className="my-2">
-                    <ArticleFooter article={article} />
+                    <ArticleFooter article={article} type={EArticleVariant.POST} />
                 </div>
             </div>
         </article>

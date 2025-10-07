@@ -33,7 +33,7 @@
 //         pageSize,
 //         filters,
 //         id,
-//         sort: { sortBy: "createdAt", isDesc: true },
+//         sort: { sortBy: "publishedAt", isDesc: true },
 //     });
 
 //     const flattenedArticles: ArticleWithGroup[] = useMemo(() => {

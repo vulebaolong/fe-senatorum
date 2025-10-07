@@ -10,6 +10,7 @@ export const ROUTER_CLIENT = {
     ARTICLE: `/article`,
     ARTICLE_CREATE: `/article/create`,
     ARTICLE_SELF: `/article/self`,
+    POST: `/post`,
     CHAPTER_CREATE: `/chapter/create`,
     POLYCY: {
         POLICY: `/policy`,
