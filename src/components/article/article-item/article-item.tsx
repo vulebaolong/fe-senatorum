@@ -24,7 +24,7 @@ export default function ArticleItem({ article }: TProps) {
                 onClick={() => {
                     router.push(`${ROUTER_CLIENT.ARTICLE}/${article.slug}`);
                 }}
-                className="flex flex-col pt-5 gap-5 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[384px] h-min w-full cursor-pointer"
+                className="flex flex-col pt-2 gap-5 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[384px] h-min w-full cursor-pointer"
             >
                 {/* header */}
                 <div className="h-[40px] flex items-center justify-between px-2">
@@ -56,7 +56,7 @@ export default function ArticleItem({ article }: TProps) {
                 </div>
 
                 {/* title */}
-                <div className="leading-6 text-xl px-5 font-bold line-clamp-2 h-[50px] break-words">{article.title}</div>
+                <div className="leading-6 text-xl px-2 font-bold line-clamp-2 h-[50px] break-words">{article.title}</div>
 
                 {/* category */}
                 <div className="px-2">

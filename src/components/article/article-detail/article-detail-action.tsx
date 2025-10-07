@@ -39,10 +39,9 @@ export default function ArticleDetailAction({ detailArticle }: TProps) {
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    {/* KHÔNG gắn onClick điều hướng ở Trigger */}
-                    <div className="size-5 flex items-center justify-center bg-[oklch(20.5%_0_0)] rounded-sm">
-                        <EllipsisVertical color="#fff" size={15}/>
-                    </div>
+                    <Button size="icon" className="size-6" variant={"ghost"}>
+                        <EllipsisVertical className="transition-transform text-muted-foreground" />
+                    </Button>
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent side="bottom" align="end">

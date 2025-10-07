@@ -66,7 +66,6 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                                 {/* article - type */}
                                 <div className="absolute top-0 flex w-full items-center justify-between p-5 h-auto">
                                     <ArticleType type={article.Types} />
-                                    {info?.id === article.Users.id && <ArticleDetailAction detailArticle={article} />}
                                 </div>
 
                                 {/* article - overlay thumbnail */}

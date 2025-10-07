@@ -13,21 +13,17 @@ import { Separator } from "../ui/separator";
 
 type TProps = {
     article: TArticle;
-    gridRef: React.RefObject<MasonryInfiniteGrid | null>;
 };
 
-export default function PostItem({ article, gridRef }: TProps) {
+export default function PostItem({ article }: TProps) {
     const router = useRouter();
-    const itemRef = React.useRef<HTMLElement | null>(null);
-    useAutoRelayout(gridRef, itemRef, 0);
 
     return (
         <article
             // onClick={() => {
             //     router.push(`${ROUTER_CLIENT.ARTICLE}/${article.slug}`);
             // }}
-            ref={itemRef}
-            className="flex flex-col pt-5 gap-5 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[0px] h-min w-full cursor-pointer"
+            className="flex flex-col pt-2 gap-5 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[0px] h-min w-full cursor-pointer"
         >
             {/* header */}
             <div className="h-[40px] flex items-center justify-between px-2">

@@ -10,6 +10,8 @@ import LinkedInIcon from "../article-detail/icon-social/linked-in-icon";
 import RedditIcon from "../article-detail/icon-social/reddit-icon";
 import XIcon from "../article-detail/icon-social/x-icon";
 import ArticleHeart from "../article-heart/article-heart";
+import { useAppSelector } from "@/redux/store";
+import ArticleDetailAction from "../article-detail/article-detail-action";
 
 const buildAbsoluteUrl = (path: string) => new URL(path, NEXT_PUBLIC_BASE_DOMAIN_FE!).toString();
 
@@ -20,6 +22,8 @@ type TProps = {
 };
 
 export default function ArticleFooter({ article }: TProps) {
+    const info = useAppSelector((state) => state.user.info);
+
     const url = buildAbsoluteUrl(`/article/${article.slug}`);
     // const url = `https://tabbicus.com/article/airbus-h175m-helicopter-detailed-overview`
     const u = enc(url);
@@ -151,6 +155,8 @@ export default function ArticleFooter({ article }: TProps) {
                     </Button>
                 </PopoverContent>
             </Popover>
+
+            {info?.id === article.Users.id && <ArticleDetailAction detailArticle={article} />}
         </div>
     );
 }

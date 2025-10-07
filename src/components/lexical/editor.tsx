@@ -39,6 +39,7 @@ import LoadEditorContentPlugin from "./plugin/load-editor-content-plugin";
 import ToolbarPlugin from "./plugin/toolbar-plugin/toolbar-plugin";
 import { parseAllowedColor, parseAllowedFontSize } from "./style-config";
 import { theme } from "./theme/theme";
+import { cn } from "@/lib/utils";
 
 const placeholder = "Enter some rich text...";
 
@@ -171,13 +172,13 @@ export default function Editor({ onChange, initialContentJSON, editorRef, isView
             <ToolbarContext>
                 <div className="editor-container">
                     {!isViewOnly && <ToolbarPlugin />}
-                    <div className="editor-inner">
+                    <div className={cn("editor-inner", isViewOnly ? "p-0" : "p-2")}>
                         <RichTextPlugin
                             contentEditable={
                                 <ContentEditable
                                     className="editor-input"
                                     aria-placeholder={placeholder}
-                                    placeholder={<div className="editor-placeholder">{placeholder}</div>}
+                                    placeholder={<div className={cn("editor-placeholder", "top-2", "left-2")}>{placeholder}</div>}
                                 />
                             }
                             ErrorBoundary={LexicalErrorBoundary}

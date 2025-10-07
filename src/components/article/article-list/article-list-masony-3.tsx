@@ -17,8 +17,6 @@ import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid";
 import { useEffect, useMemo, useRef, useState } from "react";
 import NodataOverlay from "../../no-data/NodataOverlay";
 import ArticleItem from "../article-item/article-item";
-import { AppendLoading } from "@/components/data-state/append-state/AppendState";
-import { Skeleton } from "../../ui/skeleton";
 
 type ArticleWithGroup = TArticle & { __groupKey: number };
 
@@ -32,11 +30,14 @@ export default function Articlelist({ filters, type }: TProps) {
     const [articles, setArticles] = useState<TArticle[]>([]);
     const articleNew = useAppSelector((state) => state.article.articleNew);
 
-    const containerRef = useRef<HTMLDivElement | null>(null);
-
-
     const totalItemRef = useRef(0);
     const lastAppliedFilterRef = useRef<string>("");
+    const scrollerRef = useRef<HTMLDivElement>(null);
+    const gridRef = useRef<MasonryInfiniteGrid | null>(null);
+
+    // Kích thước thẻ và khoảng cách cột
+    const columnWidthPx = 300;
+    const gapPx = 20;
     const pageSize = 10;
 
     const getArticleHook = useMemo(() => {
@@ -70,6 +71,11 @@ export default function Articlelist({ filters, type }: TProps) {
         const received = getAllArticle.data?.items;
         if (!received) return;
 
+        // const receivedWithGroup: ArticleWithGroup[] = received.map((a) => ({
+        //     ...a,
+        //     __groupKey: page, // gắn group theo trang hiện tại
+        // }));
+
         setArticles((previous) => {
             if (previous.length === 0) return received;
             return [...previous, ...received];
@@ -98,47 +104,59 @@ export default function Articlelist({ filters, type }: TProps) {
 
     const canLoadMore = !getAllArticle.isFetching && !getAllArticle.isLoading && articles.length < totalItemRef.current;
 
-    const handleEndReached = () => {
+    const handleRequestAppend = () => {
         if (canLoadMore) {
             setLastArticleId(articles[articles.length - 1].id);
         }
     };
-    
-    // const isEmpty = articles.length === 0 && !getAllArticle.isLoading;
+
+    const isEmpty = articles.length === 0 && !getAllArticle.isLoading;
 
     return (
-        <div ref={containerRef} className={`relative p-5 gap-5 h-[calc(100dvh-var(--header-height))] overflow-y-scroll`}>
-            <div
-                className={cn(
-                    "relative flex flex-col gap-5",
-                    "max-w-2xl mx-auto",
-                    "min-h-0"
-                )}
-            >
-                <AppendLoading
-                    isLoading={getAllArticle.isLoading}
-                    isEmpty={articles.length === 0}
-                    isError={getAllArticle.isError}
-                    onLoadMore={handleEndReached}
-                    containerRef={containerRef}
-                    footerLoadingComponent={Array.from({ length: 10 }).map((_, i) => (
-                        <Skeleton key={i} className={cn(`h-full w-full rounded-xl`)} />
-                    ))}
-                    initialLoadingComponent={Array.from({ length: 10 }).map((_, i) => (
-                        <Skeleton key={i} className={cn(`h-full w-full rounded-xl`)} />
-                    ))}
-                    noDataComponent={<NodataOverlay visible />}
+        <div
+            ref={scrollerRef}
+            className={cn("relative h-[calc(100dvh-var(--header-height))] overflow-y-auto p-5", "min-h-0")}
+            style={{ scrollbarGutter: "stable both-edges" }}
+        >
+            {isEmpty ? (
+                <NodataOverlay visible />
+            ) : (
+                <MasonryInfiniteGrid
+                    ref={gridRef}
+                    className="relative"
+                    gap={gapPx}
+                    align="center"
+                    scrollContainer={scrollerRef}
+                    threshold={10}
+                    onRequestAppend={handleRequestAppend}
+                    useRecycle={false}
+                    observedom="false"
                 >
-                    {articles.map((article) => {
-                        if (article.variant === EArticleVariant.POST) {
-                            return <PostItem key={article.id} article={article} />;
-                        }
-                        if (article.variant === EArticleVariant.ARTICLE) {
-                            return <ArticleItem key={article.id} article={article} />;
-                        }
-                    })}
-                </AppendLoading>
-            </div>
+                    {articles.map((article) => (
+                        <div key={article.id} style={{ width: `${columnWidthPx}px` }}>
+                            {article.variant === EArticleVariant.POST ? (
+                                // <PostItem key={article.id} article={article} gridRef={gridRef} />
+                                <></>
+                            ) : (
+                                <ArticleItem key={article.id} article={article} />
+                            )}
+                        </div>
+                    ))}
+
+                    {/* Loader cuối danh sách khi đang fetch thêm */}
+                    {/* {getAllArticle.isFetching && articles.length > 0 && (
+                        <div
+                            key={`loading-${page}`}
+                            data-grid-groupkey={page + 0.5} // nhóm tạm cho loader
+                            style={{ width: `${columnWidthPx}px` }}
+                            className="mb-5"
+                        >
+                            <Skeleton className="h-64 w-full rounded-xl" />
+                        </div>
+                    )} */}
+                </MasonryInfiniteGrid>
+            )}
         </div>
     );
 }
+
