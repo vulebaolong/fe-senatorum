@@ -12,6 +12,8 @@ import { generateStableId } from "../images-upload/images-upload";
 import { Separator } from "../ui/separator";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { EArticleVariant } from "@/types/enum/article.enum";
+import { cn } from "@/lib/utils";
+import { PostCarousel } from "./post-carousel";
 
 type TProps = {
     article: TArticle;
@@ -25,10 +27,10 @@ export default function PostItem({ article }: TProps) {
             onClick={() => {
                 router.push(`${ROUTER_CLIENT.POST}/${article.slug}`);
             }}
-            className="flex flex-col pt-2 gap-5 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[0px] h-min w-full cursor-pointer"
+            className="space-y-2 flex flex-col gap-0 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[0px] h-min w-full cursor-pointer"
         >
             {/* header */}
-            <div className="h-[40px] flex items-center justify-between px-2">
+            <div className="h-[40px] flex items-center justify-between px-2 pt-2">
                 <div className="flex basis-[60%] items-center gap-1 min-w-0">
                     <AvatartImageCustom
                         onClick={(e) => {
@@ -56,7 +58,7 @@ export default function PostItem({ article }: TProps) {
 
             {/* content */}
             {article.content && (
-                <div className="px-2">
+                <div className={cn("px-2")}>
                     <ExpandableText
                         text={article.content}
                         placement="inline"
@@ -70,29 +72,20 @@ export default function PostItem({ article }: TProps) {
                 </div>
             )}
 
-            {/* images */}
-            {article.imageUrls.length > 0 && (
-                <div className="flex-1 px-2">
-                    <FacebookCollage
-                        items={
-                            article.imageUrls.map((imageUrl) => ({
-                                id: generateStableId(),
-                                localBlobUrl: null,
-                                serverUrl: imageUrl,
-                                uploading: false,
-                            })) || []
-                        }
-                    />
+            {/* imageUrls */}
+            {article.imageUrls?.length > 0 && (
+                <div className={cn("px-2")}>
+                    <PostCarousel imageUrls={article.imageUrls} />
                 </div>
             )}
 
-            {/* footer */}
-            <div className="px-2 mt-auto">
+            <div className="px-2">
                 <Separator />
+            </div>
 
-                <div className="my-2">
-                    <ArticleFooter article={article} type={EArticleVariant.POST} />
-                </div>
+            {/* footer */}
+            <div className="p-2 pt-0">
+                <ArticleFooter article={article} type={EArticleVariant.POST} />
             </div>
         </article>
     );

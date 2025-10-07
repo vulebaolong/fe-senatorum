@@ -6,9 +6,6 @@ import CommentInput from "@/components/comment/comment-input/comment-input";
 import CommentList from "@/components/comment/comment-list";
 import { Container } from "@/components/container/container";
 import AvatartImageCustom from "@/components/custom/avatar-custom/avatart-custom";
-import ImageCustom from "@/components/custom/image-custom/ImageCustom";
-import Editor from "@/components/lexical/editor";
-import { OverflowBadges } from "@/components/overflow-badges/OverflowBadges";
 import ProfileFollow from "@/components/profile/profile-follow/profile-follow";
 import { Separator } from "@/components/ui/separator";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
@@ -18,12 +15,12 @@ import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
 import { TArticle } from "@/types/article.type";
 import { TListComment } from "@/types/comment.type";
+import { EArticleVariant } from "@/types/enum/article.enum";
 import { Clock4 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ExpandableText from "../expandable-text/ExpandableText";
 import { PostCarousel } from "./post-carousel";
-import { EArticleVariant } from "@/types/enum/article.enum";
 
 type TProps = {
     article: TArticle;
@@ -56,9 +53,9 @@ export default function PostDetail({ article, isFollowing }: TProps) {
                 <div className="flex-1 grid gap-10 lg:[grid-template-columns:0.65fr_0.35fr]">
                     {/* left */}
                     <div className=" min-w-0 w-full">
-                        <div className={cn("flex flex-col gap-0 bg-background", "rounded-xl border shadow-sm")}>
+                        <div className="space-y-2 flex flex-col gap-0 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[0px] h-min w-full cursor-pointer">
                             {/* author */}
-                            <div className={cn("flex items-center gap-2 p-2", "lg:p-4")}>
+                            <div className={cn("flex items-center gap-2 px-2 pt-2")}>
                                 <div className="flex flex-1 items-center gap-2 text-left text-sm">
                                     <AvatartImageCustom
                                         onClick={(e) => {
@@ -96,33 +93,39 @@ export default function PostDetail({ article, isFollowing }: TProps) {
                                 )}
                             </div>
 
-                            <Separator />
+                            <div className="px-2">
+                                <Separator />
+                            </div>
 
                             {/* Content  */}
-                            <div className={cn("p-2", "lg:p-4")}>
-                                <ExpandableText
-                                    text={article.content}
-                                    placement="inline"
-                                    maxLines={5}
-                                    moreLabel="...more"
-                                    lessLabel="less"
-                                    fadeFromClass="from-[#fff] dark:from-[#171717]"
-                                    inlineButtonBgClass="bg-[#fff] dark:bg-[#171717]"
-                                    fadeHeightClass="h-full"
-                                />
-                            </div>
+                            {article.content && (
+                                <div className={cn("px-2")}>
+                                    <ExpandableText
+                                        text={article.content}
+                                        placement="inline"
+                                        maxLines={5}
+                                        moreLabel="...more"
+                                        lessLabel="less"
+                                        fadeFromClass="from-[#fff] dark:from-[#171717]"
+                                        inlineButtonBgClass="bg-[#fff] dark:bg-[#171717]"
+                                        fadeHeightClass="h-full"
+                                    />
+                                </div>
+                            )}
 
                             {/* imageUrls */}
                             {article.imageUrls?.length > 0 && (
-                                <div className={cn("p-2 pt-0", "lg:p-4")}>
+                                <div className={cn("px-2")}>
                                     <PostCarousel imageUrls={article.imageUrls} />
                                 </div>
                             )}
 
-                            <Separator />
+                            <div className="px-2">
+                                <Separator />
+                            </div>
 
-                            {/* Meta */}
-                            <div className={cn("p-2", "lg:p-4")}>
+                            {/* footer */}
+                            <div className="p-2 pt-0">
                                 <ArticleFooter article={article} type={EArticleVariant.POST} />
                             </div>
                         </div>

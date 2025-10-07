@@ -81,11 +81,13 @@ export function PostCarousel({ imageUrls }: TProps) {
                 {/* Dot pagination: đáy, giữa, đè lên ảnh */}
                 {count > 1 && (
                     <div
+                        onClick={(e) => e.stopPropagation()}
                         className={cn(
                             "absolute bottom-5 left-1/2 -translate-x-1/2 z-20",
                             "flex items-center justify-center",
                             "w-min rounded-full border-0 overflow-hidden",
-                            "p-1 sm:p-2 bg-black/40 backdrop-blur-sm text-white shadow-md transition"
+                            "p-1 sm:p-2 bg-black/40 backdrop-blur-sm text-white shadow-md transition",
+                            "cursor-default"
                         )}
                     >
                         {Array.from({ length: count }).map((_, i) => {
@@ -94,7 +96,10 @@ export function PostCarousel({ imageUrls }: TProps) {
                                 <button
                                     key={i}
                                     type="button"
-                                    onClick={() => goTo(i)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        goTo(i);
+                                    }}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter" || e.key === " ") {
                                             e.preventDefault();
@@ -106,7 +111,8 @@ export function PostCarousel({ imageUrls }: TProps) {
                                     className={cn(
                                         // hit area lớn cho mobile
                                         "grid place-items-center rounded-full outline-none",
-                                        "p-1 sm:p-1.5 focus-visible:ring-2 focus-visible:ring-white/70"
+                                        "p-1 sm:p-1.5 focus-visible:ring-2 focus-visible:ring-white/70",
+                                        "cursor-pointer",
                                     )}
                                 >
                                     <span
