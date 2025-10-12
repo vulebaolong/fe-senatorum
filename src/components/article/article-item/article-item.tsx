@@ -84,7 +84,7 @@ export default function ArticleItem({ article }: TProps) {
                     <Separator />
 
                     <div className="my-2">
-                        <ArticleFooter article={article} type={EArticleVariant.ARTICLE} />
+                        <ArticleFooter article={article} type={EArticleVariant.ARTICLE} isEdit={false} />
                     </div>
                 </div>
             </article>

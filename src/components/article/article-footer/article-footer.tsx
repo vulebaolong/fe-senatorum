@@ -2,17 +2,17 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
 import { formatCompactIntl } from "@/helpers/function.helper";
+import { useAppSelector } from "@/redux/store";
 import { TArticle } from "@/types/article.type";
+import { EArticleVariant } from "@/types/enum/article.enum";
 import { Eye, LinkIcon, MessageSquare, Share2 } from "lucide-react";
 import ArticleBookmark from "../article-bookmark/article-bookmark";
+import ArticleDetailAction from "../article-detail/article-detail-action";
 import FacebookIcon from "../article-detail/icon-social/facebook-icon";
 import LinkedInIcon from "../article-detail/icon-social/linked-in-icon";
 import RedditIcon from "../article-detail/icon-social/reddit-icon";
 import XIcon from "../article-detail/icon-social/x-icon";
 import ArticleHeart from "../article-heart/article-heart";
-import { useAppSelector } from "@/redux/store";
-import ArticleDetailAction from "../article-detail/article-detail-action";
-import { EArticleVariant } from "@/types/enum/article.enum";
 
 const buildAbsoluteUrl = (path: string) => new URL(path, NEXT_PUBLIC_BASE_DOMAIN_FE!).toString();
 
@@ -21,9 +21,10 @@ const enc = (v: string) => encodeURIComponent(v);
 type TProps = {
     article: TArticle;
     type: EArticleVariant;
+    isEdit: boolean;
 };
 
-export default function ArticleFooter({ article, type }: TProps) {
+export default function ArticleFooter({ article, type, isEdit }: TProps) {
     const info = useAppSelector((state) => state.user.info);
 
     const url = buildAbsoluteUrl(`/article/${article.slug}`);
@@ -162,7 +163,7 @@ export default function ArticleFooter({ article, type }: TProps) {
                 </PopoverContent>
             </Popover>
 
-            {info?.id === article.Users.id && type === EArticleVariant.ARTICLE && <ArticleDetailAction detailArticle={article} type={type} />}
+            {isEdit && info?.id === article.Users.id && <ArticleDetailAction detailArticle={article} type={type} />}
         </div>
     );
 }

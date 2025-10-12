@@ -42,6 +42,7 @@ export const ENDPOINT = {
         ARTICLE_DELETE: "/article/delete",
     },
     POST: {
+        POST: "/article",
         POST_GET_DRAFT: "/post/draft",
         POST_UPSERT_DRAFT: "/post/upsert-draft",
         POST_UPLOAD_IMAGE: "/post/upload-image-post",

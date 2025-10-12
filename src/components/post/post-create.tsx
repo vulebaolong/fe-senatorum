@@ -1,35 +1,48 @@
-import { useDeleteImagePostByPublicId, useGetDraftPost, usePublishPost, useUploadImagePost, useUpsertPostDarft } from "@/api/tantask/post.tanstack";
-import { SET_ARTICLE_NEW, SET_OFFSET_NEW } from "@/redux/slices/article.slice";
-import { SET_OPEN_CREATE_POST_DIALOG } from "@/redux/slices/setting.slice";
-import { useAppDispatch, useAppSelector } from "@/redux/store";
+import {
+    useDeleteImagePostByPublicId,
+    useGetDraftPost,
+    useGetOnePost,
+    usePublishPost,
+    useUploadImagePost,
+    useUpsertPostDarft,
+} from "@/api/tantask/post.tanstack";
+import { resError } from "@/helpers/function.helper";
+import { SET_ARTICLE_NEW } from "@/redux/slices/article.slice";
+import { SET_OPEN_CREATE_POST_DIALOG, SET_OPEN_EDIT_POST_DIALOG } from "@/redux/slices/setting.slice";
+import { useAppDispatch } from "@/redux/store";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { X } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import ImagesUpload from "../images-upload/images-upload";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { toast } from "sonner";
+import { generateStableId } from "../images-upload/images-upload";
+import ImagesUploadGrid from "../images-upload/images-upload-grid";
 import NavUserInfo from "../nav/nav-user-info";
 import { Textarea } from "../textarea/textarea";
 import { Button } from "../ui/button";
 import { ButtonLoading } from "../ui/button-loading";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Separator } from "../ui/separator";
-import { resError } from "@/helpers/function.helper";
-import { toast } from "sonner";
+import { useArticleEdit } from "@/api/tantask/article.tanstack";
 
 type TProps = {
     type: "create" | "edit";
+    open?: boolean;
+    openOnchange: (open: boolean) => void;
 };
 
-export default function CreatePost({ type }: TProps) {
-    const openCreatePostDialog = useAppSelector((state) => state.setting.openCreatePostDialog);
+export default function PostCreate({ type, open, openOnchange }: TProps) {
     const dispatch = useAppDispatch();
     const [value, setValue] = useState("");
     const firstRunRef = useRef(true);
     const [imageUrls, setImageUrls] = useState<string[]>([]);
     const [loadingUpsertPostDraft, setLoadingUpsertPostDraft] = useState(false);
-    const router = useRouter();
 
-    const getDraftPost = useGetDraftPost();
+    const getArticleHook = useMemo(() => {
+        if (type === "create") return useGetDraftPost;
+        return useGetOnePost;
+    }, [type]);
+
+    const getDraftPost = getArticleHook();
     const upsertPostDarft = useUpsertPostDarft();
     const uploadImagePost = useUploadImagePost();
     const deleteImagePostByPublicId = useDeleteImagePostByPublicId();
@@ -37,7 +50,9 @@ export default function CreatePost({ type }: TProps) {
 
     useEffect(() => {
         if (getDraftPost.data) {
+            console.log({ getDraftPost: getDraftPost.data });
             setValue(getDraftPost.data.content);
+            setImageUrls(getDraftPost.data.imageUrls);
         }
     }, [getDraftPost.data]);
 
@@ -45,37 +60,16 @@ export default function CreatePost({ type }: TProps) {
         async (query: any) => {
             if (firstRunRef.current) return (firstRunRef.current = false);
 
-            switch (type) {
-                case "create":
-                    console.log({ Debounce: query });
-                    upsertPostDarft.mutate(
-                        {
-                            content: query,
-                        },
-                        {
-                            onSuccess: () => {
-                                setLoadingUpsertPostDraft(false);
-                            },
-                        }
-                    );
-                    break;
-
-                case "edit":
-                    if (!value.trim()) return;
-
-                    // upsertArticleEdit.mutate({
-                    //     id: article.id,
-                    //     title: query.title,
-                    //     content: query.content,
-                    //     thumbnail: query.thumbnail,
-                    //     typeId: query.typeId || undefined,
-                    //     categoryIds: query.categoryIds,
-                    // });
-                    break;
-
-                default:
-                    break;
-            }
+            upsertPostDarft.mutate(
+                {
+                    content: query,
+                },
+                {
+                    onSuccess: () => {
+                        setLoadingUpsertPostDraft(false);
+                    },
+                }
+            );
         },
         {
             delay: 1000,
@@ -84,7 +78,7 @@ export default function CreatePost({ type }: TProps) {
         }
     );
     useEffect(() => {
-        handleUpsert(value);
+        if (type === "create") handleUpsert(value);
     }, [value]);
 
     const handleCreatePost = () => {
@@ -94,12 +88,22 @@ export default function CreatePost({ type }: TProps) {
                 setImageUrls([]);
                 dispatch(SET_OPEN_CREATE_POST_DIALOG(false));
                 dispatch(SET_ARTICLE_NEW(newArticle));
-                dispatch(SET_OFFSET_NEW());
             },
             onError: (error) => {
                 toast.error(resError(error, `Publish Post failed`));
-            }
+            },
         });
+    };
+
+    const handleUpdatePost = () => {
+        // articleEdit.mutate(
+        //     { id: article.id, formData: formData },
+        //     {
+        //         onError: (error) => {
+        //             toast.error(resError(error, `Article edit failed`));
+        //         },
+        //     }
+        // );
     };
 
     async function uploadOne(file: File): Promise<string> {
@@ -120,16 +124,11 @@ export default function CreatePost({ type }: TProps) {
     }
 
     return (
-        <Dialog
-            open={openCreatePostDialog}
-            onOpenChange={(e) => {
-                dispatch(SET_OPEN_CREATE_POST_DIALOG(e));
-            }}
-        >
+        <Dialog open={open} onOpenChange={openOnchange}>
             <DialogContent showCloseButton={false}>
                 {/* header */}
                 <DialogHeader className="flex flex-row items-center justify-between">
-                    <DialogTitle>Create Quick Post</DialogTitle>
+                    <DialogTitle>{type === "create" ? "New" : "Edit"} Quick Post</DialogTitle>
 
                     <div className="flex items-center gap-2">
                         <DialogClose asChild>
@@ -147,10 +146,8 @@ export default function CreatePost({ type }: TProps) {
                     <NavUserInfo />
                     <div className="">
                         <Textarea
-                            // id={inputId}
-                            // ref={textareaRef}
                             noStyle
-                            className="flex-1 h-full resize-none" // thay cho sx={{ flex: 1 }}
+                            className="flex-1 h-full resize-none"
                             placeholder="What's on your mind?"
                             minRows={5}
                             maxRows={5}
@@ -167,16 +164,29 @@ export default function CreatePost({ type }: TProps) {
                                 }
                             }}
                         />
-                        <ImagesUpload
-                            onUploadToServer={uploadOne}
-                            initialServerUrls={getDraftPost.data?.imageUrls}
-                            onChange={setImageUrls}
-                            onDelete={handleDeleteImagePostByPublicId}
-                            disabled={publishPost.isPending || uploadImagePost.isPending}
-                            maxCount={10}
-                            title="Upload photos"
-                            description="You can upload up to 10 images"
-                        />
+
+                        {getDraftPost.data && type === "create" && (
+                            <ImagesUploadGrid
+                                onUploadToServer={uploadOne}
+                                initialServerUrls={(() => {
+                                    const listImage = getDraftPost.data?.imageUrls.map((url) => {
+                                        return {
+                                            id: generateStableId(),
+                                            localBlobUrl: null,
+                                            serverUrl: url,
+                                            uploading: false,
+                                        };
+                                    });
+                                    return listImage || [];
+                                })()}
+                                onChange={setImageUrls}
+                                onDelete={handleDeleteImagePostByPublicId}
+                                disabled={publishPost.isPending || uploadImagePost.isPending}
+                                maxCount={10}
+                                title="Upload photos"
+                                description="You can upload up to 10 images"
+                            />
+                        )}
                     </div>
                 </div>
 
@@ -185,17 +195,15 @@ export default function CreatePost({ type }: TProps) {
                 {/* footer */}
                 <DialogFooter className="fle">
                     <ButtonLoading
-                        onClick={handleCreatePost}
+                        onClick={() => {
+                            if (type === "create") handleCreatePost();
+                            if (type === "edit") handleUpdatePost();
+                        }}
                         loading={publishPost.isPending}
-                        disabled={
-                            publishPost.isPending ||
-                            uploadImagePost.isPending ||
-                            deleteImagePostByPublicId.isPending ||
-                            loadingUpsertPostDraft
-                        }
+                        disabled={publishPost.isPending || uploadImagePost.isPending || deleteImagePostByPublicId.isPending || loadingUpsertPostDraft}
                         className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-2 text-sm font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Post
+                        {type === "create" ? "Post" : "Update"}
                     </ButtonLoading>
                 </DialogFooter>
             </DialogContent>

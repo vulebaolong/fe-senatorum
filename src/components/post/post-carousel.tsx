@@ -35,10 +35,10 @@ export function PostCarousel({ imageUrls }: TProps) {
 
     return (
         <div className="mx-auto w-full max-w-[720px]">
-            <div className="relative group rounded-md overflow-hidden bg-black">
+            <div className="relative group rounded-md overflow-hidden">
                 {/* Gradient edges (IG-like) */}
-                <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-black/50 to-transparent" />
-                <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-black/50 to-transparent" />
+                {/* <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-black/50 to-transparent" /> */}
+                {/* <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-black/50 to-transparent" /> */}
 
                 <Carousel setApi={setApi} className="w-full" opts={{ align: "start", loop: false }}>
                     <CarouselContent className="m-0">

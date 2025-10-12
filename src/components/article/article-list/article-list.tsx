@@ -7,18 +7,17 @@ import {
     useGetMyHeartArticle,
     useGetMyUpvotedArticle,
 } from "@/api/tantask/article.tanstack";
+import { AppendLoading } from "@/components/data-state/append-state/AppendState";
 import PostItem from "@/components/post/post-item";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
 import { TQuery } from "@/types/app.type";
 import { TArticle } from "@/types/article.type";
 import { EArticleVariant } from "@/types/enum/article.enum";
-import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid";
 import { useEffect, useMemo, useRef, useState } from "react";
 import NodataOverlay from "../../no-data/NodataOverlay";
-import ArticleItem from "../article-item/article-item";
-import { AppendLoading } from "@/components/data-state/append-state/AppendState";
 import { Skeleton } from "../../ui/skeleton";
+import ArticleItem from "../article-item/article-item";
 
 type ArticleWithGroup = TArticle & { __groupKey: number };
 

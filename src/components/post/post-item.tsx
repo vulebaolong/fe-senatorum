@@ -85,7 +85,7 @@ export default function PostItem({ article }: TProps) {
 
             {/* footer */}
             <div className="p-2 pt-0">
-                <ArticleFooter article={article} type={EArticleVariant.POST} />
+                <ArticleFooter article={article} type={EArticleVariant.POST} isEdit={false} />
             </div>
         </article>
     );

@@ -136,7 +136,7 @@ const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article,
     return (
         <div className="flex items-start gap-2">
             {/* avatar */}
-            <div className="relative z-10 bg-white dark:bg-[#252728] rounded-full flex items-center justify-center">
+            <div className="relative z-10 rounded-full flex items-center justify-center">
                 <AvatartImageCustom
                     onClick={(e) => {
                         e.stopPropagation();
@@ -147,27 +147,6 @@ const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article,
                     src={info?.avatar}
                 />
             </div>
-
-            {/* input */}
-            {/* <Textarea
-                id={inputId}
-                ref={textareaRef}
-                className="flex-1 rounded-2xl h-[30px]" // thay cho sx={{ flex: 1 }}
-                placeholder="Got a thought? We'd love to hear it 😸"
-                minRows={1}
-                maxRows={10}
-                value={value}
-                onChange={(e) => setValue(e.target.value.normalize("NFC"))}
-                onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-                    // Enter để gửi, Shift+Enter để xuống dòng
-                    if (e.key === "Enter" && !e.shiftKey && !isComposing) {
-                        e.preventDefault();
-                        handleCreateComment();
-                    }
-                }}
-                onCompositionStart={() => setIsComposing(true)}
-                onCompositionEnd={() => setIsComposing(false)}
-            /> */}
 
             <div className="relative flex-1 min-h-[30px] mt-[1px]">
                 {/* Textarea thật: KHÔNG đặt placeholder (để lib không đo theo placeholder) */}

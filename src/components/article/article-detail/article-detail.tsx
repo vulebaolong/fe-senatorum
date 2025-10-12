@@ -118,7 +118,7 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
 
                                 {/* footer */}
                                 <div className="pt-1">
-                                    <ArticleFooter article={article} type={EArticleVariant.ARTICLE} />
+                                    <ArticleFooter article={article} type={EArticleVariant.ARTICLE} isEdit={true} />
                                 </div>
 
                                 {/* author */}

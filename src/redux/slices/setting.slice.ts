@@ -4,12 +4,14 @@ type TInitialState = {
     loadingPage: boolean;
     openVersionUpdateDialog: boolean;
     openCreatePostDialog: boolean;
+    openEditPostDialog: boolean;
 };
 
 const initialState: TInitialState = {
     loadingPage: false,
     openVersionUpdateDialog: false,
     openCreatePostDialog: false,
+    openEditPostDialog: false,
 };
 
 const settingSlice = createSlice({
@@ -25,9 +27,12 @@ const settingSlice = createSlice({
         SET_OPEN_CREATE_POST_DIALOG: (state, { payload }) => {
             state.openCreatePostDialog = payload;
         },
+        SET_OPEN_EDIT_POST_DIALOG: (state, { payload }) => {
+            state.openEditPostDialog = payload;
+        },
     },
 });
 
-export const { SET_LOADING_PAGE, SET_OPEN_VERSION_UPDATE_DIALOG, SET_OPEN_CREATE_POST_DIALOG } = settingSlice.actions;
+export const { SET_LOADING_PAGE, SET_OPEN_VERSION_UPDATE_DIALOG, SET_OPEN_CREATE_POST_DIALOG, SET_OPEN_EDIT_POST_DIALOG } = settingSlice.actions;
 
 export default settingSlice.reducer;

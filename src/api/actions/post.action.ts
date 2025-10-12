@@ -16,6 +16,16 @@ export async function getDraftPostAction(): Promise<TResAction<TArticle | null>>
     }
 }
 
+export async function getOnePostAction(postSlugUpdate: TArticle["id"]): Promise<TResAction<TArticle | null>> {
+    try {
+        const result = await api.get<TRes<TArticle | null>>(`${ENDPOINT.POST.POST}/${postSlugUpdate}`);
+        const { data } = result;
+        return { status: "success", message: result.message, data: data };
+    } catch (error: any) {
+        return { status: "error", message: error?.message, data: null };
+    }
+}
+
 export async function upsertPostDraftAction(payload: TUpsertPostDarftReq): Promise<TResAction<TArticle | null>> {
     try {
         const result = await api.post<TRes<TArticle>>(ENDPOINT.POST.POST_UPSERT_DRAFT, payload);
@@ -47,6 +57,16 @@ export async function deleteImagePostByPublicIdAction(payload: string): Promise<
 }
 
 export async function publishPostAction(): Promise<TResAction<TArticle | null>> {
+    try {
+        const result = await api.post<TRes<TArticle>>(ENDPOINT.POST.POST_PUBLISH);
+        const { data } = result;
+        return { status: "success", message: result.message, data: data };
+    } catch (error: any) {
+        return { status: "error", message: error?.message, data: null };
+    }
+}
+
+export async function updatePostAction(): Promise<TResAction<TArticle | null>> {
     try {
         const result = await api.post<TRes<TArticle>>(ENDPOINT.POST.POST_PUBLISH);
         const { data } = result;

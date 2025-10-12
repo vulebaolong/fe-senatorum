@@ -2,6 +2,9 @@ import { useDeleteArticle } from "@/api/tantask/article.tanstack";
 import ConfirmDialog from "@/components/dialog/dialog-confirm";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { SET_POST_SLUG_UPDATE } from "@/redux/slices/article.slice";
+import { SET_OPEN_EDIT_POST_DIALOG } from "@/redux/slices/setting.slice";
+import { useAppDispatch } from "@/redux/store";
 import { TArticle } from "@/types/article.type";
 import { EArticleVariant } from "@/types/enum/article.enum";
 import { EllipsisVertical, Pencil, Trash } from "lucide-react";
@@ -16,6 +19,7 @@ type TProps = {
 export default function ArticleDetailAction({ detailArticle, type }: TProps) {
     const router = useRouter();
     const [openDelete, setOpenDelete] = useState(false);
+    const dispatch = useAppDispatch();
 
     const deleteArticle = useDeleteArticle();
 
@@ -48,7 +52,15 @@ export default function ArticleDetailAction({ detailArticle, type }: TProps) {
 
                 <DropdownMenuContent side="bottom" align="end">
                     <DropdownMenuItem
-                        onClick={() => router.push(`/${type === EArticleVariant.ARTICLE ? "article" : "post"}article/${detailArticle.slug}/edit`)}
+                        onClick={() => {
+                            if (type === EArticleVariant.ARTICLE) {
+                                router.push(`/"article"/${detailArticle.slug}/edit`);
+                            }
+                            if (type === EArticleVariant.POST) {
+                                dispatch(SET_POST_SLUG_UPDATE(detailArticle.slug));
+                                dispatch(SET_OPEN_EDIT_POST_DIALOG(true));
+                            }
+                        }}
                     >
                         <Pencil className="mr-2 h-4 w-4" />
                         <span>Edit</span>

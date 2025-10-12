@@ -248,39 +248,43 @@ export default function ArticleCreate({ type, dataArticle, dataListTypeArticle, 
                                         <FormField
                                             control={form.control}
                                             name="thumbnail"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormControl>
-                                                        <ImageUpload
-                                                            value={!field.value ? "" : `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${field.value}`} // publicId hiện tại
-                                                            onSuccessToServer={(id) => {
-                                                                // ghi về form
-                                                                field.onChange(id);
-                                                                field.onBlur(); // mark as touched (hữu ích cho validate)
-                                                            }}
-                                                            onUploadToServer={onUpload} // gọi tanstack bên ngoài
-                                                            isUploading={upsertThumbnail.isPending}
-                                                            onUploadError={(e) => {
-                                                                // tuỳ bạn: toast.error(...)
-                                                                console.error(e);
-                                                            }}
-                                                            onDelete={async () => {
-                                                                // nếu cần gọi API xoá file trên server, làm ở đây
-                                                                // await api.delete(publicId)
-                                                            }}
-                                                            // tuỳ chọn giao diện
-                                                            className="w-full h-[300px]"
-                                                            title={`Add a featured image`}
-                                                            description={`Drag and drop an image, or click to browse`}
-                                                        />
-                                                    </FormControl>
-                                                    <FormDescription className="text-xs italic">
-                                                        This image represents your article in listings and previews. Choose one that is clear and
-                                                        relevant.
-                                                    </FormDescription>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
+                                            render={({ field }) => {
+                                                const previewUrl =
+                                                    typeof field.value === "string" && field.value
+                                                        ? `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${field.value}`
+                                                        : undefined;
+                                                return (
+                                                    <FormItem>
+                                                        <FormControl>
+                                                            <ImageUpload
+                                                                value={previewUrl}
+                                                                onSuccessToServer={(id) => {
+                                                                    field.onChange(id);
+                                                                    field.onBlur();
+                                                                }}
+                                                                onUploadToServer={onUpload} 
+                                                                isUploading={upsertThumbnail.isPending}
+                                                                onUploadError={(e) => {
+                                                                    console.error(e);
+                                                                }}
+                                                                onDelete={async () => {
+                                                                    // nếu cần gọi API xoá file trên server, làm ở đây
+                                                                    // await api.delete(publicId)
+                                                                }}
+                                                                // tuỳ chọn giao diện
+                                                                className="w-full h-[300px]"
+                                                                title={`Add a featured image`}
+                                                                description={`Drag and drop an image, or click to browse`}
+                                                            />
+                                                        </FormControl>
+                                                        <FormDescription className="text-xs italic">
+                                                            This image represents your article in listings and previews. Choose one that is clear and
+                                                            relevant.
+                                                        </FormDescription>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                );
+                                            }}
                                         />
 
                                         {/* content */}
@@ -334,7 +338,7 @@ export default function ArticleCreate({ type, dataArticle, dataListTypeArticle, 
 
                                 {/* RIGHT (sidebar) */}
                                 <div
-                                    className="sticky top-0 h-fit overflow-hidden transition-[flex-basis] duration-300 ease-out"
+                                    className="sticky top-8 h-fit overflow-hidden transition-[flex-basis] duration-300 ease-out"
                                     style={{ flexBasis: settingsOpen ? "360px" : "0px", willChange: "flex-basis" }}
                                     aria-hidden={!settingsOpen}
                                 >

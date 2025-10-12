@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 import { cn } from "@/lib/utils";
 import { Loader2, Plus, Trash } from "lucide-react";
 import Image from "next/image";
@@ -8,7 +9,7 @@ import * as React from "react";
 
 type UploadFunction = (file: File) => Promise<string>;
 
-type ImageItem = {
+export type ImageItem = {
     id: string;
     localBlobUrl: string | null;
     serverUrl: string | null;
@@ -18,9 +19,9 @@ type ImageItem = {
 
 export type ImagesUploadGridProps = {
     onUploadToServer: UploadFunction; // bắt buộc: trả về URL/publicId sau khi upload
-    initialServerUrls?: string[]; // nếu đã có ảnh server sẵn (ví dụ khi edit bài)
+    initialServerUrls?: ImageItem[]; // nếu đã có ảnh server sẵn (ví dụ khi edit bài)
     onChange?: (serverUrls: string[]) => void; // gọi mỗi lần danh sách URL server thay đổi
-
+    onDelete?: (serverUrls: string) => void; // danh sách URL server đã hoàn tất
     disabled?: boolean;
     accept?: string; // mặc định image/*
     maxCount?: number; // mặc định 10
@@ -33,6 +34,7 @@ export default function ImagesUploadGrid({
     onUploadToServer,
     initialServerUrls = [],
     onChange,
+    onDelete,
     disabled,
     accept = "image/*",
     maxCount = 10,
@@ -44,15 +46,7 @@ export default function ImagesUploadGrid({
     const [isDragOver, setIsDragOver] = React.useState(false);
 
     // Khởi tạo danh sách từ server (nếu có)
-    const [imageItems, setImageItems] = React.useState<ImageItem[]>(
-        () =>
-            initialServerUrls.map((url) => ({
-                id: generateStableId(),
-                localBlobUrl: null,
-                serverUrl: url,
-                uploading: false,
-            })) || []
-    );
+    const [imageItems, setImageItems] = React.useState<ImageItem[]>(initialServerUrls);
 
     // Dọn blob khi unmount
     React.useEffect(() => {
@@ -131,6 +125,7 @@ export default function ImagesUploadGrid({
         if (disabled) return;
         setImageItems((prev) => {
             const item = prev.find((x) => x.id === id);
+            onDelete?.(item?.serverUrl!);
             if (item?.localBlobUrl?.startsWith("blob:")) URL.revokeObjectURL(item.localBlobUrl);
             return prev.filter((x) => x.id !== id);
         });
@@ -182,12 +177,7 @@ export default function ImagesUploadGrid({
             {imageItems.length > 0 && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                     {imageItems.map((item, index) => {
-                        console.log({ item });
-                        // Ưu tiên hiển thị local để người dùng thấy ngay → sau đó swap sang serverUrl
-                        const displayUrl = item.serverUrl || item.localBlobUrl || "";
-
-                        console.log({ displayUrl });
-
+                        const displayUrl = (item.serverUrl && `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${item.serverUrl}`) || item.localBlobUrl || "";
                         return (
                             <div key={item.id} className="relative aspect-square overflow-hidden rounded-xl group">
                                 {displayUrl && (

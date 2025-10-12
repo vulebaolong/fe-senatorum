@@ -1,15 +1,14 @@
 import { TArticle } from "@/types/article.type";
 import { createSlice } from "@reduxjs/toolkit";
-import { number } from "zod";
 
 type TInitialState = {
     articleNew: TArticle | null;
-    offsetNew: number;
+    postSlugUpdate: string | null;
 };
 
 const initialState: TInitialState = {
     articleNew: null,
-    offsetNew: 0,
+    postSlugUpdate: null,
 };
 
 const articleSlice = createSlice({
@@ -19,12 +18,13 @@ const articleSlice = createSlice({
         SET_ARTICLE_NEW: (state, { payload }) => {
             state.articleNew = payload;
         },
-        SET_OFFSET_NEW: (state) => {
-            state.offsetNew = state.offsetNew + 1;
+    
+        SET_POST_SLUG_UPDATE: (state, { payload }) => {
+            state.postSlugUpdate = payload;
         },
     },
 });
 
-export const { SET_ARTICLE_NEW, SET_OFFSET_NEW } = articleSlice.actions;
+export const { SET_ARTICLE_NEW, SET_POST_SLUG_UPDATE } = articleSlice.actions;
 
 export default articleSlice.reducer;

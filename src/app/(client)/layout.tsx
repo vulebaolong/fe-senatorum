@@ -4,12 +4,12 @@ import { AppSidebar } from "@/components/nav/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { VERSION } from "@/constant/app.constant";
 import { useSocket } from "@/hooks/socket.hook";
-import { useAppDispatch } from "@/redux/store";
-import { SET_OPEN_VERSION_UPDATE_DIALOG } from "@/redux/slices/setting.slice";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { SET_OPEN_CREATE_POST_DIALOG, SET_OPEN_EDIT_POST_DIALOG, SET_OPEN_VERSION_UPDATE_DIALOG } from "@/redux/slices/setting.slice";
 import { TSocketRes } from "@/types/base.type";
 import { useEffect } from "react";
 import Header from "@/components/header/header-root/header";
-import CreatePost from "@/components/post/create-post";
+import PostCreate from "@/components/post/post-create";
 
 type TProps = {
     children: React.ReactNode;
@@ -18,6 +18,8 @@ type TProps = {
 export default function layout({ children }: TProps) {
     const { socket } = useSocket();
     const dispatch = useAppDispatch();
+    const openCreatePostDialog = useAppSelector((state) => state.setting.openCreatePostDialog);
+    const openEditPostDialog = useAppSelector((state) => state.setting.openEditPostDialog);
 
     useEffect(() => {
         if (!socket) return;
@@ -42,7 +44,14 @@ export default function layout({ children }: TProps) {
                 <AppSidebar />
                 <SidebarInset>{children}</SidebarInset>
             </SidebarProvider>
-            <CreatePost type="create" />
+            <PostCreate
+                type="create"
+                open={openCreatePostDialog}
+                openOnchange={(e) => {
+                    dispatch(SET_OPEN_CREATE_POST_DIALOG(e));
+                }}
+            />
+            <PostCreate type="edit" open={openEditPostDialog} openOnchange={(e) => dispatch(SET_OPEN_EDIT_POST_DIALOG(e))} />
         </>
     );
 }
