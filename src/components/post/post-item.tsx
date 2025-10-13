@@ -1,18 +1,13 @@
+import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { formatLocalTime } from "@/helpers/function.helper";
-import { useAutoRelayout } from "@/hooks/auto-relayout";
+import { cn } from "@/lib/utils";
 import { TArticle } from "@/types/article.type";
-import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid";
+import { EArticleVariant } from "@/types/enum/article.enum";
 import { useRouter } from "next/navigation";
-import React from "react";
 import ArticleFooter from "../article/article-footer/article-footer";
 import AvatartImageCustom from "../custom/avatar-custom/avatart-custom";
 import ExpandableText from "../expandable-text/ExpandableText";
-import FacebookCollage from "../facebook-collage/facebook-collage";
-import { generateStableId } from "../images-upload/images-upload";
 import { Separator } from "../ui/separator";
-import { ROUTER_CLIENT } from "@/constant/router.constant";
-import { EArticleVariant } from "@/types/enum/article.enum";
-import { cn } from "@/lib/utils";
 import { PostCarousel } from "./post-carousel";
 
 type TProps = {
@@ -63,8 +58,8 @@ export default function PostItem({ article }: TProps) {
                         text={article.content}
                         placement="inline"
                         maxLines={5}
-                        moreLabel="...more"
-                        lessLabel="less"
+                        moreLabel="See more"
+                        lessLabel="See less"
                         fadeFromClass="from-[#fff] dark:from-[#171717]"
                         inlineButtonBgClass="bg-[#fff] dark:bg-[#171717]"
                         fadeHeightClass="h-full"

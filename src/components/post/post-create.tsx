@@ -23,7 +23,6 @@ import { Button } from "../ui/button";
 import { ButtonLoading } from "../ui/button-loading";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Separator } from "../ui/separator";
-import { useArticleEdit } from "@/api/tantask/article.tanstack";
 
 type TProps = {
     type: "create" | "edit";
@@ -52,7 +51,6 @@ export default function PostCreate({ type, open, openOnchange }: TProps) {
     const postEdit = usePostEdit();
 
     useEffect(() => {
-        console.log(getDraftPost.data);
         if (getDraftPost.data) {
             console.log({ getDraftPost: getDraftPost.data });
             setValue(getDraftPost.data.content);
@@ -104,18 +102,18 @@ export default function PostCreate({ type, open, openOnchange }: TProps) {
 
     const handleUpdatePost = () => {
         if (!getDraftPost.data) return;
-        // console.log({ imageFiles, value });
+        console.log({ imageFiles, value, imageUrls });
 
         const formData = new FormData();
         formData.append("content", value);
+        imageUrls.forEach((image) => formData.append("imageUrls", image));
         imageFiles.forEach((file) => formData.append("imagePost", file));
 
-        // console.log(`content`, formData.getAll(`content`));
-        // console.log(`imagePost`, formData.getAll(`imagePost`));
-
-        // console.log(getDraftPost.data.id);
-
-        postEdit.mutate({ id: getDraftPost.data.id, formData: formData });
+        postEdit.mutate({ id: getDraftPost.data.id, formData: formData }, {
+            onSuccess: () => {
+                dispatch(SET_OPEN_EDIT_POST_DIALOG(false));
+            }
+        });
     };
 
     async function uploadOne(file: File): Promise<string> {
@@ -199,7 +197,7 @@ export default function PostCreate({ type, open, openOnchange }: TProps) {
                                     return listImage || [];
                                 })()}
                                 onChange={setImageUrls}
-                                onDelete={handleDeleteImagePostByPublicId}
+                                onDelete={type === "create" ? handleDeleteImagePostByPublicId : undefined}
                                 disabled={publishPost.isPending || uploadImagePost.isPending}
                                 maxCount={10}
                                 title="Upload photos"

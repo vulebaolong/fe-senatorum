@@ -54,7 +54,7 @@ export default function ArticleDetailAction({ detailArticle, type }: TProps) {
                     <DropdownMenuItem
                         onClick={() => {
                             if (type === EArticleVariant.ARTICLE) {
-                                router.push(`/"article"/${detailArticle.slug}/edit`);
+                                router.push(`/article/${detailArticle.slug}/edit`);
                             }
                             if (type === EArticleVariant.POST) {
                                 dispatch(SET_POST_SLUG_UPDATE(detailArticle.slug));

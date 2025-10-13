@@ -116,12 +116,26 @@ export default function ExpandableText({
     };
 
     const DefaultMore = (
-        <span className="px-0 h-auto text-sm font-bold hover:underline cursor-pointer" onClick={handleClickExpand}>
+        <span
+            className="px-0 h-auto text-sm font-bold hover:underline cursor-pointer text-blue-400"
+            onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                handleClickExpand();
+            }}
+        >
             {moreLabel}
         </span>
     );
     const DefaultLess = (
-        <span className="px-0 h-auto text-sm font-bold hover:underline cursor-pointer" onClick={handleClickCollapse}>
+        <span
+            className="px-0 h-auto text-sm font-bold hover:underline cursor-pointer text-blue-400"
+            onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                handleClickCollapse();
+            }}
+        >
             {lessLabel}
         </span>
     );
@@ -147,20 +161,20 @@ export default function ExpandableText({
 
                     {isTrulyClamped && !collapse.isExpanded && placement === "inline" && (
                         <>
-                            <div
+                            {/* <div
                                 className={cn(
                                     "pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t rounded-b-[inherit] to-transparent",
                                     fadeHeightClass,
                                     fadeFromClass
                                 )}
-                            />
+                            /> */}
                             <div className={cn("absolute bottom-0 right-0 pl-2", inlineButtonBgClass)}>{MoreButton}</div>
                         </>
                     )}
                 </div>
             </div>
 
-            {isTrulyClamped && (placement === "below" || collapse.isExpanded) && (
+            { (placement === "below" || collapse.isExpanded) && (
                 <div className="mt-1">{collapse.isExpanded ? LessButton : MoreButton}</div>
             )}
         </div>

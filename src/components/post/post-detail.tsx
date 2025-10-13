@@ -98,8 +98,8 @@ export default function PostDetail({ article, isFollowing }: TProps) {
                                     text={article.content}
                                     placement="inline"
                                     maxLines={5}
-                                    moreLabel="...more"
-                                    lessLabel="less"
+                                    moreLabel="See more"
+                                    lessLabel="See less"
                                     fadeFromClass="from-[#fff] dark:from-[#171717]"
                                     inlineButtonBgClass="bg-[#fff] dark:bg-[#171717]"
                                     fadeHeightClass="h-full"
