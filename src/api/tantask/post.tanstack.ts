@@ -1,15 +1,19 @@
-import { TUpsertPostDarftReq } from "@/types/post.type";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { TUpdatePostReq, TUpsertPostDarftReq } from "@/types/post.type";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
     deleteImagePostByPublicIdAction,
     getDraftPostAction,
     getOnePostAction,
+    postEditAction,
     publishPostAction,
     updatePostAction,
     uploadImagePostAction,
     upsertPostDraftAction,
 } from "../actions/post.action";
 import { useAppSelector } from "@/redux/store";
+import { toast } from "sonner";
+import { resError } from "@/helpers/function.helper";
+import { useRouter } from "next/navigation";
 
 export const useGetDraftPost = () => {
     return useQuery({
@@ -30,7 +34,7 @@ export const useGetOnePost = () => {
     return useQuery({
         queryKey: ["get-one-post", postSlugUpdate],
         queryFn: async () => {
-            if(postSlugUpdate === null) return null
+            if (postSlugUpdate === null) return null;
             const { data, status, message } = await getOnePostAction(postSlugUpdate);
             if (status === "error" || data === null) throw new Error(message);
 
@@ -91,6 +95,24 @@ export const useUpdatePost = () => {
             if (status === "error" || data === null) throw new Error(message);
             console.log({ usePublishPost: data });
             return data;
+        },
+    });
+};
+
+export const usePostEdit = () => {
+    const router = useRouter();
+    return useMutation({
+        mutationFn: async (payload: TUpdatePostReq) => {
+            const { data, status, message } = await postEditAction(payload);
+            if (status === "error" || data === null) throw new Error(message);
+            console.log({ usePostEdit: data });
+            return data;
+        },
+        onSuccess: () => {
+            router.refresh();
+        },
+        onError: (error) => {
+            toast.error(resError(error, `Post edit failed`));
         },
     });
 };

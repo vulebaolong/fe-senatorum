@@ -2,6 +2,7 @@ import {
     useDeleteImagePostByPublicId,
     useGetDraftPost,
     useGetOnePost,
+    usePostEdit,
     usePublishPost,
     useUploadImagePost,
     useUpsertPostDarft,
@@ -36,6 +37,7 @@ export default function PostCreate({ type, open, openOnchange }: TProps) {
     const firstRunRef = useRef(true);
     const [imageUrls, setImageUrls] = useState<string[]>([]);
     const [loadingUpsertPostDraft, setLoadingUpsertPostDraft] = useState(false);
+    const [imageFiles, setImageFiles] = useState<File[]>([]);
 
     const getArticleHook = useMemo(() => {
         if (type === "create") return useGetDraftPost;
@@ -47,8 +49,10 @@ export default function PostCreate({ type, open, openOnchange }: TProps) {
     const uploadImagePost = useUploadImagePost();
     const deleteImagePostByPublicId = useDeleteImagePostByPublicId();
     const publishPost = usePublishPost();
+    const postEdit = usePostEdit();
 
     useEffect(() => {
+        console.log(getDraftPost.data);
         if (getDraftPost.data) {
             console.log({ getDraftPost: getDraftPost.data });
             setValue(getDraftPost.data.content);
@@ -59,7 +63,6 @@ export default function PostCreate({ type, open, openOnchange }: TProps) {
     const handleUpsert = useDebouncedCallback(
         async (query: any) => {
             if (firstRunRef.current) return (firstRunRef.current = false);
-
             upsertPostDarft.mutate(
                 {
                     content: query,
@@ -78,10 +81,14 @@ export default function PostCreate({ type, open, openOnchange }: TProps) {
         }
     );
     useEffect(() => {
-        if (type === "create") handleUpsert(value);
+        if (type === "create") {
+            setLoadingUpsertPostDraft(true);
+            handleUpsert(value);
+        }
     }, [value]);
 
     const handleCreatePost = () => {
+        console.log("Create");
         publishPost.mutate(undefined, {
             onSuccess: (newArticle) => {
                 setValue("");
@@ -96,14 +103,19 @@ export default function PostCreate({ type, open, openOnchange }: TProps) {
     };
 
     const handleUpdatePost = () => {
-        // articleEdit.mutate(
-        //     { id: article.id, formData: formData },
-        //     {
-        //         onError: (error) => {
-        //             toast.error(resError(error, `Article edit failed`));
-        //         },
-        //     }
-        // );
+        if (!getDraftPost.data) return;
+        // console.log({ imageFiles, value });
+
+        const formData = new FormData();
+        formData.append("content", value);
+        imageFiles.forEach((file) => formData.append("imagePost", file));
+
+        // console.log(`content`, formData.getAll(`content`));
+        // console.log(`imagePost`, formData.getAll(`imagePost`));
+
+        // console.log(getDraftPost.data.id);
+
+        postEdit.mutate({ id: getDraftPost.data.id, formData: formData });
     };
 
     async function uploadOne(file: File): Promise<string> {
@@ -154,20 +166,27 @@ export default function PostCreate({ type, open, openOnchange }: TProps) {
                             value={value || ""}
                             onChange={(e) => {
                                 setValue(e.target.value.normalize("NFC"));
-                                setLoadingUpsertPostDraft(true);
                             }}
                             onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
                                 // Enter để gửi, Shift+Enter để xuống dòng
                                 if (e.key === "Enter" && !e.shiftKey) {
                                     e.preventDefault();
-                                    handleCreatePost();
+                                    if (type === "create") handleCreatePost();
+                                    if (type === "edit") handleUpdatePost();
                                 }
                             }}
                         />
 
-                        {getDraftPost.data && type === "create" && (
+                        {getDraftPost.data && (
                             <ImagesUploadGrid
-                                onUploadToServer={uploadOne}
+                                onUploadToServer={type === "create" ? uploadOne : undefined}
+                                onUploadToLocal={
+                                    type === "edit"
+                                        ? (files) => {
+                                              setImageFiles((prev) => [...prev, ...files]);
+                                          }
+                                        : undefined
+                                }
                                 initialServerUrls={(() => {
                                     const listImage = getDraftPost.data?.imageUrls.map((url) => {
                                         return {
@@ -200,7 +219,13 @@ export default function PostCreate({ type, open, openOnchange }: TProps) {
                             if (type === "edit") handleUpdatePost();
                         }}
                         loading={publishPost.isPending}
-                        disabled={publishPost.isPending || uploadImagePost.isPending || deleteImagePostByPublicId.isPending || loadingUpsertPostDraft}
+                        disabled={
+                            publishPost.isPending ||
+                            uploadImagePost.isPending ||
+                            deleteImagePostByPublicId.isPending ||
+                            loadingUpsertPostDraft ||
+                            postEdit.isPending
+                        }
                         className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-2 text-sm font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {type === "create" ? "Post" : "Update"}
@@ -210,3 +235,6 @@ export default function PostCreate({ type, open, openOnchange }: TProps) {
         </Dialog>
     );
 }
+
+// ["Tabbicus/articles/posts/fo6mw9mgffgyihqmoozm"]
+// ["Tabbicus/articles/posts/fo6mw9mgffgyihqmoozm","Tabbicus/articles/posts/u1ik8dflnob6t3jbg5vi"]

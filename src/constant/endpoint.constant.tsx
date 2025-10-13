@@ -48,6 +48,7 @@ export const ENDPOINT = {
         POST_UPLOAD_IMAGE: "/post/upload-image-post",
         POST_DELETE_IMAGE: "/post/delete-image-post",
         POST_PUBLISH: "/post/publish",
+        POST_EDIT: "/post/edit",
     },
     ARTICLE_BOOKMARK: {
         BOOKMARK_ALL: "/article-bookmark",

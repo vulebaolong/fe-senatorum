@@ -1,6 +1,5 @@
 import { getDetailArticleAction } from "@/api/actions/article.action";
 import { getIsFollowingAction } from "@/api/actions/follow.action";
-import ArticleDetail from "@/components/article/article-detail/article-detail";
 import PostDetail from "@/components/post/post-detail";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE, TITLE } from "@/constant/app.constant";

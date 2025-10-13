@@ -18,8 +18,10 @@ export type ImageItem = {
 };
 
 export type ImagesUploadGridProps = {
-    onUploadToServer: UploadFunction; // bắt buộc: trả về URL/publicId sau khi upload
+    onUploadToServer?: UploadFunction; // bắt buộc: trả về URL/publicId sau khi upload
     initialServerUrls?: ImageItem[]; // nếu đã có ảnh server sẵn (ví dụ khi edit bài)
+    // chỉ show không up server
+    onUploadToLocal?: (files: File[]) => void; // chỉ show hình
     onChange?: (serverUrls: string[]) => void; // gọi mỗi lần danh sách URL server thay đổi
     onDelete?: (serverUrls: string) => void; // danh sách URL server đã hoàn tất
     disabled?: boolean;
@@ -32,6 +34,7 @@ export type ImagesUploadGridProps = {
 
 export default function ImagesUploadGrid({
     onUploadToServer,
+    onUploadToLocal,
     initialServerUrls = [],
     onChange,
     onDelete,
@@ -85,40 +88,47 @@ export default function ImagesUploadGrid({
             id: generateStableId(),
             localBlobUrl: URL.createObjectURL(file),
             serverUrl: null,
-            uploading: true,
+            // uploading: true,
+            uploading: !!onUploadToServer ? true : false,
         }));
 
         // Render local trước
         setImageItems((prev) => [...prev, ...newItems]);
 
-        // Upload song song (mỗi file một promise), cập nhật từng item
-        await Promise.all(
-            newItems.map(async (newItem, index) => {
-                const file = files[index];
-                try {
-                    const serverUrl = await onUploadToServer(file);
-                    setImageItems((prev) =>
-                        prev.map((it) =>
-                            it.id === newItem.id
-                                ? {
-                                      ...it,
-                                      serverUrl,
-                                      uploading: false,
-                                      // dọn blob để tránh memory leak
-                                      localBlobUrl: it.localBlobUrl?.startsWith("blob:")
-                                          ? (URL.revokeObjectURL(it.localBlobUrl), null)
-                                          : it.localBlobUrl,
-                                  }
-                                : it
-                        )
-                    );
-                } catch (error: any) {
-                    setImageItems((prev) =>
-                        prev.map((it) => (it.id === newItem.id ? { ...it, uploading: false, error: error?.message || "Upload failed" } : it))
-                    );
-                }
-            })
-        );
+        if (onUploadToLocal) {
+            onUploadToLocal(files);
+        }
+
+        if (onUploadToServer) {
+            // Upload song song (mỗi file một promise), cập nhật từng item
+            await Promise.all(
+                newItems.map(async (newItem, index) => {
+                    const file = files[index];
+                    try {
+                        const serverUrl = await onUploadToServer(file);
+                        setImageItems((prev) =>
+                            prev.map((it) =>
+                                it.id === newItem.id
+                                    ? {
+                                          ...it,
+                                          serverUrl,
+                                          uploading: false,
+                                          // dọn blob để tránh memory leak
+                                          localBlobUrl: it.localBlobUrl?.startsWith("blob:")
+                                              ? (URL.revokeObjectURL(it.localBlobUrl), null)
+                                              : it.localBlobUrl,
+                                      }
+                                    : it
+                            )
+                        );
+                    } catch (error: any) {
+                        setImageItems((prev) =>
+                            prev.map((it) => (it.id === newItem.id ? { ...it, uploading: false, error: error?.message || "Upload failed" } : it))
+                        );
+                    }
+                })
+            );
+        }
     };
 
     const handleDelete = (id: string) => {
