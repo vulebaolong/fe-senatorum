@@ -30,6 +30,7 @@ export default function ButtonNav() {
                         variant="ghost"
                         className={cn(
                             "relative flex flex-col items-center transition-colors duration-200",
+                            "focus-visible:!outline-none focus-visible:!border-none focus-visible:!ring-0",
                             isActive ? "text-blue-400" : "text-gray-400"
                         )}
                         onClick={() => {
