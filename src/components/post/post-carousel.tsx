@@ -44,11 +44,13 @@ export function PostCarousel({ imageUrls }: TProps) {
                     <CarouselContent className="m-0">
                         {images.map((imageString, i) => (
                             <CarouselItem key={i} className="basis-full p-0">
-                                <div className="relative w-full aspect-[4/3] sm:aspect-[16/10]">
+                                <div className="relative flex items-center justify-center w-full h-full max-h-[400px] sm:max-h-[500px] overflow-hidden">
                                     <ImageCustom
                                         src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${imageString}`}
                                         alt="article image"
-                                        className="absolute inset-0 h-full w-full object-cover select-none"
+                                        className={cn(
+                                            "w-full h-auto object-cover select-none"
+                                        )}
                                     />
                                 </div>
                             </CarouselItem>
@@ -112,7 +114,7 @@ export function PostCarousel({ imageUrls }: TProps) {
                                         // hit area lớn cho mobile
                                         "grid place-items-center rounded-full outline-none",
                                         "p-1 sm:p-1.5 focus-visible:ring-2 focus-visible:ring-white/70",
-                                        "cursor-pointer",
+                                        "cursor-pointer"
                                     )}
                                 >
                                     <span
