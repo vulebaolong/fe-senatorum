@@ -9,6 +9,7 @@ import AvatartImageCustom from "../custom/avatar-custom/avatart-custom";
 import ExpandableText from "../expandable-text/ExpandableText";
 import { Separator } from "../ui/separator";
 import { PostCarousel } from "./post-carousel";
+import { Zap } from "lucide-react";
 
 type TProps = {
     article: TArticle;
@@ -49,6 +50,8 @@ export default function PostItem({ article }: TProps) {
                         <p className="text-xs text-muted-foreground">{formatLocalTime(article.publishedAt, `ago`)}</p>
                     </div>
                 </div>
+
+                 <Zap size={15} className="text-blue-400" />
             </div>
 
             {/* content */}

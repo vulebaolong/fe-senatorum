@@ -1,13 +1,14 @@
+import { SidebarTrigger } from "@/components/custom/sidebar-custom";
 import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
-import { LogIn, SquarePen } from "lucide-react";
+import { LogIn } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Logo } from "../../logo/Logo";
 import { Button } from "../../ui/button";
+import ButtonNav from "./button-nav";
 import HeaderBellring from "./header-bellring";
 import Search from "./search";
-import { SidebarTrigger } from "@/components/custom/sidebar-custom";
 
 export default function Header() {
     const info = useAppSelector((state) => state.user.info);
@@ -16,39 +17,44 @@ export default function Header() {
     return (
         <header className="fixed top-0 w-full h-[var(--header-height)] flex items-center justify-between bg-sidebar border-sidebar-border border shadow-sm z-50">
             <div className="px-3 sm:px-4 md:px-6 lg:px-[15px] py-2 w-full h-[50px] flex items-center justify-between gap-2 sm:gap-4">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-[240px]">
                     <div className="visible md:hidden">
                         <SidebarTrigger />
                     </div>
 
-                    {/* Logo - always visible, responsive sizing */}
-                    <div className="flex-shrink-0">
-                        <Logo />
-                    </div>
-                </div>
-
-                {/* Search - responsive behavior */}
-                <div className="flex-1 max-w-md mx-2 sm:mx-4 md:mx-6 lg:mx-8">
-                    <Search />
-                </div>
-
-                {/* Bell/Notifications - always visible */}
-                {info ? (
+                    {/* Logo */}
                     <div className="flex items-center gap-2">
                         <div className="flex-shrink-0">
-                            <HeaderBellring />
+                            <Logo />
+                        </div>
+                        {/* Search */}
+                        <div className="flex-1 w-[200px] hidden md:block">
+                            <Search />
                         </div>
                     </div>
-                ) : (
-                    <Button
-                        className={cn("!text-xs", "h-8 w-8", "sm:h-6 sm:w-20")}
-                        onClick={() => {
-                            router.push(ROUTER_CLIENT.LOGIN);
-                        }}
-                    >
-                        <LogIn /> <span className={cn("hidden sm:inline font-bold")}>Login</span>
-                    </Button>
-                )}
+                </div>
+
+                <ButtonNav />
+
+                {/* Bell/Notifications - always visible */}
+                <div className="w-[240px] flex justify-end">
+                    {info ? (
+                        <div className="flex items-center gap-2">
+                            <div className="flex-shrink-0">
+                                <HeaderBellring />
+                            </div>
+                        </div>
+                    ) : (
+                        <Button
+                            className={cn("!text-xs", "h-8 w-8", "sm:h-6 sm:w-20")}
+                            onClick={() => {
+                                router.push(ROUTER_CLIENT.LOGIN);
+                            }}
+                        >
+                            <LogIn /> <span className={cn("hidden sm:inline font-bold")}>Login</span>
+                        </Button>
+                    )}
+                </div>
             </div>
         </header>
     );
