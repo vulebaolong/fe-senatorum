@@ -105,7 +105,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                         {replyingCommentId && <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />}
 
                         {/* comment */}
-                        <div className={cn("rounded-lg p-2 w-fit max-w-full", "bg-[#fff] dark:bg-[#333334]")}>
+                        <div className={cn("rounded-lg p-2 w-fit max-w-full", "shadow-sm")}>
                             <div className="flex items-center gap-1">
                                 <Name name={comment.Users.name} username={comment.Users.username} />
                                 {comment.Users.id === article.userId && (
