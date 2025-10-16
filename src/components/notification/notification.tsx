@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Tabs } from "../ui/tabs";
-import NotiAll from "./noti-all";
-import NotiUnread from "./noti-unread";
 import NotificationFeed from "./notification-feed";
 
 export default function Notification() {

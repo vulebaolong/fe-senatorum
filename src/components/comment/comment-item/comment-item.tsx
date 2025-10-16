@@ -97,7 +97,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                 </div>
 
                 {/* Right column */}
-                <div className="relative flex-1 flex flex-col">
+                <div className="relative flex-1 flex flex-col min-w-0">
                     {/* action */}
                     <div className="relative">
                         {/* line */}
@@ -105,7 +105,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                         {replyingCommentId && <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />}
 
                         {/* comment */}
-                        <div className={cn("rounded-lg p-2 w-fit max-w-full", "shadow-sm")}>
+                        <div className={cn("rounded-lg p-2 w-fit max-w-full", "shadow-sm bg-background")}>
                             <div className="flex items-center gap-1">
                                 <Name name={comment.Users.name} username={comment.Users.username} />
                                 {comment.Users.id === article.userId && (
@@ -121,8 +121,9 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                                 maxLines={5}
                                 moreLabel="See more"
                                 lessLabel="See less"
-                                fadeFromClass="from-[#fff] dark:from-[#333334]"
-                                inlineButtonBgClass="bg-[#fff] dark:bg-[#333334]"
+                                // fadeFromClass="from-[#fff] dark:from-[#333334]"
+                                // inlineButtonBgClass="bg-[#fff] dark:bg-[#333334]"
+                                // inlineButtonBgClass="bg-[#f5f5f5] dark:bg-[#151515]"
                                 fadeHeightClass="h-full"
                             />
                         </div>

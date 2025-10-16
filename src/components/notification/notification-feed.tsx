@@ -15,6 +15,7 @@ import React, { useEffect, useRef, useState } from "react";
 import AvatartImageCustom from "../custom/avatar-custom/avatart-custom";
 import { AppendLoading } from "../data-state/append-state/AppendState";
 import NodataOverlay from "../no-data/NodataOverlay";
+import { EArticleVariant } from "@/types/enum/article.enum";
 
 // ----- Types -----
 type FeedMode = "all" | "unread";
@@ -80,12 +81,12 @@ function navigateByType(router: ReturnType<typeof useRouter>, notification: TNot
         }
         case NotificationType.NEW_ARTICLE: {
             const slug = notification.Articles?.slug;
-            if (slug) router.push(`${ROUTER_CLIENT.ARTICLE}/${slug}`);
+            if (slug) router.push(`${notification.Articles?.variant === EArticleVariant.ARTICLE ? ROUTER_CLIENT.ARTICLE : ROUTER_CLIENT.POST}/${slug}#comments`);
             break;
         }
         case NotificationType.NEW_COMMENT: {
             const slug = notification.Articles?.slug;
-            if (slug) router.push(`${ROUTER_CLIENT.ARTICLE}/${slug}#comments`);
+            if (slug) router.push(`${notification.Articles?.variant === EArticleVariant.ARTICLE ? ROUTER_CLIENT.ARTICLE : ROUTER_CLIENT.POST}/${slug}#comments`);
             break;
         }
         default:

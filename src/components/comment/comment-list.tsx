@@ -81,7 +81,7 @@ export default function CommentList({ article, listComment, setListComment, clas
     };
 
     return (
-        <div ref={containerRef} className={cn("relative", "h-full lg:overflow-y-scroll", className)}>
+        <div ref={containerRef} className={cn("relative", "h-full lg:overflow-y-scroll", className)} id="comments">
             <AppendLoading
                 isLoading={getCommentByArticle.isLoading}
                 isEmpty={!getCommentByArticle.data || listComment.length === 0}

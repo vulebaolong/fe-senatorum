@@ -63,7 +63,7 @@ export default function PostItem({ article }: TProps) {
                         maxLines={5}
                         moreLabel="See more"
                         lessLabel="See less"
-                        fadeFromClass="from-[#fff] dark:from-[#171717]"
+                        // fadeFromClass="from-[#fff] dark:from-[#171717]"
                         inlineButtonBgClass="bg-[#fff] dark:bg-[#171717]"
                         fadeHeightClass="h-full"
                     />
