@@ -86,12 +86,9 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                 {/* Avatar */}
                 <div className={cn("relative z-10 h-10 w-8 rounded-full flex items-start justify-center")}>
                     <AvatartImageCustom
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            router.push(`/${comment.Users?.username}`);
-                        }}
                         className="h-8 w-8 rounded-full cursor-pointer"
-                        name={comment.Users?.name}
+                        nameFallback={comment.Users?.name}
+                        nameRouterPush={comment.Users?.username}
                         src={comment.Users?.avatar}
                     />
                 </div>

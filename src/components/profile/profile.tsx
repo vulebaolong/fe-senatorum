@@ -59,7 +59,7 @@ export default function Profile({ dataProfile, isFollowing }: Props) {
                                     <div className="flex flex-col sm:flex-row items-start sm:items-end gap-4 -mt-16 relative z-10">
                                         {/* Avatar */}
                                         {dataProfile.avatar ? (
-                                            <AvatartImageCustom name={dataProfile.name} src={dataProfile.avatar} />
+                                            <AvatartImageCustom nameFallback={dataProfile.name} nameRouterPush={dataProfile.username} src={dataProfile.avatar} />
                                         ) : (
                                             <div className="w-32 h-32 bg-white rounded-full border-4 border-white shadow-lg flex items-center justify-center">
                                                 <User className="w-16 h-16 text-slate-400" />

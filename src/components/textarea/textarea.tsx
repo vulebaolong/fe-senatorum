@@ -1,5 +1,5 @@
-import TextareaAutosize from "react-textarea-autosize";
 import { cn } from "@/lib/utils"; // hàm merge class của shadcn (tuỳ dự án bạn có)
+import TextareaAutosize from "react-textarea-autosize";
 
 type TProps = {
     noStyle?: boolean;

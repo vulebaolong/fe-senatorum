@@ -125,12 +125,9 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                                 <div className="flex items-center gap-2">
                                     <div className="flex flex-1 items-center gap-2 py-1.5 text-left text-sm">
                                         <AvatartImageCustom
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                router.push(`/${article.Users.username}`);
-                                            }}
+                                            nameRouterPush={article.Users.username}
                                             className="h-8 w-8 rounded-full cursor-pointer"
-                                            name={article.Users.name}
+                                            nameFallback={article.Users.name}
                                             src={article.Users.avatar}
                                         />
                                         <div className="grid flex-1 text-left leading-tight">

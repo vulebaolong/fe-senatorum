@@ -14,14 +14,14 @@ const navItems = [
     // { href: "/users", icon: Users },
 ];
 
-const width = "w-18";
+const width = "w-10 md:w-18";
 
 export default function ButtonNav() {
     const pathname = usePathname();
     const router = useRouter();
 
     return (
-        <div className="relative flex justify-around gap-2">
+        <div className={cn("relative flex justify-around gap-0", "md:gap-2")}>
             {navItems.map((item, index) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
@@ -40,11 +40,11 @@ export default function ButtonNav() {
                             router.push(item.href);
                         }}
                     >
-                        <Icon className="!w-5 !h-5 font-bold"/>
+                        <Icon className={cn("!w-5 !h-5 font-bold")}/>
                         <div
                             className={cn(
                                 width,
-                                "absolute bottom-0 h-[2px] rounded-full bg-blue-500 transition-all duration-300",
+                                "absolute bottom-0 h-[2px] rounded-full bg-blue-400 transition-all duration-300",
                                 isActive ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
                             )}
                         />

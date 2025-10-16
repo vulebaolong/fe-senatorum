@@ -29,12 +29,9 @@ export default function PostItem({ article }: TProps) {
             <div className="h-[40px] flex items-center justify-between px-2 pt-2">
                 <div className="flex basis-[60%] items-center gap-1 min-w-0">
                     <AvatartImageCustom
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            router.push(`/${article.Users.username}`);
-                        }}
                         className="h-8 w-8 rounded-full cursor-pointer"
-                        name={article.Users.name}
+                        nameFallback={article.Users.name}
+                        nameRouterPush={article.Users.username}
                         src={article.Users.avatar}
                     />
                     <div className="flex flex-col min-w-0">

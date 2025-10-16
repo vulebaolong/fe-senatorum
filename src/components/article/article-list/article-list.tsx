@@ -111,7 +111,7 @@ export default function Articlelist({ filters, type }: TProps) {
                 className={cn(
                     "relative flex flex-col gap-5",
                     "max-w-2xl mx-auto",
-                    "min-h-0"
+                    "min-h-full",
                 )}
             >
                 <AppendLoading

@@ -85,10 +85,10 @@ export function PostCarousel({ imageUrls }: TProps) {
                     <div
                         onClick={(e) => e.stopPropagation()}
                         className={cn(
-                            "absolute bottom-5 left-1/2 -translate-x-1/2 z-20",
+                            "absolute bottom-2 md:bottom-4 left-1/2 -translate-x-1/2 z-20",
                             "flex items-center justify-center",
                             "w-min rounded-full border-0 overflow-hidden",
-                            "p-1 sm:p-2 bg-black/40 backdrop-blur-sm text-white shadow-md transition",
+                            "p-0.5 md:p-1 bg-black/40 backdrop-blur-sm text-white shadow-md transition",
                             "cursor-default"
                         )}
                     >

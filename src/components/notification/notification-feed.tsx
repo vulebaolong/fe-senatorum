@@ -114,7 +114,8 @@ function LeadingVisual({ notification }: { notification: TNotification }) {
     return (
         <AvatartImageCustom
             className="h-8 w-8 rounded-full"
-            name={notification.Users_Notifications_actorIdToUsers?.name}
+            nameFallback={notification.Users_Notifications_actorIdToUsers?.name}
+            nameRouterPush={notification.Users_Notifications_actorIdToUsers?.username}
             src={notification.Users_Notifications_actorIdToUsers?.avatar}
         />
     );

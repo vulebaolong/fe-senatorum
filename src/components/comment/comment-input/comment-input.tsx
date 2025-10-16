@@ -3,12 +3,12 @@ import AvatartImageCustom from "@/components/custom/avatar-custom/avatart-custom
 import { Textarea } from "@/components/textarea/textarea";
 import { Button } from "@/components/ui/button";
 import { resError } from "@/helpers/function.helper";
+import { useMention } from "@/hooks/use-mention";
 import { useAppSelector } from "@/redux/store";
 import { TArticle } from "@/types/article.type";
 import { TCreateCommentReq, TListComment } from "@/types/comment.type";
 import { ECommentStatus } from "@/types/enum/comment-status.enum";
 import { SendHorizontal } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { Dispatch, forwardRef, SetStateAction, useImperativeHandle, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -29,10 +29,20 @@ const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article,
     const [value, setValue] = useState("");
     const info = useAppSelector((state) => state.user.info);
     const [isComposing, setIsComposing] = useState(false);
-    const router = useRouter();
     const createComment = useCreateComment();
 
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+    const { mentionHandlers, popup, open } = useMention({
+        trigger: "@",
+        limit: 10,
+        externalRef: textareaRef, // 👈 dùng ref bạn đã có
+        value: value, // (tuỳ chọn) controlled
+        onValueChange: (v) => {
+            console.log(v);
+            setValue(v.normalize("NFC"))
+        },
+    });
 
     useImperativeHandle(ref, () => ({
         focus: () => {
@@ -132,18 +142,17 @@ const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article,
             },
         });
     };
+
     const isEmpty = value.length === 0;
+
     return (
         <div className="flex items-start gap-2">
             {/* avatar */}
             <div className="relative z-10 rounded-full flex items-center justify-center">
                 <AvatartImageCustom
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        router.push(`/${info?.username}`);
-                    }}
                     className="h-8 w-8 rounded-full cursor-pointer"
-                    name={info?.name}
+                    nameFallback={info?.name}
+                    nameRouterPush={info?.username}
                     src={info?.avatar}
                 />
             </div>
@@ -158,17 +167,22 @@ const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article,
                     minRows={1}
                     maxRows={10}
                     value={value}
-                    onChange={(e) => setValue(e.target.value.normalize("NFC"))}
+                    onChange={(e) => {
+                        // setValue(e.target.value.normalize("NFC"));
+                        mentionHandlers.onChange(e);
+                    }}
                     onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
                         // Enter để gửi, Shift+Enter để xuống dòng
-                        if (e.key === "Enter" && !e.shiftKey && !isComposing) {
+                        if (e.key === "Enter" && !e.shiftKey && !isComposing && !open) {
                             e.preventDefault();
                             handleCreateComment();
                         }
+                        mentionHandlers.onKeyDown(e);
                     }}
                     onCompositionStart={() => setIsComposing(true)}
                     onCompositionEnd={() => setIsComposing(false)}
                 />
+                {popup}
 
                 {/* Fake placeholder: overlay 1 dòng, không làm đổi chiều cao */}
                 {isEmpty && (

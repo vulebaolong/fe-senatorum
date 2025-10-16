@@ -7,7 +7,7 @@ import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { cn } from "@/lib/utils";
 import { SET_OPEN_CREATE_POST_DIALOG } from "@/redux/slices/setting.slice";
 import { useAppDispatch } from "@/redux/store";
-import { Plus } from "lucide-react";
+import { FileText, Plus, Zap } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSidebar } from "../ui/sidebar";
 
@@ -57,7 +57,7 @@ export function NavButtonCreate() {
                             dispatch(SET_OPEN_CREATE_POST_DIALOG(true));
                         }}
                     >
-                        Create Post
+                        Create Post <Zap className="ml-auto" />
                     </DropdownMenuItem>
                     <DropdownMenuItem
                         onSelect={() => {
@@ -66,7 +66,7 @@ export function NavButtonCreate() {
                             router.push(ROUTER_CLIENT.ARTICLE_CREATE);
                         }}
                     >
-                        Create Article
+                        Create Article <FileText className="ml-auto" />
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

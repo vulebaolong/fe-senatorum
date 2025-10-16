@@ -6,12 +6,15 @@ import {
     editProfileAction,
     findAllUserAction,
     getDetailUserAction,
+    getUsersAction,
     searchNameUserAction,
     uploadAvatarAction,
     uploadAvatarDraftAction,
     uploadBannerAction,
     uploadBannerDraftAction,
 } from "@/api/actions/user.action";
+import { buildQueryString } from "@/helpers/build-query";
+import { TQuery } from "@/types/app.type";
 import { TEditProfileReq } from "@/types/user.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -34,7 +37,7 @@ export const useSearchNameUser = () => {
             if (status === "error" || data === null) throw new Error(message);
             // await wait(5000);
             console.log({ useSearchNameUser: data });
-            return data;
+            return data.items;
         },
     });
 };
@@ -185,5 +188,22 @@ export const useDeleteBannerDraft = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["query-info"] });
         },
+    });
+};
+
+export const useGetNameUser = (payload: TQuery & { enabled: boolean }) => {
+    return useQuery({
+        queryKey: ["name-user", payload],
+        queryFn: async () => {
+            console.log(payload);
+            const queryString = buildQueryString(payload);
+
+            const { data, status, message } = await getUsersAction(queryString);
+            if (status === "error" || data === null) throw new Error(message);
+            // await wait(5000);
+            console.log({ useGetNameUser: data });
+            return data.items;
+        },
+        enabled: payload.enabled,
     });
 };

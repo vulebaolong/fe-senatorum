@@ -61,7 +61,8 @@ export default function PostDetail({ article, isFollowing }: TProps) {
                                         router.push(`/${article.Users.username}`);
                                     }}
                                     className="h-8 w-8 rounded-full cursor-pointer"
-                                    name={article.Users.name}
+                                    nameFallback={article.Users.name}
+                                    nameRouterPush={article.Users.username}
                                     src={article.Users.avatar}
                                 />
                                 <div className="grid flex-1 text-left leading-tight">

@@ -134,12 +134,9 @@ export default function NotiUnread() {
                                 }}
                             >
                                 <AvatartImageCustom
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        router.push(`/${notification.Users_Notifications_actorIdToUsers.username}`);
-                                    }}
                                     className="h-8 w-8 rounded-full cursor-pointer"
-                                    name={notification.Users_Notifications_actorIdToUsers.name}
+                                    nameFallback={notification.Users_Notifications_actorIdToUsers.name}
+                                    nameRouterPush={notification.Users_Notifications_actorIdToUsers.username}
                                     src={notification.Users_Notifications_actorIdToUsers.avatar}
                                 />
                                 <div className="grid flex-1 text-left text-sm leading-tight">
