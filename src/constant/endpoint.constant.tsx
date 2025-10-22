@@ -42,13 +42,21 @@ export const ENDPOINT = {
         ARTICLE_DELETE: "/article/delete",
     },
     POST: {
-        POST: "/article",
+        POST: "/post",
         POST_GET_DRAFT: "/post/draft",
         POST_UPSERT_DRAFT: "/post/upsert-draft",
         POST_UPLOAD_IMAGE: "/post/upload-image-post",
         POST_DELETE_IMAGE: "/post/delete-image-post",
         POST_PUBLISH: "/post/publish",
         POST_EDIT: "/post/edit",
+    },
+    GALLERY_IMAGE: {
+        GALLERY_IMAGE: "/gallery-image",
+        GALLERY_IMAGE_GET_DRAFT: "/gallery-image/draft",
+        GALLERY_IMAGE_UPSERT_THUMBNAIL: "/gallery-image/upsert-thumbnail",
+        GALLERY_IMAGE_UPSERT_DRAFT: "/gallery-image/upsert-draft",
+        GALLERY_IMAGE_PUBLISH: "/gallery-image/publish",
+        GALLERY_IMAGE_EDIT: "/gallery-image/edit",
     },
     ARTICLE_BOOKMARK: {
         BOOKMARK_ALL: "/article-bookmark",

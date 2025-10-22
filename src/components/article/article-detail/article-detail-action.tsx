@@ -60,6 +60,9 @@ export default function ArticleDetailAction({ detailArticle, type }: TProps) {
                                 dispatch(SET_POST_SLUG_UPDATE(detailArticle.slug));
                                 dispatch(SET_OPEN_EDIT_POST_DIALOG(true));
                             }
+                             if (type === EArticleVariant.IMAGE) {
+                                router.push(`/image/${detailArticle.slug}/edit`);
+                            }
                         }}
                     >
                         <Pencil className="mr-2 h-4 w-4" />

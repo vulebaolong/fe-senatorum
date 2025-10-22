@@ -20,14 +20,14 @@ import { Clock4 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ExpandableText from "../expandable-text/ExpandableText";
-import { PostCarousel } from "./post-carousel";
+import ImageCustom from "../custom/image-custom/ImageCustom";
 
 type TProps = {
     article: TArticle;
     isFollowing?: boolean;
 };
 
-export default function PostDetail({ article, isFollowing }: TProps) {
+export default function GalleryImageDetail({ article, isFollowing }: TProps) {
     useGetInfoQuery();
     const info = useAppSelector((state) => state.user.info);
     const [listComment, setListComment] = useState<TListComment[]>([]);
@@ -52,6 +52,13 @@ export default function PostDetail({ article, isFollowing }: TProps) {
                 {/* Mặc định 1 cột; lên lg mới tách 0.73/0.27 */}
                 <div className="max-w-2xl mx-auto">
                     <div className="space-y-2 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[0px] h-min w-full">
+                        {/* thumbnail */}
+                        <div className={cn("px-2")}>
+                            <div className="min-w-0 w-full h-full aspect-[632/355] overflow-hidden rounded-t-lg">
+                                <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`} alt={article.slug} />
+                            </div>
+                        </div>
+
                         {/* author */}
                         <div className={cn("flex items-center gap-2 px-2 pt-2")}>
                             <div className="flex flex-1 items-center gap-2 text-left text-sm">
@@ -92,6 +99,9 @@ export default function PostDetail({ article, isFollowing }: TProps) {
                             )}
                         </div>
 
+                        {/* title */}
+                        <div className=" px-2 text-sm font-bold truncate">{article.title}</div>
+
                         {/* Content  */}
                         {article.content && (
                             <div className={cn("px-2")}>
@@ -108,20 +118,13 @@ export default function PostDetail({ article, isFollowing }: TProps) {
                             </div>
                         )}
 
-                        {/* imageUrls */}
-                        {article.imageUrls?.length > 0 && (
-                            <div className={cn("px-2")}>
-                                <PostCarousel imageUrls={article.imageUrls} />
-                            </div>
-                        )}
-
                         <div className="px-2">
                             <Separator />
                         </div>
 
                         {/* footer */}
                         <div className="px-2">
-                            <ArticleFooter article={article} type={EArticleVariant.POST} isEdit={true} />
+                            <ArticleFooter article={article} type={EArticleVariant.IMAGE} isEdit={true} />
                         </div>
 
                         <div className="px-2">

@@ -18,6 +18,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import NodataOverlay from "../../no-data/NodataOverlay";
 import { Skeleton } from "../../ui/skeleton";
 import ArticleItem from "../article-item/article-item";
+import GalleryImageItem from "@/components/gallery/gallery-image-item";
 
 type ArticleWithGroup = TArticle & { __groupKey: number };
 
@@ -134,6 +135,9 @@ export default function Articlelist({ filters, type }: TProps) {
                         }
                         if (article.variant === EArticleVariant.ARTICLE) {
                             return <ArticleItem key={article.id} article={article} />;
+                        }
+                        if (article.variant === EArticleVariant.IMAGE) {
+                            return <GalleryImageItem key={article.id} article={article} />;
                         }
                     })}
                 </AppendLoading>

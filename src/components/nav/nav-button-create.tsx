@@ -7,7 +7,7 @@ import { ROUTER_CLIENT } from "@/constant/router.constant";
 import { cn } from "@/lib/utils";
 import { SET_OPEN_CREATE_POST_DIALOG } from "@/redux/slices/setting.slice";
 import { useAppDispatch } from "@/redux/store";
-import { FileText, Plus, Zap } from "lucide-react";
+import { FileText, Image, Plus, Zap } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSidebar } from "../ui/sidebar";
 
@@ -19,35 +19,35 @@ export function NavButtonCreate() {
     return (
         <Tooltip>
             <DropdownMenu>
-                <TooltipTrigger asChild>
-                    <DropdownMenuTrigger asChild>
-                        <Button
+                {/* <TooltipTrigger asChild> */}
+                <DropdownMenuTrigger asChild>
+                    <Button
+                        className={cn(
+                            "flex items-center justify-center gap-2 h-8 w-full overflow-hidden px-3 py-2 transition-all duration-500",
+                            "group-data-[collapsible=icon]:size-8",
+                            "group-data-[collapsible=icon]:px-0",
+                            "group-data-[collapsible=icon]:justify-center",
+                            "group-data-[collapsible=icon]:gap-0"
+                        )}
+                    >
+                        <Plus />
+                        <span
                             className={cn(
-                                "flex items-center justify-center gap-2 h-8 w-full overflow-hidden px-3 py-2 transition-all duration-500",
-                                "group-data-[collapsible=icon]:size-8",
-                                "group-data-[collapsible=icon]:px-0",
-                                "group-data-[collapsible=icon]:justify-center",
-                                "group-data-[collapsible=icon]:gap-0"
+                                "whitespace-nowrap transition-all duration-200 ease-linear",
+                                "group-data-[collapsible=icon]:opacity-0",
+                                "group-data-[collapsible=icon]:w-0",
+                                "group-data-[collapsible=icon]:overflow-hidden"
                             )}
                         >
-                            <Plus />
-                            <span
-                                className={cn(
-                                    "whitespace-nowrap transition-all duration-200 ease-linear",
-                                    "group-data-[collapsible=icon]:opacity-0",
-                                    "group-data-[collapsible=icon]:w-0",
-                                    "group-data-[collapsible=icon]:overflow-hidden"
-                                )}
-                            >
-                                Create
-                            </span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                </TooltipTrigger>
+                            Create
+                        </span>
+                    </Button>
+                </DropdownMenuTrigger>
+                {/* </TooltipTrigger> */}
 
-                <TooltipContent side="right" align="center">
+                {/* <TooltipContent side="right" align="center">
                     <p>Create Post Or Article</p>
-                </TooltipContent>
+                </TooltipContent> */}
 
                 <DropdownMenuContent align="start" side="right">
                     <DropdownMenuItem
@@ -57,7 +57,7 @@ export function NavButtonCreate() {
                             dispatch(SET_OPEN_CREATE_POST_DIALOG(true));
                         }}
                     >
-                        Create Post <Zap className="ml-auto" />
+                        <Zap /> Post
                     </DropdownMenuItem>
                     <DropdownMenuItem
                         onSelect={() => {
@@ -66,7 +66,18 @@ export function NavButtonCreate() {
                             router.push(ROUTER_CLIENT.ARTICLE_CREATE);
                         }}
                     >
-                        Create Article <FileText className="ml-auto" />
+                        <FileText />
+                        Article
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                        onSelect={() => {
+                            setOpen(false);
+                            setOpenMobile(false);
+                            router.push(ROUTER_CLIENT.GALLERY_IMAGE_CREATE);
+                        }}
+                    >
+                        <Image />
+                        Image
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

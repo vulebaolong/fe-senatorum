@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { resError } from "@/helpers/function.helper";
 import { useAppSelector } from "@/redux/store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2Icon, Save, User } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";

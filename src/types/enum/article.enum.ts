@@ -7,4 +7,5 @@ export enum EArticleStatus {
 export enum EArticleVariant {
     ARTICLE = "ARTICLE",
     POST = "POST",
+    IMAGE = "IMAGE",
 }
