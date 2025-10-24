@@ -2,14 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { FileText, House, Zap } from "lucide-react";
+import { FileText, House, Image, Zap } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 const navItems = [
     { href: "/", icon: House },
     { href: "/post", icon: Zap },
     { href: "/article", icon: FileText },
-    // { href: "/images", icon: Image },
+    { href: "/image", icon: Image },
     // { href: "/videos", icon: Video },
     // { href: "/users", icon: Users },
 ];

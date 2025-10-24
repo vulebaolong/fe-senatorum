@@ -44,7 +44,7 @@ export default function ProfileBanner() {
                 <div className="grid gap-10 mt-10">
                     <div className="flex items-center gap-5">
                         <Avatar className="h-40 w-64 rounded-xl overflow-hidden relative group">
-                            <ImageCustom className="object-cover" src={checkPathImage(info?.banner) || ""} alt={`banner`} />
+                            <ImageCustom className="object-cover" src={checkPathImage(info?.banner) || ""} alt={`banner`} imageFor="hero" />
                             {info?.banner && (
                                 <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
                                     <Button type="button" variant="outline" onClick={onDeleteClick} size="icon" className="size-8">

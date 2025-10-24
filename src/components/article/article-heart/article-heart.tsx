@@ -18,9 +18,10 @@ type TProps = {
     heartCountInit: number;
     initial?: boolean;
     debounceMs?: number;
+    variant?: "default" | "link" | "destructive" | "outline" | "secondary" | "ghost" | null | undefined;
 };
 
-export default function ArticleHeart({ articleId, heartCountInit, initial = false, debounceMs = 300 }: TProps) {
+export default function ArticleHeart({ articleId, heartCountInit, initial = false, debounceMs = 300, variant = "ghost" }: TProps) {
     const addHeart = useAddHeart();
     const removeHeart = useRemoveHeart();
     const info = useAppSelector((state) => state.user.info);
@@ -89,7 +90,7 @@ export default function ArticleHeart({ articleId, heartCountInit, initial = fals
     };
 
     return (
-        <Button onClick={onClick} size="icon" className="h-6 px-[5px] rounded-lg w-auto" variant={"ghost"} aria-pressed={isHeart}>
+        <Button onClick={onClick} size="icon" className="h-6 px-[5px] rounded-lg w-auto" variant={variant} aria-pressed={isHeart}>
             <div className="flex items-center gap-1 justify-center">
                 <Heart
                     // style={{ width: 16, height: 16 }}
@@ -101,7 +102,7 @@ export default function ArticleHeart({ articleId, heartCountInit, initial = fals
                 {heartCount > 0 && (
                     <AnimatedScore
                         value={heartCount}
-                        className="font-semibold text-center text-muted-foreground"
+                        className="font-semibold text-center"
                         fontPx={12} // khớp text-sm
                         maxDigits={1} // khóa bề rộng 3 chữ số (000..999) trước khi compact
                         compact // hiển thị 1.2K, 3.4M...

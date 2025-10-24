@@ -147,6 +147,7 @@ function ArticleRow({ item, onClick }: { item: RelatedItem; onClick?: () => void
                                 src={item.thumbnail}
                                 alt={item.title}
                                 className="transition-transform duration-300 group-hover:scale-[1.04]"
+                                imageFor="list"
                             />
                         </div>
                     ) : (

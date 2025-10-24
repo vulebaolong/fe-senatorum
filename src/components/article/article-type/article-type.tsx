@@ -11,7 +11,7 @@ export default function ArticleType({ type }: TProps) {
     return (
         <div className={cn("flex items-center gap-1.5 justify-end rounded-md px-2 py-1")} style={{ background: color }}>
             <div className="size-3">
-                <ImageCustom src={`/images/article-type/${imageName}.webp`} alt={type.name} />
+                <ImageCustom src={`/images/article-type/${imageName}.webp`} alt={type.name} imageFor="list" />
             </div>
             <p className=" text-xs text-black font-bold truncate leading-none">{type.name}</p>
         </div>

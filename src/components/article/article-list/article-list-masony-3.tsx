@@ -7,16 +7,16 @@ import {
     useGetMyHeartArticle,
     useGetMyUpvotedArticle,
 } from "@/api/tantask/article.tanstack";
-import PostItem from "@/components/post/post-item";
+import ImageCustom from "@/components/custom/image-custom/ImageCustom";
+import { FALLBACK_IMAGE, NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
 import { TQuery } from "@/types/app.type";
 import { TArticle } from "@/types/article.type";
-import { EArticleVariant } from "@/types/enum/article.enum";
 import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid";
 import { useEffect, useMemo, useRef, useState } from "react";
 import NodataOverlay from "../../no-data/NodataOverlay";
-import ArticleItem from "../article-item/article-item";
+import GalleryImageItem1 from "@/components/gallery/gallery-image-item1";
 
 type ArticleWithGroup = TArticle & { __groupKey: number };
 
@@ -25,7 +25,12 @@ type TProps = {
     type: "all" | "my" | "upvoted" | "bookmarked" | "heart";
 };
 
-export default function Articlelist({ filters, type }: TProps) {
+// Kích thước thẻ và khoảng cách cột
+const columnWidthPx = 300;
+const gapPx = 10;
+const pageSize = 10;
+
+export default function ArticlelistMasony({ filters, type }: TProps) {
     const [lastArticleId, setLastArticleId] = useState<string | undefined>(undefined);
     const [articles, setArticles] = useState<TArticle[]>([]);
     const articleNew = useAppSelector((state) => state.article.articleNew);
@@ -34,11 +39,6 @@ export default function Articlelist({ filters, type }: TProps) {
     const lastAppliedFilterRef = useRef<string>("");
     const scrollerRef = useRef<HTMLDivElement>(null);
     const gridRef = useRef<MasonryInfiniteGrid | null>(null);
-
-    // Kích thước thẻ và khoảng cách cột
-    const columnWidthPx = 300;
-    const gapPx = 20;
-    const pageSize = 10;
 
     const getArticleHook = useMemo(() => {
         if (type === "all") return useGetAllArticle;
@@ -121,30 +121,44 @@ export default function Articlelist({ filters, type }: TProps) {
             {isEmpty ? (
                 <NodataOverlay visible />
             ) : (
-                <MasonryInfiniteGrid
-                    ref={gridRef}
-                    className="relative"
-                    gap={gapPx}
-                    align="center"
-                    scrollContainer={scrollerRef}
-                    threshold={10}
-                    onRequestAppend={handleRequestAppend}
-                    useRecycle={false}
-                    observedom="false"
-                >
-                    {articles.map((article) => (
-                        <div key={article.id} style={{ width: `${columnWidthPx}px` }}>
-                            {article.variant === EArticleVariant.POST ? (
-                                // <PostItem key={article.id} article={article} gridRef={gridRef} />
-                                <></>
-                            ) : (
-                                <ArticleItem key={article.id} article={article} />
-                            )}
-                        </div>
-                    ))}
+                <>
+                    {scrollerRef && (
+                        <MasonryInfiniteGrid
+                            ref={gridRef}
+                            /* --- Bố cục & tính toán --- */
+                            gap={gapPx}
+                            align="center"
+                            columnSize={columnWidthPx} // cột cố định -> ít tính toán hơn
+                            columnCalculationThreshold={10} // chỉ tính lại khi container đổi ≥120px
+                            useFit={false} // bỏ bước fit-compact tốn CPU
+                            useRoundedSize={true} // giảm rung layout
+                            /* --- Cuộn vô hạn & ảo hóa --- */
+                            scrollContainer={scrollerRef}
+                            threshold={10} // ngưỡng nạp nhỏ để ít event
+                            useRecycle={true} // TÁI DÙNG NODE: bắt buộc để nhẹ
+                            placeholder={<div style={{ height: 240 }} />} // khung tạm, rẻ CPU
+                            /* --- Quan sát/resize --- */
+                            autoResize={false} // tắt lắng nghe resize chung
+                            useResizeObserver={true} // nếu cần, chỉ dùng RO (nhẹ hơn)
+                            resizeDebounce={500}
+                            maxResizeDebounce={500}
+                            /* --- Ổn định & giảm reflow --- */
+                            observeChildren={false} // đừng quan sát con tự động
+                            renderOnPropertyChange={false} // props đổi ít khi -> tránh relayout
+                            /* --- Sự kiện nạp dữ liệu --- */
+                            onRequestAppend={handleRequestAppend}
+                            onRenderComplete={() => {
+                                // có thể lazy hydrate analytics/things sau khi ổn định
+                            }}
+                        >
+                            {articles.map((article) => (
+                                <div key={article.id} style={{ width: `${columnWidthPx}px` }}>
+                                    <GalleryImageItem1 article={article} />
+                                </div>
+                            ))}
 
-                    {/* Loader cuối danh sách khi đang fetch thêm */}
-                    {/* {getAllArticle.isFetching && articles.length > 0 && (
+                            {/* Loader cuối danh sách khi đang fetch thêm */}
+                            {/* {getAllArticle.isFetching && articles.length > 0 && (
                         <div
                             key={`loading-${page}`}
                             data-grid-groupkey={page + 0.5} // nhóm tạm cho loader
@@ -154,9 +168,10 @@ export default function Articlelist({ filters, type }: TProps) {
                             <Skeleton className="h-64 w-full rounded-xl" />
                         </div>
                     )} */}
-                </MasonryInfiniteGrid>
+                        </MasonryInfiniteGrid>
+                    )}
+                </>
             )}
         </div>
     );
 }
-

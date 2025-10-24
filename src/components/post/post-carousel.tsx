@@ -51,6 +51,7 @@ export function PostCarousel({ imageUrls }: TProps) {
                                         className={cn(
                                             "w-full h-auto object-cover select-none"
                                         )}
+                                        imageFor="list"
                                     />
                                 </div>
                             </CarouselItem>

@@ -55,7 +55,7 @@ export default function GalleryImageDetail({ article, isFollowing }: TProps) {
                         {/* thumbnail */}
                         <div className={cn("px-2")}>
                             <div className="min-w-0 w-full h-full aspect-[632/355] overflow-hidden rounded-t-lg">
-                                <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`} alt={article.slug} />
+                                <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`} alt={article.slug} imageFor="hero" />
                             </div>
                         </div>
 

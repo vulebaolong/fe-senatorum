@@ -171,6 +171,7 @@ export default function Search() {
                                                         alt={a.title}
                                                         sizes="32px"
                                                         className="object-cover"
+                                                        imageFor="list"
                                                     />
                                                 </div>
                                                 <div className="flex flex-col">

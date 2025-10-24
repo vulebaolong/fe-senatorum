@@ -5,6 +5,7 @@ import Image, { ImageProps } from "next/image";
 import { useEffect, useState } from "react";
 
 export type AppImageProps = {
+    imageFor: "hero" | "list";
     alt?: string;
     fallbackSrc?: string;
     priority?: boolean;
@@ -34,6 +35,7 @@ function isValidImageSrc(src: string | StaticRequire | StaticImageData | null | 
 }
 
 export default function ImageCustom({
+    imageFor,
     alt = "",
     fallbackSrc = "/images/fallback-image.png",
     priority = false,
@@ -57,6 +59,8 @@ export default function ImageCustom({
         <Image
             key={key}
             {...props}
+            {...(imageFor === "hero" ? { loading: "eager", fetchpriority: "high", decoding: "async" } : {})}
+            {...(imageFor === "list" ? { loading: "lazy", decoding: "async" } : {})}
             alt={alt}
             src={src}
             width={0}

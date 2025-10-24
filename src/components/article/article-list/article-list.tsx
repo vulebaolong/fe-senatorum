@@ -34,7 +34,6 @@ export default function Articlelist({ filters, type }: TProps) {
 
     const containerRef = useRef<HTMLDivElement | null>(null);
 
-
     const totalItemRef = useRef(0);
     const lastAppliedFilterRef = useRef<string>("");
     const pageSize = 10;

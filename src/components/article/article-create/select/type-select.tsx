@@ -21,7 +21,7 @@ export default function TypeSelect({ listTypeArticle }: TProps) {
                             <SelectItem value={item.id.toString()}>
                                 <div className={cn("flex items-center gap-2")}>
                                     <div className="size-3">
-                                        <ImageCustom src={`/images/article-type/${imageName}.webp`} alt={imageName} />
+                                        <ImageCustom src={`/images/article-type/${imageName}.webp`} alt={imageName} imageFor="list" />
                                     </div>
                                     {item.name}
                                 </div>

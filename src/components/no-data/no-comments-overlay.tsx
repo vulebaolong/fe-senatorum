@@ -91,7 +91,7 @@ export default function NoCommentsOverlay({
                             </div> */}
                             <div className="flex justify-center">
                                 <div className="size-20">
-                                    <ImageCustom src={"/images/comment/conversation.png"} alt="no-comment" />
+                                    <ImageCustom src={"/images/comment/conversation.png"} alt="no-comment" imageFor="hero" />
                                 </div>
                             </div>
                             <h3 className="text-base font-semibold">{title}</h3>

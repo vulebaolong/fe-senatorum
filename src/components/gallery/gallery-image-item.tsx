@@ -61,6 +61,7 @@ export default function GalleryImageItem({ article }: TProps) {
                     <ImageCustom
                         src={!article.thumbnail ? FALLBACK_IMAGE : `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`}
                         alt={"article image"}
+                        imageFor="list"
                     />
                 </div>
             </div>

@@ -51,7 +51,7 @@ export default function Profile({ dataProfile, isFollowing }: Props) {
                                     )}
                                 >
                                     {/* <div className="absolute inset-0 bg-black/20 rounded-t-lg"></div> */}
-                                    {dataProfile.banner && <ImageCustom src={checkPathImage(dataProfile.banner) || ""} alt="Banner" />}
+                                    {dataProfile.banner && <ImageCustom src={checkPathImage(dataProfile.banner) || ""} alt="Banner" imageFor="hero" />}
                                 </div>
 
                                 {/* Profile Info */}
