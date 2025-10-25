@@ -13,12 +13,10 @@ import ArticleItem from "../article-item/article-item";
 
 type TProps = {
     filters?: Record<string, any>;
-    id?: string;
     type: "all" | "my" | "upvoted" | "bookmarked";
-    // className?: string;
 };
 
-export default function Articlelist({ filters, id, type }: TProps) {
+export default function ArticlelistGrid({ filters, type }: TProps) {
     const [page, setPage] = useState(1);
     const [articles, setArticles] = useState<TArticle[]>([]);
 

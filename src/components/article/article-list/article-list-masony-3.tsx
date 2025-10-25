@@ -150,6 +150,7 @@ export default function ArticlelistMasony({ filters, type }: TProps) {
                             onRenderComplete={() => {
                                 // có thể lazy hydrate analytics/things sau khi ổn định
                             }}
+                            
                         >
                             {articles.map((article) => (
                                 <div key={article.id} style={{ width: `${columnWidthPx}px` }}>

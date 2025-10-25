@@ -8,7 +8,7 @@ import { Container } from "@/components/container/container";
 import AvatartImageCustom from "@/components/custom/avatar-custom/avatart-custom";
 import ProfileFollow from "@/components/profile/profile-follow/profile-follow";
 import { Separator } from "@/components/ui/separator";
-import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
+import { FALLBACK_IMAGE, NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
 import { formatLocalTime } from "@/helpers/function.helper";
 import { useAutoArticleView } from "@/hooks/use-article-view";
 import { cn } from "@/lib/utils";
@@ -49,14 +49,17 @@ export default function GalleryImageDetail({ article, isFollowing }: TProps) {
     return (
         <div className="h-[calc(100dvh-var(--header-height))] overflow-y-scroll border-none outline-none">
             <Container as="article" className="py-4 sm:py-6 lg:py-8">
-                {/* Mặc định 1 cột; lên lg mới tách 0.73/0.27 */}
                 <div className="max-w-2xl mx-auto">
-                    <div className="space-y-2 bg-card text-card-foreground rounded-xl border shadow-sm min-h-[0px] h-min w-full">
+                    <div className="space-y-2 bg-card text-card-foreground rounded-t-2xl overflow-hidden border shadow-sm min-h-[0px] h-min w-full">
                         {/* thumbnail */}
-                        <div className={cn("px-2")}>
-                            <div className="min-w-0 w-full h-full aspect-[632/355] overflow-hidden rounded-t-lg">
-                                <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`} alt={article.slug} imageFor="hero" />
-                            </div>
+                        <div >
+                            {/* Ảnh */}
+                            <ImageCustom
+                                src={!article.thumbnail ? FALLBACK_IMAGE : `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`}
+                                alt="article image"
+                                imageFor="hero"
+                                className="transition-transform duration-500 group-hover:scale-101 max-h-[80dvh]" // zoom nhẹ
+                            />
                         </div>
 
                         {/* author */}
