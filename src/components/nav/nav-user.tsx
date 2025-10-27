@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronsUpDown, LogOut, User } from "lucide-react";
+import { ChevronsUpDown, LogOut, Palette, User } from "lucide-react";
 
 import { logout } from "@/api/core.api";
 import {
@@ -16,6 +16,7 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/c
 import { useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import NavUserInfo from "./nav-user-info";
+import ThemeToggleV2 from "../theme-toggle/theme-toggle-v2";
 
 export function NavUser() {
     const { isMobile } = useSidebar();

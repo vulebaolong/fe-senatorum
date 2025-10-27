@@ -10,6 +10,7 @@ import { useAppSelector } from "@/redux/store";
 import { SidebarTrigger } from "../custom/sidebar-custom";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { NavButtonCreate } from "./nav-button-create";
+import { Separator } from "../ui/separator";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { open } = useSidebar();
@@ -47,9 +48,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </div>
                 <NavButtonCreate />
             </SidebarHeader>
+
             <SidebarContent>
                 <NavMain />
             </SidebarContent>
+
+            <div className="px-2">
+                <Separator />
+            </div>
+
             {info && (
                 <SidebarFooter>
                     <NavUser />

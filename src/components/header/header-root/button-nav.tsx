@@ -5,11 +5,11 @@ import { cn } from "@/lib/utils";
 import { FileText, House, Image, Zap } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
-const navItems = [
-    { href: "/", icon: House },
-    { href: "/post", icon: Zap },
-    { href: "/article", icon: FileText },
-    { href: "/image", icon: Image },
+export const navItems = [
+    { href: "/", icon: House, label: "Home" },
+    { href: "/post", icon: Zap, label: "Post" },
+    { href: "/article", icon: FileText, label: "Article" },
+    { href: "/image", icon: Image, label: "Image" },
     // { href: "/videos", icon: Video },
     // { href: "/users", icon: Users },
 ];
@@ -21,7 +21,7 @@ export default function ButtonNav() {
     const router = useRouter();
 
     return (
-        <div className={cn("relative flex justify-around gap-0", "md:gap-2")}>
+        <div className={cn( "relative flex justify-around gap-0", "md:gap-2", "hidden md:flex")}>
             {navItems.map((item, index) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
@@ -40,7 +40,7 @@ export default function ButtonNav() {
                             router.push(item.href);
                         }}
                     >
-                        <Icon className={cn("!w-5 !h-5 font-bold")}/>
+                        <Icon className={cn("!w-5 !h-5 font-bold")} />
                         <div
                             className={cn(
                                 width,
