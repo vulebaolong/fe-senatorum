@@ -1,5 +1,6 @@
 "use client";
 
+import { useArticleViewEasy } from "@/api/tantask/article-view.tanstack";
 import { useGetInfoQuery } from "@/api/tantask/auth.tanstack";
 import ArticleFooter from "@/components/article/article-footer/article-footer";
 import CommentInput from "@/components/comment/comment-input/comment-input";
@@ -10,7 +11,6 @@ import ProfileFollow from "@/components/profile/profile-follow/profile-follow";
 import { Separator } from "@/components/ui/separator";
 import { FALLBACK_IMAGE, NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
 import { formatLocalTime } from "@/helpers/function.helper";
-import { useAutoArticleView } from "@/hooks/use-article-view";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
 import { TArticle } from "@/types/article.type";
@@ -19,8 +19,8 @@ import { EArticleVariant } from "@/types/enum/article.enum";
 import { Clock4 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import ExpandableText from "../expandable-text/ExpandableText";
 import ImageCustom from "../custom/image-custom/ImageCustom";
+import ExpandableText from "../expandable-text/ExpandableText";
 
 type TProps = {
     article: TArticle;
@@ -32,7 +32,8 @@ export default function GalleryImageDetail({ article, isFollowing }: TProps) {
     const info = useAppSelector((state) => state.user.info);
     const [listComment, setListComment] = useState<TListComment[]>([]);
     const router = useRouter();
-    article.id && useAutoArticleView(article.id, { delayMs: 3500 });
+    // article.id && useAutoArticleView(article.id, { delayMs: 3500 });
+    useArticleViewEasy(article.id);
 
     const jsonLd = {
         "@context": "https://schema.org",
@@ -52,7 +53,7 @@ export default function GalleryImageDetail({ article, isFollowing }: TProps) {
                 <div className="max-w-2xl mx-auto">
                     <div className="space-y-2 bg-card text-card-foreground rounded-t-2xl overflow-hidden border shadow-sm min-h-[0px] h-min w-full">
                         {/* thumbnail */}
-                        <div >
+                        <div>
                             {/* Ảnh */}
                             <ImageCustom
                                 src={!article.thumbnail ? FALLBACK_IMAGE : `${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`}

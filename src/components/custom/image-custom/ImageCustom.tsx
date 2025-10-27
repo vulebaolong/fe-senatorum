@@ -59,7 +59,7 @@ export default function ImageCustom({
         <Image
             key={key}
             {...props}
-            {...(imageFor === "hero" ? { loading: "eager", fetchpriority: "high", decoding: "async" } : {})}
+            {...(imageFor === "hero" ? { loading: "eager", fetchPriority: "high", decoding: "async" } : {})}
             {...(imageFor === "list" ? { loading: "lazy", decoding: "async" } : {})}
             alt={alt}
             src={src}

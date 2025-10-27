@@ -72,8 +72,8 @@ export default async function Page({ params }: TProps) {
             ) : (
                 <Alert variant="default">
                     <CircleX color="red" />
-                    <AlertTitle>No Article</AlertTitle>
-                    <AlertDescription>No Article</AlertDescription>
+                    <AlertTitle>No Image</AlertTitle>
+                    <AlertDescription>No Image</AlertDescription>
                 </Alert>
             )}
         </>

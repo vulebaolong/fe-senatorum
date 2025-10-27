@@ -1,5 +1,6 @@
 "use client";
 
+import { useArticleViewEasy } from "@/api/tantask/article-view.tanstack";
 import { useGetInfoQuery } from "@/api/tantask/auth.tanstack";
 import CommentInput from "@/components/comment/comment-input/comment-input";
 import CommentList from "@/components/comment/comment-list";
@@ -12,18 +13,16 @@ import ProfileFollow from "@/components/profile/profile-follow/profile-follow";
 import { Separator } from "@/components/ui/separator";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY, NEXT_PUBLIC_BASE_DOMAIN_FE } from "@/constant/app.constant";
 import { formatLocalTime } from "@/helpers/function.helper";
-import { useAutoArticleView } from "@/hooks/use-article-view";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
 import { TArticle } from "@/types/article.type";
 import { TListComment } from "@/types/comment.type";
+import { EArticleVariant } from "@/types/enum/article.enum";
 import { Clock4 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ArticleFooter from "../article-footer/article-footer";
 import ArticleType from "../article-type/article-type";
-import ArticleDetailAction from "./article-detail-action";
-import { EArticleVariant } from "@/types/enum/article.enum";
 
 type TProps = {
     article: TArticle;
@@ -35,7 +34,8 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
     const info = useAppSelector((state) => state.user.info);
     const [listComment, setListComment] = useState<TListComment[]>([]);
     const router = useRouter();
-    article.id && useAutoArticleView(article.id, { delayMs: 3500 });
+    // article.id && useAutoArticleView(article.id, { delayMs: 3500 });
+    useArticleViewEasy(article.id);
 
     const jsonLd = {
         "@context": "https://schema.org",
@@ -61,7 +61,11 @@ export default function ArticleDetail({ article, isFollowing }: TProps) {
                             <div className="relative">
                                 {/* article - thumbnail */}
                                 <div className="min-w-0 w-full h-full aspect-[632/355] overflow-hidden rounded-t-lg">
-                                    <ImageCustom src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`} alt={article.slug} imageFor="hero" />
+                                    <ImageCustom
+                                        src={`${NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY}/${article.thumbnail}`}
+                                        alt={article.slug}
+                                        imageFor="hero"
+                                    />
                                 </div>
 
                                 {/* article - type */}
