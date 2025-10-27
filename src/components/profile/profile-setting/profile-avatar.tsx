@@ -4,10 +4,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { NEXT_PUBLIC_BASE_DOMAIN_CLOUDINARY } from "@/constant/app.constant";
-import { checkPathImage, toUrl } from "@/helpers/function.helper";
+import { checkPathImage } from "@/helpers/function.helper";
 import { useAppSelector } from "@/redux/store";
 import { Camera, Loader2Icon, Save, Trash } from "lucide-react";
 import React from "react";
+import { toast } from "sonner";
 
 export default function ProfileAvatar() {
     const info = useAppSelector((state) => state.user.info);
@@ -60,9 +61,7 @@ export default function ProfileAvatar() {
                             }}
                             onUploadToServer={onUpload} // gọi tanstack bên ngoài
                             isUploading={uploadAvatarDraft.isPending || deleteAvatarDraft.isPending}
-                            onUploadError={(e) => {
-                                console.error(e);
-                            }}
+                            onUploadError={(err) => toast.error((err as Error).message)}
                             onDelete={async () => {
                                 if (info?.avatarDraft) {
                                     deleteAvatarDraft.mutate();

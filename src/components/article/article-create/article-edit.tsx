@@ -208,9 +208,7 @@ export default function ArticleEdit({ dataArticle, dataListTypeArticle, dataList
                                                                 field.onBlur();
                                                                 field.onChange(file ?? "");
                                                             }}
-                                                            onUploadError={(e) => {
-                                                                console.error(e);
-                                                            }}
+                                                            onUploadError={(err) => toast.error((err as Error).message)}
                                                             onDelete={async () => {
                                                                 field.onBlur();
                                                                 field.onChange("");

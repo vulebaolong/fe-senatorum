@@ -23,9 +23,9 @@ export async function generateMetadata({ params }: TProps): Promise<Metadata> {
     if (!article) return {};
 
     const url = `${NEXT_PUBLIC_BASE_DOMAIN_FE}/post/${article.slug}`;
-    const title = article.content;
-    const desc = article.content;
-    const ogImage = ogUrl(article.imageUrls[0]);
+    const title = article.title;
+    const desc = article.title;
+    const ogImage = ogUrl(article.thumbnail);
 
     const result: Metadata = {
         title, // sẽ áp dụng template ở Root: "%s | TITLE"

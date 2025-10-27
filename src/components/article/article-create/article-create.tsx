@@ -2,6 +2,7 @@
 
 import { usePublishArticle, useUpsertArticleDarft, useUpsertArticleEdit } from "@/api/tantask/article.tanstack";
 import { useUpsertThumbnail } from "@/api/tantask/image.tanstack";
+import { Container } from "@/components/container/container";
 import ImageUpload from "@/components/image-upload/image-upload";
 import { Button } from "@/components/ui/button";
 import { ButtonLoading } from "@/components/ui/button-loading";
@@ -29,7 +30,6 @@ import { z } from "zod";
 import Editor from "../../lexical/editor";
 import { CategoryMultiSelect } from "./select/category-multi-select";
 import TypeSelect from "./select/type-select";
-import { Container } from "@/components/container/container";
 
 const FormSchema = z.object({
     title: z.string().nonempty("Title is required."),
@@ -262,11 +262,9 @@ export default function ArticleCreate({ type, dataArticle, dataListTypeArticle, 
                                                                     field.onChange(id);
                                                                     field.onBlur();
                                                                 }}
-                                                                onUploadToServer={onUpload} 
+                                                                onUploadToServer={onUpload}
                                                                 isUploading={upsertThumbnail.isPending}
-                                                                onUploadError={(e) => {
-                                                                    console.error(e);
-                                                                }}
+                                                                onUploadError={(err) => toast.error((err as Error).message)}
                                                                 onDelete={async () => {
                                                                     // nếu cần gọi API xoá file trên server, làm ở đây
                                                                     // await api.delete(publicId)

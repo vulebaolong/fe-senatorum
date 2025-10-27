@@ -12,6 +12,16 @@ import { SendHorizontal } from "lucide-react";
 import { Dispatch, forwardRef, SetStateAction, useImperativeHandle, useRef, useState } from "react";
 import { toast } from "sonner";
 
+function highlightMentions(text: string) {
+    // escape HTML để tránh XSS
+    const safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+    // regex tìm từ bắt đầu bằng @ + ký tự chữ/số/_
+    return safe.replace(/(^|\s)(@\w+)/g, (_, space, mention) => {
+        return `${space}<span class="text-blue-500 font-medium">${mention}</span>`;
+    });
+}
+
 export type CommentInputHandle = {
     focus: () => void;
     insertMention: (username: string) => void;
@@ -40,7 +50,7 @@ const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article,
         value: value, // (tuỳ chọn) controlled
         onValueChange: (v) => {
             console.log(v);
-            setValue(v.normalize("NFC"))
+            setValue(v.normalize("NFC"));
         },
     });
 

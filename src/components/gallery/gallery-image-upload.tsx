@@ -122,11 +122,11 @@ export default function GalleryImageUpload({ dataArticle, type }: TProps) {
         if (dirty.thumbnail) push("thumbnail", values.thumbnail);
         formData.append("isRemoveThumbnail", isRemoveThumbnail.toString());
 
-        console.log({ formData });
-        console.log(`title`, formData.getAll(`title`));
-        console.log(`content`, formData.getAll(`content`));
-        console.log(`thumbnail`, formData.getAll(`thumbnail`));
-        console.log(`isRemoveThumbnail`, formData.getAll(`isRemoveThumbnail`));
+        // console.log({ formData });
+        // console.log(`title`, formData.getAll(`title`));
+        // console.log(`content`, formData.getAll(`content`));
+        // console.log(`thumbnail`, formData.getAll(`thumbnail`));
+        // console.log(`isRemoveThumbnail`, formData.getAll(`isRemoveThumbnail`));
 
         galleryImageEdit.mutate(
             { id: article.id, formData: formData },
@@ -230,9 +230,7 @@ export default function GalleryImageUpload({ dataArticle, type }: TProps) {
                                                                   },
                                                               }
                                                             : {})}
-                                                        onUploadError={(e) => {
-                                                            console.error(e);
-                                                        }}
+                                                        onUploadError={(err) => toast.error((err as Error).message)}
                                                         // tuỳ chọn giao diện
                                                         className="w-full h-[400px]"
                                                         title={`Add a featured image`}

@@ -3,6 +3,7 @@
 import { useGetNameUser } from "@/api/tantask/user.tanstack";
 import AvatartImageCustom from "@/components/custom/avatar-custom/avatart-custom";
 import Name from "@/components/name/name";
+import { cn } from "@/lib/utils";
 import { useDebouncedValue } from "@mantine/hooks";
 import React, { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type RefObject } from "react";
 import { createPortal } from "react-dom";
@@ -57,7 +58,7 @@ export function useMention(opts?: UseMentionOptions) {
     });
 
     const list: MentionUser[] = useMemo(() => (usersQuery.data as MentionUser[]) || [], [usersQuery.data]);
-    
+
     const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
     const computeCaretPosition = useCallback((el: HTMLTextAreaElement) => {
@@ -191,20 +192,14 @@ export function useMention(opts?: UseMentionOptions) {
             position: "fixed",
             left: anchor.x,
             top: anchor.y,
-            zIndex: 9999,
+            zIndex: 10,
             width: 260,
             maxHeight: 240,
-            overflowY: "auto",
-            background: "white",
-            border: "1px solid rgba(0,0,0,.08)",
-            borderRadius: 8,
-            boxShadow: "0 8px 24px rgba(0,0,0,.12)",
-            padding: 4,
             ...popupStyle,
         };
 
         return createPortal(
-            <div style={style} className={popupClassName}>
+            <div style={style} className={cn("bg-popover text-popover-foreground overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md", popupClassName)}>
                 {list.map((user, idx) => {
                     return (
                         <div
@@ -225,7 +220,7 @@ export function useMention(opts?: UseMentionOptions) {
                         </div>
                     );
                 })}
-                {usersQuery.isFetching && <div className="px-2 py-1 text-xs opacity-60">Đang tải...</div>}
+                {usersQuery.isFetching && <div className="px-2 py-1 text-xs opacity-60">Loading...</div>}
             </div>,
             document.body
         );

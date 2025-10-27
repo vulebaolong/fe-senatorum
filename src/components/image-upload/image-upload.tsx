@@ -29,6 +29,7 @@ export type ThumbnailUploadProps = {
     variant?: "square" | "round";
     title?: string;
     description?: string;
+    maxSizeMB?: number;
 };
 
 export default function ImageUpload({
@@ -45,6 +46,7 @@ export default function ImageUpload({
     title,
     description,
     variant = "square",
+    maxSizeMB = 1,
 }: ThumbnailUploadProps) {
     const [dragActive, setDragActive] = useState(false);
     const [tempUrl, setTempUrl] = useState<string | null>(null); // blob preview
@@ -77,6 +79,13 @@ export default function ImageUpload({
 
             const file = files[0];
             if (!file.type?.startsWith?.("image/")) return;
+
+            const maxBytes = maxSizeMB * 1024 * 1024;
+            if (file.size > maxBytes) {
+                const err = new Error(`File is too large! Limit is ${maxSizeMB}MB`);
+                onUploadError?.(err);
+                return;
+            }
 
             // Tạo preview trước
             const url = URL.createObjectURL(file);

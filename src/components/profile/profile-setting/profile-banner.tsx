@@ -9,6 +9,7 @@ import { checkPathImage } from "@/helpers/function.helper";
 import { useAppSelector } from "@/redux/store";
 import { Bandage, Loader2Icon, Save, Trash } from "lucide-react";
 import React from "react";
+import { toast } from "sonner";
 
 export default function ProfileBanner() {
     const info = useAppSelector((state) => state.user.info);
@@ -60,9 +61,7 @@ export default function ProfileBanner() {
                             }}
                             onUploadToServer={onUpload} // gọi tanstack bên ngoài
                             isUploading={uploadBannerDraft.isPending || deleteBannerDraft.isPending}
-                            onUploadError={(e) => {
-                                console.error(e);
-                            }}
+                            onUploadError={(err) => toast.error((err as Error).message)}
                             onDelete={async () => {
                                 if (info?.bannerDraft) {
                                     deleteBannerDraft.mutate();
