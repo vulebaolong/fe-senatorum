@@ -22,9 +22,9 @@ export function NavMain() {
                 <SidebarMenu>
                     {navItems.map((item, index) => {
                         const Icon = item.icon;
-                        const isActive = pathname === item.href;
+                        // const isActive = pathname === item.href;
                         return (
-                            <SidebarMenuItem>
+                            <SidebarMenuItem key={index}>
                                 <SidebarMenuButton
                                     onClick={() => {
                                         router.push(item.href);

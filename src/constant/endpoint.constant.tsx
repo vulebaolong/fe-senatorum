@@ -83,6 +83,7 @@ export const ENDPOINT = {
     },
     COMMENT: {
         COMMENT: "/comment",
+        UPDATE_COMMENT: "/comment",
     },
     USER: {
         USER: "/user",

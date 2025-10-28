@@ -1,6 +1,6 @@
-import { TCreateCommentReq } from "@/types/comment.type";
+import { TCreateCommentReq, TUpdateComment } from "@/types/comment.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createCommentAction, getCommentByArticleAction } from "../actions/comment.action";
+import { createCommentAction, getCommentByArticleAction, updateCommentAction } from "../actions/comment.action";
 
 export const useCreateComment = () => {
     return useMutation({
@@ -39,6 +39,18 @@ export const useMutationCommentByParent = () => {
             const query = `page=${page}&pageSize=${pageSize}&filters=${JSON.stringify(filters)}&sortBy=${sort?.sortBy}&isDesc=${sort?.isDesc}`;
 
             const { data, status, message } = await getCommentByArticleAction(query);
+            if (status === "error" || data === null) throw new Error(message);
+
+            console.log({ useMutationCommentByParent: data });
+            return data;
+        },
+    });
+};
+
+export const useUpdateComment = () => {
+    return useMutation({
+        mutationFn: async (payload: TUpdateComment) => {
+            const { data, status, message } = await updateCommentAction(payload);
             if (status === "error" || data === null) throw new Error(message);
 
             console.log({ useMutationCommentByParent: data });

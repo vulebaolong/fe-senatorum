@@ -60,3 +60,8 @@ export type TRoomCommentRes = {
     parentId: TComment["id"] | null;
     level: number;
 };
+
+export type TUpdateComment = {
+    id: TComment["id"];
+    content: TComment["content"];
+};

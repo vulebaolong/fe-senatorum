@@ -1,4 +1,4 @@
-import { useMutationCommentByParent } from "@/api/tantask/comment.tanstack";
+import { useMutationCommentByParent, useUpdateComment } from "@/api/tantask/comment.tanstack";
 import AvatartImageCustom from "@/components/custom/avatar-custom/avatart-custom";
 import ExpandableText from "@/components/expandable-text/ExpandableText";
 import Name from "@/components/name/name";
@@ -10,11 +10,15 @@ import { TArticle } from "@/types/article.type";
 import { TComment, TListComment } from "@/types/comment.type";
 import { Spotlight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import CommentInput, { CommentInputHandle } from "../comment-input/comment-input";
 import LineCurve from "../line/line-curve";
 import LineStraight from "../line/line-straight";
+import { useAppSelector } from "@/redux/store";
+import { Textarea } from "@/components/textarea/textarea";
+import { Button } from "@/components/ui/button";
+import CommentInputUi from "../comment-input/comment-input-ui";
 
 type CommentItemProps = {
     comment: TListComment;
@@ -25,10 +29,10 @@ type CommentItemProps = {
 };
 
 export default function CommentItem({ comment, article, level = 0, isLast, handleReplyCommentParent }: CommentItemProps) {
-    const router = useRouter();
     const [replyingCommentId, setReplyingCommentId] = useState<TComment["id"] | null>(null);
     const [listComment, setListComment] = useState<TListComment[]>([]);
     const inputRef = useRef<CommentInputHandle>(null);
+    const info = useAppSelector((state) => state.user.info);
 
     // meta phân trang cho replies của comment hiện tại
     const [meta, setMeta] = useState({
@@ -39,6 +43,23 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
     });
 
     const mutationCommentByParent = useMutationCommentByParent();
+    const updateComment = useUpdateComment();
+
+    // ======= LOCAL STATE for EDIT =======
+    // giữ content hiển thị cục bộ để có thể cập nhật lạc quan mà không cần refetch ngay
+    const [content, setContent] = useState<string>(comment.content);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [editValue, setEditValue] = useState<string>(comment.content);
+    const [editError, setEditError] = useState<string | null>(null);
+
+    // nếu prop comment.content thay đổi (do refetch từ cha) và hiện không ở chế độ edit -> đồng bộ lại
+    useEffect(() => {
+        if (!isEditing) {
+            setContent(comment.content);
+            setEditValue(comment.content);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [comment.content]);
 
     const handleReplyComment = (commentId: TComment["id"], username?: string) => {
         flushSync(() => setReplyingCommentId(commentId)); // mount input ngay
@@ -78,6 +99,51 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
         );
     };
 
+    // ======= EDIT handlers =======
+    const startEdit = () => {
+        setIsEditing(true);
+        setEditError(null);
+        setEditValue(content);
+    };
+
+    const cancelEdit = () => {
+        setIsEditing(false);
+        setEditError(null);
+        setEditValue(content);
+    };
+
+    const submitEdit = (e?: React.FormEvent) => {
+        e?.preventDefault();
+        const trimmed = editValue.trim();
+        if (!trimmed || trimmed === content || updateComment.isPending) return;
+
+        setEditError(null);
+
+        // Optimistic: cập nhật ngay trên UI
+        const previous = content;
+        setContent(trimmed);
+        setIsEditing(false);
+
+        updateComment.mutate(
+            { id: comment.id, content: trimmed },
+            {
+                onError: (err: any) => {
+                    // rollback khi lỗi
+                    setContent(previous);
+                    setIsEditing(true);
+                    setEditError(err?.message || "Không thể cập nhật bình luận. Vui lòng thử lại.");
+                },
+                onSuccess: (data: any) => {
+                    // phòng khi server chuẩn hoá content (ví dụ: sanitize)
+                    if (data?.content && data.content !== trimmed) {
+                        setContent(data.content);
+                    }
+                    setIsEditing(false);
+                },
+            }
+        );
+    };
+
     return (
         <div className="flex flex-col relative">
             {level > 0 && !isLast && <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />}
@@ -102,7 +168,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                         {replyingCommentId && <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />}
 
                         {/* comment */}
-                        <div className={cn("rounded-lg p-2 w-fit max-w-full", "shadow-sm bg-background")}>
+                        <div className={cn("rounded-lg p-2 max-w-full", "shadow-sm bg-background", isEditing ? "w-auto": "w-fit")}>
                             <div className="flex items-center gap-1">
                                 <Name name={comment.Users.name} username={comment.Users.username} />
                                 {comment.Users.id === article.userId && (
@@ -112,17 +178,28 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                                     </Badge>
                                 )}
                             </div>
-                            <ExpandableText
-                                text={comment.content}
-                                placement="inline"
-                                maxLines={5}
-                                moreLabel="See more"
-                                lessLabel="See less"
-                                // fadeFromClass="from-[#fff] dark:from-[#333334]"
-                                // inlineButtonBgClass="bg-[#fff] dark:bg-[#333334]"
-                                // inlineButtonBgClass="bg-[#f5f5f5] dark:bg-[#151515]"
-                                fadeHeightClass="h-full"
-                            />
+                            {/* BODY: ExpandableText hoặc ô nhập edit */}
+                            {!isEditing ? (
+                                <ExpandableText
+                                    text={content}
+                                    placement="inline"
+                                    maxLines={5}
+                                    moreLabel="See more"
+                                    lessLabel="See less"
+                                    fadeHeightClass="h-full"
+                                />
+                            ) : (
+                                <form onSubmit={submitEdit} className="mt-1">
+                                    <CommentInputUi type="edit" onSubmit={submitEdit} value={editValue} setValue={setEditValue} />
+                                    <span
+                                        onClick={cancelEdit}
+                                        className={cn("text-xs text-muted-foreground transition-colors cursor-pointer hover:text-primary")}
+                                    >
+                                        cancel
+                                    </span>
+                                    {editError && <p className="mt-1 text-xs text-red-500">{editError}</p>}
+                                </form>
+                            )}
                         </div>
 
                         {/* Meta actions */}
@@ -138,18 +215,29 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                                         }}
                                     /> */}
 
-                                    <span
-                                        onClick={() => {
-                                            if (level === 2) {
-                                                handleReplyCommentParent?.(comment.id, comment.Users?.username || comment.Users?.name);
-                                            } else {
-                                                handleReplyComment(comment.id, comment.Users?.username || comment.Users?.name);
-                                            }
-                                        }}
-                                        className={cn("text-xs text-muted-foreground transition-colors cursor-pointer hover:text-primary")}
-                                    >
-                                        reply
-                                    </span>
+                                    {!isEditing && (
+                                        <span
+                                            onClick={() => {
+                                                if (level === 2) {
+                                                    handleReplyCommentParent?.(comment.id, comment.Users?.name || comment.Users?.username);
+                                                } else {
+                                                    handleReplyComment(comment.id, comment.Users?.name || comment.Users?.username);
+                                                }
+                                            }}
+                                            className={cn("text-xs text-muted-foreground transition-colors cursor-pointer hover:text-primary")}
+                                        >
+                                            reply
+                                        </span>
+                                    )}
+
+                                    {info?.id === comment.userId && !isEditing && (
+                                        <span
+                                            onClick={startEdit}
+                                            className={cn("text-xs text-muted-foreground transition-colors cursor-pointer hover:text-primary")}
+                                        >
+                                            edit
+                                        </span>
+                                    )}
                                 </div>
                             ) : (
                                 <div className="pl-2 text-xs italic text-muted-foreground">{typingText("Writing")}</div>

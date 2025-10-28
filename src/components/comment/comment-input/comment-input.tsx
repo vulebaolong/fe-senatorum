@@ -1,16 +1,12 @@
 import { useCreateComment } from "@/api/tantask/comment.tanstack";
-import AvatartImageCustom from "@/components/custom/avatar-custom/avatart-custom";
-import { Textarea } from "@/components/textarea/textarea";
-import { Button } from "@/components/ui/button";
 import { resError } from "@/helpers/function.helper";
-import { useMention } from "@/hooks/use-mention";
 import { useAppSelector } from "@/redux/store";
 import { TArticle } from "@/types/article.type";
 import { TCreateCommentReq, TListComment } from "@/types/comment.type";
 import { ECommentStatus } from "@/types/enum/comment-status.enum";
-import { SendHorizontal } from "lucide-react";
-import { Dispatch, forwardRef, SetStateAction, useImperativeHandle, useRef, useState } from "react";
+import { Dispatch, forwardRef, SetStateAction, useState } from "react";
 import { toast } from "sonner";
+import CommentInputUi from "./comment-input-ui";
 
 function highlightMentions(text: string) {
     // escape HTML để tránh XSS
@@ -38,76 +34,7 @@ type TProps = {
 const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article, setListComment, commentParent = null }, ref) => {
     const [value, setValue] = useState("");
     const info = useAppSelector((state) => state.user.info);
-    const [isComposing, setIsComposing] = useState(false);
     const createComment = useCreateComment();
-
-    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
-    const { mentionHandlers, popup, open } = useMention({
-        trigger: "@",
-        limit: 10,
-        externalRef: textareaRef, // 👈 dùng ref bạn đã có
-        value: value, // (tuỳ chọn) controlled
-        onValueChange: (v) => {
-            console.log(v);
-            setValue(v.normalize("NFC"));
-        },
-    });
-
-    useImperativeHandle(ref, () => ({
-        focus: () => {
-            const el = textareaRef.current;
-            if (!el) return;
-            el.focus();
-            try {
-                const len = el.value.length;
-                el.setSelectionRange(len, len);
-            } catch {}
-        },
-        insertMention: (username: string) => {
-            const el = textareaRef.current;
-            const uname = (username || "").replace(/^@/, "");
-            const mention = `@${uname} `;
-            setValue((prev) => {
-                // nếu đã có mention ở đầu thì bỏ qua
-                if (prev.startsWith(mention)) return prev;
-
-                // nếu có caret, chèn tại caret; không thì prepend
-                if (el && typeof el.selectionStart === "number") {
-                    const s = el.selectionStart;
-                    const e = el.selectionEnd ?? s;
-                    const next = prev.slice(0, s) + mention + prev.slice(e);
-                    // đặt caret sau mention
-                    requestAnimationFrame(() => {
-                        const pos = s + mention.length;
-                        el.setSelectionRange(pos, pos);
-                    });
-                    return next;
-                }
-                return mention + prev;
-            });
-        },
-        focusAndInsertMention: (username: string) => {
-            const el = textareaRef.current;
-            if (!el) return;
-            el.focus();
-            try {
-                const len = el.value.length;
-                el.setSelectionRange(len, len);
-            } catch {}
-            // chèn sau khi focus để caret đúng vị trí
-            const uname = (username || "").replace(/^@/, "");
-            const mention = `@${uname} `;
-            setValue((prev) => (prev.startsWith(mention) ? prev : mention + prev));
-            requestAnimationFrame(() => {
-                const el2 = textareaRef.current;
-                if (el2) {
-                    const pos = mention.length;
-                    el2.setSelectionRange(pos, pos);
-                }
-            });
-        },
-    }));
 
     const handleCreateComment = () => {
         if (value.trim() === "" || !info) return;
@@ -153,65 +80,7 @@ const CommentInput = forwardRef<CommentInputHandle, TProps>(({ inputId, article,
         });
     };
 
-    const isEmpty = value.length === 0;
-
-    return (
-        <div className="flex items-start gap-2">
-            {/* avatar */}
-            <div className="relative z-10 rounded-full flex items-center justify-center">
-                <AvatartImageCustom
-                    className="h-8 w-8 rounded-full cursor-pointer"
-                    nameFallback={info?.name}
-                    nameRouterPush={info?.username}
-                    src={info?.avatar}
-                />
-            </div>
-
-            <div className="relative flex-1 min-h-[30px] mt-[1px]">
-                {/* Textarea thật: KHÔNG đặt placeholder (để lib không đo theo placeholder) */}
-                <Textarea
-                    id={inputId}
-                    ref={textareaRef}
-                    className="flex-1 rounded-2xl h-full" // thay cho sx={{ flex: 1 }}
-                    placeholder=""
-                    minRows={1}
-                    maxRows={10}
-                    value={value}
-                    onChange={(e) => {
-                        // setValue(e.target.value.normalize("NFC"));
-                        mentionHandlers.onChange(e);
-                    }}
-                    onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-                        // Enter để gửi, Shift+Enter để xuống dòng
-                        if (e.key === "Enter" && !e.shiftKey && !isComposing && !open) {
-                            e.preventDefault();
-                            handleCreateComment();
-                        }
-                        mentionHandlers.onKeyDown(e);
-                    }}
-                    onCompositionStart={() => setIsComposing(true)}
-                    onCompositionEnd={() => setIsComposing(false)}
-                />
-                {popup}
-
-                {/* Fake placeholder: overlay 1 dòng, không làm đổi chiều cao */}
-                {isEmpty && (
-                    <div
-                        aria-hidden
-                        className="h-fit pt-[8px] leading-none pointer-events-none absolute inset-y-0 left-3 right-3 flex items-center text-sm text-muted-foreground/70 transition-opacity duration-150"
-                        style={{ paddingRight: 0 }}
-                    >
-                        <span className="truncate">Got a thought? We'd love to hear it 😸</span>
-                    </div>
-                )}
-            </div>
-
-            {/* button send */}
-            <Button onClick={handleCreateComment} variant="outline" size="icon" className="size-8 rounded-full">
-                <SendHorizontal />
-            </Button>
-        </div>
-    );
+    return <CommentInputUi ref={ref} type="create" onSubmit={handleCreateComment} value={value} setValue={setValue} />;
 });
 
 export default CommentInput;
