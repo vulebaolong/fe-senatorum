@@ -80,8 +80,10 @@ export default function CommentList({ article, listComment, setListComment, clas
         setPage((prev) => prev + 1);
     };
 
+    const [refreshKey, setRefreshKey] = useState(0);
+
     return (
-        <div ref={containerRef} className={cn("relative", "h-full lg:overflow-y-scroll", className)} id="comments">
+        <div key={refreshKey} ref={containerRef} className={cn("relative", "h-full lg:overflow-y-scroll", className)} id="comments">
             <AppendLoading
                 isLoading={getCommentByArticle.isLoading}
                 isEmpty={!getCommentByArticle.data || listComment.length === 0}
@@ -104,7 +106,7 @@ export default function CommentList({ article, listComment, setListComment, clas
                 {listComment.map((comment: TListComment, index) => {
                     return (
                         <Fragment key={comment.id}>
-                            <CommentItem comment={comment} article={article} level={comment.level ?? 0} isLast={index === listComment.length - 1} />
+                            <CommentItem setRefreshKey={setRefreshKey} comment={comment} article={article} level={comment.level ?? 0} />
                         </Fragment>
                     );
                 })}

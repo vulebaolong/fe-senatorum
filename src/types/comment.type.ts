@@ -64,4 +64,8 @@ export type TRoomCommentRes = {
 export type TUpdateComment = {
     id: TComment["id"];
     content: TComment["content"];
+
+};
+export type TDeleteComment = {
+    id: TComment["id"];
 };

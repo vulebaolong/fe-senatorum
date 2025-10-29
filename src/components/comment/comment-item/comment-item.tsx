@@ -1,34 +1,44 @@
-import { useMutationCommentByParent, useUpdateComment } from "@/api/tantask/comment.tanstack";
+import { useDeleteComment, useMutationCommentByParent, useUpdateComment } from "@/api/tantask/comment.tanstack";
 import AvatartImageCustom from "@/components/custom/avatar-custom/avatart-custom";
 import ExpandableText from "@/components/expandable-text/ExpandableText";
 import Name from "@/components/name/name";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { formatLocalTime } from "@/helpers/function.helper";
 import { typingText } from "@/helpers/motion.helper";
 import { cn } from "@/lib/utils";
+import { useAppSelector } from "@/redux/store";
 import { TArticle } from "@/types/article.type";
 import { TComment, TListComment } from "@/types/comment.type";
 import { Spotlight } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import CommentInput, { CommentInputHandle } from "../comment-input/comment-input";
+import CommentInputUi from "../comment-input/comment-input-ui";
 import LineCurve from "../line/line-curve";
 import LineStraight from "../line/line-straight";
-import { useAppSelector } from "@/redux/store";
-import { Textarea } from "@/components/textarea/textarea";
-import { Button } from "@/components/ui/button";
-import CommentInputUi from "../comment-input/comment-input-ui";
 
 type CommentItemProps = {
     comment: TListComment;
     article: TArticle;
     level?: number;
-    isLast: boolean;
     handleReplyCommentParent?: (commentId: string, username?: string | undefined) => void;
+    setRefreshKey: Dispatch<SetStateAction<number>>;
 };
 
-export default function CommentItem({ comment, article, level = 0, isLast, handleReplyCommentParent }: CommentItemProps) {
+const gapAvatarAndLineStraight = 38;
+
+export default function CommentItem({ comment, article, level = 0, handleReplyCommentParent, setRefreshKey }: CommentItemProps) {
     const [replyingCommentId, setReplyingCommentId] = useState<TComment["id"] | null>(null);
     const [listComment, setListComment] = useState<TListComment[]>([]);
     const inputRef = useRef<CommentInputHandle>(null);
@@ -44,6 +54,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
 
     const mutationCommentByParent = useMutationCommentByParent();
     const updateComment = useUpdateComment();
+    const deleteComment = useDeleteComment();
 
     // ======= LOCAL STATE for EDIT =======
     // giữ content hiển thị cục bộ để có thể cập nhật lạc quan mà không cần refetch ngay
@@ -73,7 +84,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
     };
 
     // Lấy thêm 1 "pageSize" replies và nối vào list
-    const handleGetCommentByParent = (commentId: TComment["id"]) => {
+    const handleGetCommentByParent = () => {
         // nếu đã tải hết thì thôi
         if (meta.totalPage > 0 && meta.page >= meta.totalPage) return;
 
@@ -82,7 +93,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
         mutationCommentByParent.mutate(
             {
                 pagination: { page: nextPage, pageSize: meta.pageSize },
-                filters: { articleId: article.id, level: level + 1, parentId: commentId },
+                filters: { articleId: article.id, level: level + 1, parentId: comment.id },
                 sort: { sortBy: "createdAt", isDesc: true }, // page 1 mới nhất -> nối vào cuối
             },
             {
@@ -144,31 +155,69 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
         );
     };
 
+    const [isDeleted, setIsDeleted] = useState(false);
+
+    const handleDelete = () => {
+        deleteComment.mutate({ id: comment.id });
+        setIsDeleted(true);
+    };
+
+    const rightRef = useRef<HTMLDivElement>(null);
+    const [heightDiff, setHeightDiff] = useState(0);
+
+    useEffect(() => {
+        if (!rightRef.current) return;
+        const el = rightRef.current;
+
+        const calcHeight = () => {
+            console.dir(el);
+            const lastChild = el.lastElementChild as HTMLElement | null;
+            if (!lastChild) {
+                setHeightDiff(0);
+                return;
+            }
+            const parentHeight = el.getBoundingClientRect().height;
+            const lastHeight = lastChild.getBoundingClientRect().height;
+            setHeightDiff(parentHeight - lastHeight - gapAvatarAndLineStraight);
+        };
+
+        // chạy 1 lần khi mount
+        calcHeight();
+
+        // theo dõi mọi thay đổi kích thước
+        const observer = new ResizeObserver(() => {
+            console.log(222);
+            calcHeight();
+        });
+
+        observer.observe(el);
+
+        return () => observer.disconnect();
+    }, []);
+
+    if (isDeleted) return null;
+
     return (
         <div className="flex flex-col relative">
-            {level > 0 && !isLast && <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />}
             <div className={`relative flex items-start gap-2 ${level > 0 ? "pl-2" : ""}`}>
                 {level > 0 && <LineCurve className="absolute top-0 right-full h-[18px] w-[25px]" />}
+
                 {/* Avatar */}
-                <div className={cn("relative z-10 h-10 w-8 rounded-full flex items-start justify-center")}>
-                    <AvatartImageCustom
-                        className="h-8 w-8 rounded-full cursor-pointer"
-                        nameFallback={comment.Users?.name}
-                        nameRouterPush={comment.Users?.username}
-                        src={comment.Users?.avatar}
-                    />
-                </div>
+                <AvatartImageCustom
+                    className="h-8 w-8 rounded-full cursor-pointer"
+                    nameFallback={comment.Users?.name}
+                    nameRouterPush={comment.Users?.username}
+                    src={comment.Users?.avatar}
+                />
 
                 {/* Right column */}
-                <div className="relative flex-1 flex flex-col min-w-0">
+                <div ref={rightRef} className="relative flex-1 flex flex-col min-w-0">
+                    <LineStraight className={cn(`absolute top-[${gapAvatarAndLineStraight}px] -left-[25px]`)} style={{ height: heightDiff }} />
+
                     {/* action */}
                     <div className="relative">
-                        {/* line */}
-                        {comment.replyCount > 0 && <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />}
-                        {replyingCommentId && <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />}
-
                         {/* comment */}
-                        <div className={cn("rounded-lg p-2 max-w-full", "shadow-sm bg-background", isEditing ? "w-auto": "w-fit")}>
+                        <div className={cn("rounded-lg p-2 max-w-full", "shadow-sm bg-background", isEditing ? "w-auto" : "w-fit")}>
                             <div className="flex items-center gap-1">
                                 <Name name={comment.Users.name} username={comment.Users.username} />
                                 {comment.Users.id === article.userId && (
@@ -231,12 +280,37 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                                     )}
 
                                     {info?.id === comment.userId && !isEditing && (
-                                        <span
-                                            onClick={startEdit}
-                                            className={cn("text-xs text-muted-foreground transition-colors cursor-pointer hover:text-primary")}
-                                        >
-                                            edit
-                                        </span>
+                                        <>
+                                            <span
+                                                onClick={startEdit}
+                                                className={cn("text-xs text-muted-foreground transition-colors cursor-pointer hover:text-primary")}
+                                            >
+                                                edit
+                                            </span>
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <span
+                                                        className={cn(
+                                                            "text-xs text-muted-foreground transition-colors cursor-pointer hover:text-primary"
+                                                        )}
+                                                    >
+                                                        del
+                                                    </span>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>Bạn có chắc muốn xoá bình luận này?</AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            Hành động này không thể hoàn tác. Bình luận sẽ bị xoá vĩnh viễn khỏi hệ thống.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>Huỷ</AlertDialogCancel>
+                                                        <AlertDialogAction onClick={handleDelete}>Đồng ý xoá</AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        </>
                                     )}
                                 </div>
                             ) : (
@@ -249,28 +323,23 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                     {replyingCommentId && (
                         <div className={`relative pl-2 pb-2`}>
                             <LineCurve className={`absolute top-0 right-full h-[16px] w-[25px]`} />
-                            {comment.replyCount > 0 && !mutationCommentByParent?.data && (
-                                <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />
-                            )}
-                            {mutationCommentByParent?.data && mutationCommentByParent.data.items.length > 0 && (
-                                <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />
-                            )}
-                            {listComment.length > 0 && <LineStraight className="absolute bottom-[0] -left-[25px] h-[100%]" />}
                             <CommentInput ref={inputRef} article={article} commentParent={comment} setListComment={setListComment} />
                         </div>
                     )}
 
                     {listComment.map((c, index) => {
                         return (
-                            <div key={c.id} className="flex flex-col">
-                                <CommentItem
-                                    comment={c}
-                                    article={article}
-                                    level={c.level}
-                                    isLast={index === listComment.length - 1 && (!shouldShowLoadMore(meta, listComment) || comment.replyCount === 0)}
-                                    handleReplyCommentParent={handleReplyComment}
-                                />
-                            </div>
+                            // <div key={c.id} className="flex flex-col">
+                            <CommentItem
+                                key={c.id}
+                                setRefreshKey={setRefreshKey}
+                                comment={c}
+                                article={article}
+                                level={c.level}
+                                // isLast={index === listComment.length - 1 && (!shouldShowLoadMore(meta, listComment) || comment.replyCount === 0)}
+                                handleReplyCommentParent={handleReplyComment}
+                            />
+                            // </div>
                         );
                     })}
 
@@ -280,7 +349,7 @@ export default function CommentItem({ comment, article, level = 0, isLast, handl
                             <LineCurve className="absolute top-[0px] right-full h-[15px] w-[25px]" />
 
                             <span
-                                onClick={() => handleGetCommentByParent(comment.id)}
+                                onClick={() => handleGetCommentByParent()}
                                 className={cn("pl-2 text-sm text-muted-foreground transition-colors cursor-pointer hover:text-primary leading-none")}
                             >
                                 View all {comment.replyCount > meta.pageSize ? meta.pageSize : comment.replyCount} comments
