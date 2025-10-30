@@ -299,14 +299,14 @@ export default function CommentItem({ comment, article, level = 0, handleReplyCo
                                                 </AlertDialogTrigger>
                                                 <AlertDialogContent>
                                                     <AlertDialogHeader>
-                                                        <AlertDialogTitle>Bạn có chắc muốn xoá bình luận này?</AlertDialogTitle>
+                                                        <AlertDialogTitle>Are you sure you want to delete this comment?</AlertDialogTitle>
                                                         <AlertDialogDescription>
-                                                            Hành động này không thể hoàn tác. Bình luận sẽ bị xoá vĩnh viễn khỏi hệ thống.
+                                                            This action cannot be undone. The comment will be permanently deleted from the system.
                                                         </AlertDialogDescription>
                                                     </AlertDialogHeader>
                                                     <AlertDialogFooter>
-                                                        <AlertDialogCancel>Huỷ</AlertDialogCancel>
-                                                        <AlertDialogAction onClick={handleDelete}>Đồng ý xoá</AlertDialogAction>
+                                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                        <AlertDialogAction onClick={handleDelete}>Agree</AlertDialogAction>
                                                     </AlertDialogFooter>
                                                 </AlertDialogContent>
                                             </AlertDialog>
@@ -329,17 +329,14 @@ export default function CommentItem({ comment, article, level = 0, handleReplyCo
 
                     {listComment.map((c, index) => {
                         return (
-                            // <div key={c.id} className="flex flex-col">
                             <CommentItem
                                 key={c.id}
                                 setRefreshKey={setRefreshKey}
                                 comment={c}
                                 article={article}
                                 level={c.level}
-                                // isLast={index === listComment.length - 1 && (!shouldShowLoadMore(meta, listComment) || comment.replyCount === 0)}
                                 handleReplyCommentParent={handleReplyComment}
                             />
-                            // </div>
                         );
                     })}
 
