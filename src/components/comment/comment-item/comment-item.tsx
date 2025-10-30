@@ -212,7 +212,7 @@ export default function CommentItem({ comment, article, level = 0, handleReplyCo
 
                 {/* Right column */}
                 <div ref={rightRef} className="relative flex-1 flex flex-col min-w-0">
-                    <LineStraight className={cn(`absolute top-[${gapAvatarAndLineStraight}px] -left-[25px]`)} style={{ height: heightDiff }} />
+                    <LineStraight className={cn(`absolute -left-[25px]`)} style={{ height: heightDiff, top: gapAvatarAndLineStraight }} />
 
                     {/* action */}
                     <div className="relative">
