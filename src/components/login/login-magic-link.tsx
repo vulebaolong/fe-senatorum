@@ -75,8 +75,9 @@ export function LoginMagicLink({ className, ...props }: React.ComponentProps<"di
                                     <h1 className="text-[42px] leading-none font-light tracking-wide text-white">
                                         <span className="font-bold">{TITLE}</span>
                                     </h1>
-                                    <p className="text-white/90 flex items-center justify-center gap-2 text-lg tracking-wider font-medium">
-                                        <Coffee className="size-4" />A place to gather!
+                                    <p className="text-white/90 flex items-center justify-center gap-2 text-[15px] tracking-wider font-medium">
+                                        {/* <Coffee className="size-4" /> */}
+                                        Enjoy a coffee, share your stories
                                     </p>
                                 </div>
                             </div>
